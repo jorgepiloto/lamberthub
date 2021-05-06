@@ -38,7 +38,7 @@ def assert_gravitational_parameter_is_positive(mu):
 
 def assert_position_vector_is_valid(r):
     """
-    Checks if position vector have proper dimensions.
+    Checks if position vector has proper dimensions and is not the null one.
 
     Parameters
     ----------
@@ -118,8 +118,7 @@ def assert_number_of_revolutions_not_negative(M):
 
 def assert_transfer_angle_not_zero(dtheta):
     """
-    Checks if the the transfer angle is the null value. If so, returns `True`,
-    otherwise it returns `False`.
+    Checks if the transfer angle is the null value, if so, raises an exception.
 
     Parameters
     ----------
