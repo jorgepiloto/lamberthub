@@ -24,15 +24,9 @@ that is: `authorYYYY`.
 To answer this question, simply run the following code snippet or refer to the
 official package API reference:
 
-```python
+```{code-cell}
 from lamberthub import ALL_SOLVERS
 print([solver.__name__ for solver in ALL_SOLVERS])
-```
-
-and these are the available solvers for current version:
-
-```bash
->>> []
 ```
 
 In addition, `lamberthub` provides other lists holding algorithms which
@@ -124,6 +118,38 @@ The orbit is seen to be prograde (inclination is less than $90^{\circ}$) and
 direct $M=0$. Remember that when $M=0$, there is only one possible solution, so
 the `low_path` flag will not play any role in this problem.
 
+To solve for the problem, we first import a solver. Let us use Gooding's one:
+
+```{code-cell}
+from lamberthub import gooding1990
+```
+
+Next, we specify the initial conditions of the problem:
+
+```{code-cell}
+# Import NumPy for declaring position vectors
+import numpy as np
+
+# Initial conditions for the problem
+mu_sun = 39.47692641  # [AU ** 3 / year ** 2]
+r1 = np.array([0.159321004, 0.579266185, 0.052359607])  # [AU]
+r2 = np.array([0.057594337, 0.605750797, 0.068345246])  # [AU]
+tof = 0.010794065  # [year]
+```
+
+Finally, we just need to solve for it. Notice that, as explained before, the
+default value for the `prograde` flag is `True`, which matches the one from
+problem's statement.
+
+```{code-cell}
+# Solving the problem
+v1, v2 = gooding1990(mu_sun, r1, r2, tof)
+
+# Let us print the results
+print(f"Initial velocity: {v1} [AU / years]\nFinal velocity: {v2} [AU / years]")
+```
+
+previous values are the same ones comming from the original example.
 
 [^1]: Directly taken from *An Introduction to the Mathematics and Methods of
   Astrodynamics, revised edition*, by R.H. Battin, problem 7-12.
