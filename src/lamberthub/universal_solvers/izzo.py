@@ -65,6 +65,13 @@ def izzo2015(
     high performance and robustness while requiring no more than four iterations
     to reach a solution.
 
+    All credits of the implementation go to Juan Luis Cano Rodríguez and the
+    poliastro development team, from which this routine inherits. Some changes
+    were made to adapt it to `lamberthub` API. In addition, the hypergeometric
+    function is the one from SciPy.
+
+    Copyright (c) 2012-2021 Juan Luis Cano Rodríguez and the poliastro development team
+
     References
     ----------
     [1] Izzo, D. (2015). Revisiting Lambert’s problem. Celestial Mechanics
