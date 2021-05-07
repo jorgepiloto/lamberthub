@@ -8,14 +8,6 @@ from lamberthub import ALL_SOLVERS
 
 
 @pytest.mark.parametrize("solver", ALL_SOLVERS)
-def test_transfer_angle_is_zero_raises_exception(solver):
-    with pytest.raises(ValueError) as excinfo:
-        r1, r2 = [i * np.ones(3) for i in range(1, 3)]
-        solver(1.00, r1, r2, 1.00)
-    assert "Transfer angle was found to be zero!" in excinfo.exconly()
-
-
-@pytest.mark.parametrize("solver", ALL_SOLVERS)
 def test_case_from_vallado_book(solver):
     """
     Example 5.7 from Fundamentals of Astrodynamics and Applications (4th
