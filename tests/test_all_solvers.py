@@ -79,6 +79,62 @@ def test_case_from_battin_book(solver):
     assert_allclose(v1, expected_v1, rtol=1e-5)
 
 
+@pytest.mark.parametrize("solver", ALL_SOLVERS)
+def test_case_from_GMAT_hyperbolic_prograde(solver):
+    """
+    This test case was generated using GMAT2020a software from NASA by defining
+    an initial position and velocity vectors around the Earth and propagating
+    the resulting orbit in time.
+    """
+
+    # Initial conditions
+    mu_earth = 3.986004418e5  # [km ** 3 / s ** 2]
+    r1 = np.array([7100, 200, 1300])  # [km]
+    # This vector was obtained after propagating the initial one with original
+    # velocity a given amount of time.
+    r2 = np.array([-38113.5870, 67274.1946, 29309.5799])  # [km]
+    tof = 12000  # [s]
+
+    # Solving the problem
+    v1, v2 = solver(mu_earth, r1, r2, tof)
+
+    # Expected final results
+    expected_v1 = np.array([0, 10.35, 5.5])  # [km / s]
+    expected_v2 = np.array([-3.6379, 4.4932, 1.7735])  # [km / s]
+
+    # Assert the results
+    assert_allclose(v1, expected_v1, atol=5e-3, rtol=1e-4)
+    assert_allclose(v2, expected_v2, atol=5e-3, rtol=1e-4)
+
+
+@pytest.mark.parametrize("solver", ALL_SOLVERS)
+def test_case_from_GMAT_hyperbolic_retrograde(solver):
+    """
+    This test case was generated using GMAT2020a software from NASA by defining
+    an initial position and velocity vectors around the Earth and propagating
+    the resulting orbit in time.
+    """
+
+    # Initial conditions
+    mu_earth = 3.986004418e5  # [km ** 3 / s ** 2]
+    r1 = np.array([7100, 200, 1300])  # [km]
+    # This vector was obtained after propagating the initial one with original
+    # velocity a given amount of time.
+    r2 = np.array([-47332.7499, -54840.2027, -37100.17067])  # [km]
+    tof = 12000  # [s]
+
+    # Solving the problem
+    v1, v2 = solver(mu_earth, r1, r2, tof, prograde=False)
+
+    # Expected final results
+    expected_v1 = np.array([0, -10.35, -5.5])  # [km / s]
+    expected_v2 = np.array([-4.3016, -3.4314, -2.5467])  # [km / s]
+
+    # Assert the results
+    assert_allclose(v1, expected_v1, atol=5e-3, rtol=1e-4)
+    assert_allclose(v2, expected_v2, atol=5e-3, rtol=1e-4)
+
+
 TABLE_OF_TRANSFERS_I = {
     "M0_prograde_low": [
         np.array([-2.09572809, 3.92602196, -4.94516810]),  # [km / s]
