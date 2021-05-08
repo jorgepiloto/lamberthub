@@ -1,5 +1,7 @@
 """ Holds plotting utilities related with required number of iterations """
 
+import time
+
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.colors import BoundaryNorm
@@ -9,7 +11,7 @@ from numpy import cos, pi, sin
 from lamberthub.utils.misc import get_solver_name
 
 
-def _iterations_from_theta_and_T(solver, theta, T):
+def _time_from_theta_and_T(solver, theta, T):
     """
     Computes the number of iterations from a particular value of theta and the
     transfer angle.
@@ -59,6 +61,7 @@ def _iterations_from_theta_and_T(solver, theta, T):
         return 0
 
     # Solve the problem but only collect the number of iterations
+    tic = time.perf_counter()
     _, _, numiter = solver(
         mu,
         r1_vec,
@@ -71,17 +74,19 @@ def _iterations_from_theta_and_T(solver, theta, T):
         rtol=1e-7,
         full_output=True,
     )
+    toc = time.perf_counter()
 
-    return numiter
+    # return numiter / (toc - tic) * 1E6 # Convert to [iter / ms]
+    return (toc - tic) / numiter * 1e6  # Convert to [microseconds / iter]
 
 
 # Vectorize the solver
-_iterations_from_theta_and_T_vec = np.vectorize(
-    _iterations_from_theta_and_T, otypes=[np.ndarray], excluded=[0]
+_time_from_theta_and_T_vec = np.vectorize(
+    _time_from_theta_and_T, otypes=[np.ndarray], excluded=[0]
 )
 
 
-class IterationsPlotter:
+class TimePlotter:
     """
     A class for plotting solvers number of iterations as functions of the
     transfer angle and the non-dimensional time of flight.
@@ -106,7 +111,7 @@ class IterationsPlotter:
         # Force the aspect ratio of the figure
         self.ax.set_aspect("equal")
 
-    def plot_performance(self, solver, maxiter=10, cmap=None):
+    def plot_performance(self, solver, N_samples=10, maxiter=10, cmap=None):
         """
         Returns a graphical representation on the iteration performance for a
         particular solver.
@@ -132,21 +137,30 @@ class IterationsPlotter:
         theta_span, T_span = [np.linspace(0, 2 * pi * 0.999, 50) for _ in range(2)]
         THETA, TOF = np.meshgrid(theta_span, T_span)
 
-        # Compute the meshgrid holding the number of required iterations
-        NN_ITER = _iterations_from_theta_and_T_vec(
-            solver, theta_span[np.newaxis, :], T_span[:, np.newaxis]
-        ).astype("int")
+        # Compute the time per iteration in the form of meshgrid
+        TIME_TOTAL_PER_ITERATION = np.zeros((50, 50))
+        for _ in range(N_samples):
+
+            # Compute the meshgrid holding the number of required iterations
+            TIME_PER_ITERATION = _time_from_theta_and_T_vec(
+                solver, theta_span[np.newaxis, :], T_span[:, np.newaxis]
+            ).astype("float")
+            TIME_TOTAL_PER_ITERATION += TIME_PER_ITERATION
+        TIME_PER_ITER = TIME_TOTAL_PER_ITERATION / N_samples
+
+        # Store the mean time
+        self.mean_time = np.mean(TIME_PER_ITER)
 
         # Prepare the levels for the contour
-        levels = MaxNLocator(nbins=maxiter + 1).tick_values(0, maxiter)
+        levels = MaxNLocator(nbins=11).tick_values(0, 1000)
         cmap = plt.get_cmap("YlOrRd") if cmap is None else cmap
         bd_norm = BoundaryNorm(levels, ncolors=cmap.N)
 
-        # Generate meshgrid
+        # Generate discrete contour map
         c = self.ax.pcolor(
             THETA,
             TOF,
-            NN_ITER[:-1, :-1],  # For pcolor, the last rows need to be removed
+            TIME_PER_ITER[:-1, :-1],  # For pcolor, the last rows need to be removed
             cmap=cmap,
             vmin=1,
             edgecolors="k",
@@ -159,18 +173,23 @@ class IterationsPlotter:
 
         # Draw a beautiful colorbar with the legend for the number of iterations
         # in the middle
-        for n in range(maxiter):
-            color = "white" if n == 0 else "black"
+        for n in range(maxiter * 100):
+            if n % 100 != 0:
+                continue
             cbar.ax.text(
-                4.5,
-                (maxiter * n + 5) / maxiter,
+                500,
+                (maxiter * n + 500) / maxiter,
                 str(n),
                 ha="center",
                 va="center",
-                color=color,
+                color="black",
             )
             cbar.ax.get_yaxis().labelpad = maxiter * 1.5
-        cbar.set_label("Number of iterations")
+        cbar.set_label(
+            f"Time in microseconds per iteration\nAverage {np.mean(self.mean_time):.2f} "
+            + r"$\mu$"
+            + "s / iter"
+        )
 
         # Set the ticks
         self.ax.set_xticks(np.array([0, 0.5, 1, 1.5, 2]) * pi)
