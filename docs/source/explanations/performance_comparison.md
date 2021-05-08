@@ -7,6 +7,9 @@ kernelspec:
   display_name: Python 3
   language: python
   name: python3
+metadata:
+  execution:
+    timeout = 300
 ---
 
 # Solvers performance comparison
@@ -19,9 +22,12 @@ following utilities are available:
   iterations for a particular combination of the transfer angle and the
   non-dimensional time of flight.
 
+* **Time required per iteration:** shows a contour map in which the time per
+  iteration is shown against the transfer angle and the non-dimensional time. It
+  also computes the required average time. 
+
 In this page, all these tools are presented together with the results output by
 them.
-
 
 ## Iterations contour maps
 
@@ -52,3 +58,70 @@ def plot_iterations_performance(SOLVERS_LIST):
 
 plot_iterations_performance(ALL_SOLVERS)
 ```
+
+## Time contour maps
+
+The number of iterations does not provide a full insight of the problem, as an
+algorithm with low iterations number might require a lot of time per iteration
+it finds a solution. Therefore, a plotter in which the time per iteration is
+shown against a combination of transfer angle and non-dimensional time of
+flight is required.
+
+```{note}
+Notice this performance tool is directly linked to machine specifications, the
+number of processes being run in it, the current implementation and the number
+of samples.
+```
+
+The following code snippet runs the time performance plotter for all the
+available solvers. Results might vary in your local machine as these ones are
+executed with a low number of samples in order to avoid `RuntimeErrors` in the
+server computer which builds the documentation. 
+
+```{code-cell}
+import matplotlib.pyplot as plt
+
+from lamberthub import ALL_SOLVERS
+from lamberthub.plotting import TimePlotter
+
+def plot_time_performance(SOLVERS_LIST):
+    """ Plots the contour maps and a bar chart for a given set of solvers """
+
+    # Allocate an list for hosting the mean time, useful for next section 
+    # performance analysis
+    MEAN_TIMES = []
+
+    # Plots iterations performance for each one of the solvers from given set
+    for solver in SOLVERS_LIST:
+        fig_ctime, ax_ctime = plt.subplots()
+        iter_plotter = TimePlotter(ax=ax_ctime, fig=fig_ctime)
+        iter_plotter.plot_performance(solver, N_samples=5, cmap=plt.get_cmap("YlOrRd"))
+        MEAN_TIMES.append(iter_plotter.mean_time)
+    plt.show()
+
+    return MEAN_TIMES
+
+MEAN_TIMES = plot_time_performance(ALL_SOLVERS)
+```
+
+## Average time per iteration
+
+Previous time contour maps can be summarized using the average time per
+iteration required by each one of the algorithms. Using the previous variable
+named `MEAN_TIME`, we collected all the average times for the different solvers.
+We can now plot those into an horizontal bar to better see which one performs
+the fastest:
+
+```{code-cell}
+from lamberthub.utils.misc import get_solver_name
+
+# Generate a bar chart showing the algoritms mean time
+fig_btime, ax_btime = plt.subplots()
+
+for solver, time in zip(ALL_SOLVERS, MEAN_TIMES):
+    ax_btime.barh(get_solver_name(solver), time, color="black")
+    ax_btime.set_xlabel("Mean time per iteration in " + r"$\mu$" + "s / iter")
+
+plt.show()
+```
+
