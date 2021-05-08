@@ -77,3 +77,13 @@ can be used.
 
 **Additional returns**
 * `numiter`: number of iterations. Only of `full_output` has been set to `True`.
+
+## Documentation and performance comparison tools
+
+The [official lamberthub
+documentation](https://github.com/jorgepiloto/lamberthub) contains different
+how-to guides, explanations, tutorials and references related to the package.
+
+If you are interested in the performance comparison tools provided, please refer
+to [this documentation chapter](https://github.com/jorgepiloto/lamberthub), were
+you can find a brief tutorials on how to use those tools.
