@@ -82,3 +82,7 @@ exclude_patterns.append("_autoapi_templates/python/module.rst")
 nbsphinx_custom_formats = {
     '.mystnb': ['jupytext.reads', {'fmt': 'mystnb'}],
 }
+
+# The performance comparison takes a bit long. This avoids the documentation to
+# assume something has failed due to long time computations
+execution_timeout = 300
