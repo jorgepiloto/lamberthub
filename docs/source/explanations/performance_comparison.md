@@ -7,9 +7,6 @@ kernelspec:
   display_name: Python 3
   language: python
   name: python3
-metadata:
-  execution:
-    timeout = 300
 ---
 
 # Solvers performance comparison
@@ -119,7 +116,7 @@ from lamberthub.utils.misc import get_solver_name
 fig_btime, ax_btime = plt.subplots()
 
 for solver, time in zip(ALL_SOLVERS, MEAN_TIMES):
-    ax_btime.barh(get_solver_name(solver), time, color="black")
+    ax_btime.barh(get_solver_name(solver), time, height=0.4, color="salmon", edgecolor="black")
     ax_btime.set_xlabel("Mean time per iteration in " + r"$\mu$" + "s / iter")
 
 plt.show()
