@@ -38,8 +38,8 @@ def get_transfer_angle(r1, r2, prograde):
     alpha = dot(np.array([0, 0, 1]), h)
 
     # Get the minimum angle (0 <= dtheta <= pi) between r1 and r2.
-    rnorm, r2_norm = [norm(vec) for vec in [r1, r2]]
-    theta0 = np.arccos(dot(r1, r2) / (rnorm * r2_norm))
+    r1_norm, r2_norm = [norm(vec) for vec in [r1, r2]]
+    theta0 = np.arccos(dot(r1, r2) / (r1_norm * r2_norm))
 
     # Fix the value of theta if necessary
     if prograde is True:
