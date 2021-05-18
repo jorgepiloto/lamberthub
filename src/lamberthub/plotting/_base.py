@@ -70,7 +70,7 @@ class TauThetaPlotter:
         ]
         return theta_span, tau_span
 
-    def _draw_colorbar(self, maxval, step, label):
+    def _draw_colorbar(self, maxval, step, label, cmap, color_vmin):
         """Draws the colorbar for the figure.
 
         Parameters
@@ -81,6 +81,8 @@ class TauThetaPlotter:
             The step for drawing each of the colorbar ticks.
         label: str
             The title of the colorbar.
+        cmap: matplotlib.cmap
+            The colormap used in the contour plot.
 
         """
 
@@ -93,25 +95,27 @@ class TauThetaPlotter:
         self.cbar.ax.get_yaxis().labelpad = 15
 
         # Properly size the aspect ratio of the colorbar
-        AR = 20 if maxval < 100 else 40
-        self.cbar.aspect = AR
+        digits = int(np.log10(maxval)) + 1
+        self.cbar.aspect = 50 * digits
+
+        # Compute the step which separates two different levels
+        step = maxval / cmap.N
 
         # Draw a beautiful colorbar with the legend for the number of iterations
         # in the middle
-        for n in range(maxval):
+        for n in range(int(cmap.N)):
 
-            # Check within valid desired scale number
-            if n % step != 0:
-                continue
+            # Select suitable font-color
+            fontcolor = "black" if n != 0 else color_vmin
 
             # Draw the number within the scale
             self.cbar.ax.text(
                 0.5 * maxval,
-                0.5 * step + n,
-                str(n),
+                step / 2 + step * n,
+                str(int(step * n)),
                 ha="center",
                 va="center",
-                color="k",
+                color=fontcolor,
             )
 
     def _draw_ticks(self):

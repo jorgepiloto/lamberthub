@@ -98,7 +98,7 @@ class TPIPlotter(TauThetaPlotter):
             TAU,
             TPI[:-1, :-1],  # For pcolor, the last rows need to be removed
             cmap=cmap,
-            vmin=1,
+            vmin=1e-12,
             edgecolors="k",
             linewidths=1,
             norm=bd_norm,
@@ -107,7 +107,7 @@ class TPIPlotter(TauThetaPlotter):
 
         # Draw the colorbar with proper diemensions and label
         label = f"Time per iteration\nAverage {MEAN_TPI:.2f} " + r"$\mu$" + "s / iter"
-        self._draw_colorbar(maxtpi, step, label)
+        self._draw_colorbar(maxtpi, step, label, cmap, "black")
 
         # Finally, draw the ticks, labels and title
         self._draw_ticks()
@@ -215,7 +215,7 @@ class TTCPlotter(TauThetaPlotter):
 
         # Draw the colorbar with proper diemensions and label
         label = f"Total computation time\nAverage {MEAN_TTC:.2f} " + r"$\mu$" + "s"
-        self._draw_colorbar(maxttc, step, label)
+        self._draw_colorbar(maxttc, step, label, cmap, "black")
 
         # Finally, draw the ticks, labels and title
         self._draw_ticks()
