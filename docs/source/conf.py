@@ -42,6 +42,9 @@ extensions = [
 # Source files
 source_suffix = [".md", ".rst"]
 
+# Index document
+master_doc = ["index"]
+
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
 
