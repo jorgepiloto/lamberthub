@@ -35,7 +35,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Physics",
     "Topic :: Scientific/Engineering :: Astronomy",
 ]
-dependencies = ["numpy", "matplotlib", "scipy"]
+dependencies = ["cmaps", "matplotlib", "numpy", "scipy"]
 dynamic = ["version", "description"]
 
 [project.urls]
