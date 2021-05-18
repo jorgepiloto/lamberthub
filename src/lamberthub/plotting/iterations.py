@@ -93,7 +93,7 @@ class IterationsPlotter(TauThetaPlotter):
 
         # Draw the colorbar with proper diemensions and label
         label = f"Number of iterations\nAverage {MEAN_NN_ITER:.2f} iter"
-        self._draw_colorbar(maxiter, step, label)
+        self._draw_colorbar(maxiter, step, label, cmap, "white")
 
         # Finally, draw the ticks, labels and title
         self._draw_ticks()
