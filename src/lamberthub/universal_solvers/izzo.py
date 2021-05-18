@@ -1,5 +1,7 @@
 """ A module hosting all algorithms devised by Izzo """
 
+import time
+
 import numpy as np
 from numpy import cross, pi
 from numpy.linalg import norm
@@ -116,7 +118,7 @@ def izzo2015(
     T = np.sqrt(2 * mu / s ** 3) * tof
 
     # Find solutions and filter them
-    x, y, numiter = _find_xy(ll, T, M, maxiter, rtol, low_path)
+    x, y, numiter, tpi = _find_xy(ll, T, M, maxiter, atol, rtol, low_path)
 
     # Reconstruct
     gamma = np.sqrt(mu * s / 2)
@@ -131,7 +133,7 @@ def izzo2015(
     v1 = V_r1 * (r1 / r1_norm) + V_t1 * i_t1
     v2 = V_r2 * (r2 / r2_norm) + V_t2 * i_t2
 
-    return (v1, v2, numiter) if full_output is True else (v1, v2)
+    return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
 def _reconstruct(x, y, r1, r2, ll, gamma, rho, sigma):
@@ -143,7 +145,7 @@ def _reconstruct(x, y, r1, r2, ll, gamma, rho, sigma):
     return [V_r1, V_r2, V_t1, V_t2]
 
 
-def _find_xy(ll, T, M, maxiter, rtol, low_path):
+def _find_xy(ll, T, M, maxiter, atol, rtol, low_path):
     """Computes all x, y for given number of revolutions."""
     # For abs(ll) == 1 the derivative is not continuous
     assert abs(ll) < 1
@@ -153,7 +155,7 @@ def _find_xy(ll, T, M, maxiter, rtol, low_path):
 
     # Refine maximum number of revolutions if necessary
     if T < T_00 + M_max * pi and M_max > 0:
-        _, T_min = _compute_T_min(ll, M_max, maxiter, rtol)
+        _, T_min = _compute_T_min(ll, M_max, maxiter, atol, rtol)
         if T < T_min:
             M_max -= 1
 
@@ -166,10 +168,10 @@ def _find_xy(ll, T, M, maxiter, rtol, low_path):
     x_0 = _initial_guess(T, ll, M, low_path)
 
     # Start Householder iterations from x_0 and find x, y
-    x, numiter = _householder(x_0, T, ll, M, rtol, maxiter)
+    x, numiter, tpi = _householder(x_0, T, ll, M, atol, rtol, maxiter)
     y = _compute_y(x, ll)
 
-    return x, y, numiter
+    return x, y, numiter, tpi
 
 
 def _compute_y(x, ll):
@@ -234,7 +236,7 @@ def _tof_equation_p3(x, y, _, dT, ddT, ll):
     )
 
 
-def _compute_T_min(ll, M, maxiter, rtol):
+def _compute_T_min(ll, M, maxiter, atol, rtol):
     """Compute minimum T."""
     if ll == 1:
         x_T_min = 0.0
@@ -247,7 +249,7 @@ def _compute_T_min(ll, M, maxiter, rtol):
             # Set x_i > 0 to avoid problems at ll = -1
             x_i = 0.1
             T_i = _tof_equation(x_i, 0.0, ll, M)
-            x_T_min = _halley(x_i, T_i, ll, rtol, maxiter)
+            x_T_min = _halley(x_i, T_i, ll, atol, rtol, maxiter)
             T_min = _tof_equation(x_T_min, 0.0, ll, M)
 
     return [x_T_min, T_min]
@@ -284,7 +286,7 @@ def _initial_guess(T, ll, M, low_path):
         return x_0
 
 
-def _halley(p0, T0, ll, tol, maxiter):
+def _halley(p0, T0, ll, atol, rtol, maxiter):
     """Find a minimum of time of flight equation using the Halley method.
 
     Note
@@ -304,14 +306,14 @@ def _halley(p0, T0, ll, tol, maxiter):
         # Halley step (cubic)
         p = p0 - 2 * fder * fder2 / (2 * fder2 ** 2 - fder * fder3)
 
-        if abs(p - p0) < tol:
+        if abs(p - p0) < rtol * np.abs(p0) + atol:
             return p
         p0 = p
 
     raise RuntimeError("Failed to converge")
 
 
-def _householder(p0, T0, ll, M, tol, maxiter):
+def _householder(p0, T0, ll, M, atol, rtol, maxiter):
     """Find a zero of time of flight equation using the Householder method.
 
     Note
@@ -320,6 +322,9 @@ def _householder(p0, T0, ll, M, tol, maxiter):
     this module and is not really reusable.
 
     """
+
+    # The clock starts together with the iteration
+    tic = time.perf_counter()
     for numiter in range(1, maxiter + 1):
         y = _compute_y(p0, ll)
         fval = _tof_equation_y(p0, y, T0, ll, M)
@@ -334,8 +339,12 @@ def _householder(p0, T0, ll, M, tol, maxiter):
             / (fder * (fder ** 2 - fval * fder2) + fder3 * fval ** 2 / 6)
         )
 
-        if abs(p - p0) < tol:
-            return p, numiter
+        if abs(p - p0) < rtol * np.abs(p0) + atol:
+            # Stop the clock and compute the time per iteration
+            tac = time.perf_counter()
+            tpi = (tac - tic) / numiter
+
+            return p, numiter, tpi
         p0 = p
 
     raise RuntimeError("Failed to converge")

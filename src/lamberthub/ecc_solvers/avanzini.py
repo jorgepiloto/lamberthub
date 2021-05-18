@@ -30,6 +30,8 @@ previous routines.
 
 """
 
+import time
+
 import numpy as np
 from scipy.optimize import newton
 
@@ -80,7 +82,7 @@ def avanzini2008(
     rtol: float
         Relative tolerance.
     full_output: bool
-        If True, the number of iterations is also returned.
+        If True, the number of iterations and time per iteration are also returned.
 
     Returns
     -------
@@ -88,8 +90,10 @@ def avanzini2008(
         Initial velocity vector.
     v2: numpy.array
         Final velocity vector.
-    numiter: list
+    numiter: int
         Number of iterations.
+    tpi: float
+        Time per iteration in seconds.
 
     Notes
     -----
@@ -121,6 +125,7 @@ def avanzini2008(
     # did not provided a derivative for Kepler's equation of time w.r.t. the ecc_T
     # variable, so this root solver is the one required rather than the pure N-R
     # one.
+    tic = time.perf_counter()
     x_sol, r = newton(
         _f,
         0,
@@ -130,6 +135,13 @@ def avanzini2008(
         rtol=rtol,
         full_output=True,
     )
+    tac = time.perf_counter()
+
+    # Extract the number of iterations
+    numiter = r.iterations
+
+    # Compute the time per iteration
+    tpi = (tac - tic) / numiter
 
     # Solve the actual value of ecc_T at solved x and retrieve COE elements
     ecc_T = eccT_at_x(x_sol)
@@ -138,10 +150,7 @@ def avanzini2008(
     # Compute the velocity vectors from the classic orbital elements
     (_, v1), (_, v2) = [coe2rv(mu, p, ecc, inc, raan, argp, nu) for nu in [nu_1, nu_2]]
 
-    # Extract the number of iterations
-    numiter = r.iterations
-
-    return (v1, v2, numiter) if full_output is True else (v1, v2)
+    return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
 def _get_eccT_limits(geometry):

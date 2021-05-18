@@ -1,5 +1,7 @@
 """ A module hosting all algorithms devised by Gooding  """
 
+import time
+
 import numpy as np
 from numpy.linalg import norm
 
@@ -47,7 +49,7 @@ def gooding1990(
     rtol: float
         Relative tolerance.
     full_output: bool
-        If True, the number of iterations is also returned.
+        If True, the number of iterations and time per iteration are also returned.
 
     Returns
     -------
@@ -55,8 +57,10 @@ def gooding1990(
         Initial velocity vector.
     v2: numpy.array
         Final velocity vector.
-    numiter: list
+    numiter: int
         Number of iterations.
+    tpi: float
+        Time per iteration in seconds.
 
     Notes
     -----
@@ -113,7 +117,7 @@ def gooding1990(
     i_t1, i_t2 = [np.cross(i_h, i_r) for i_r in [i_r1, i_r2]]
 
     # Compute amount of solutions and the velocity components.
-    vr1, vt1, vr2, vt2, numiter = vlamb(
+    vr1, vt1, vr2, vt2, numiter, tpi = vlamb(
         mu,
         r1_norm,
         r2_norm,
@@ -129,7 +133,7 @@ def gooding1990(
     v1 = vr1 * i_r1 + vt1 * i_t1
     v2 = vr2 * i_r2 + vt2 * i_t2
 
-    return (v1, v2, numiter) if full_output is True else (v1, v2)
+    return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
 def tlamb(m, q, qsqfm1, x, n):
@@ -502,6 +506,8 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
         # 5: LINE OF STATEMENT
         if goto3 is False:
 
+            # Start the timer
+            tic = time.perf_counter()
             # Enable desired number of iterations
             for numiter in range(1, maxiter + 1):
 
@@ -518,8 +524,12 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
                     break
 
             if n != 3:
+                # Stop the timer and compute the time per iteration
+                tac = time.perf_counter()
+                tpi = (tac - tic) / numiter
+
                 # Exit if only one solution normally when m = 0
-                return n, x, xpl, numiter
+                return n, x, xpl, numiter, tpi
 
             n = 2
             xpl = x
@@ -615,7 +625,7 @@ def vlamb(mu, r1_norm, r2_norm, dtheta, tof, low_path, maxiter, atol, rtol):
         m = m + 1
     thr2 = thr2 / 2.0
 
-    # Compute auxliary parameters
+    # Compute auxiliary parameters
     dr = r1_norm - r2_norm
     r1r2 = r1_norm * r2_norm
     r1r2th = 4.0 * r1r2 * np.sin(thr2) ** 2
@@ -636,7 +646,7 @@ def vlamb(mu, r1_norm, r2_norm, dtheta, tof, low_path, maxiter, atol, rtol):
     t = 4.0 * mus * tof / s ** 2
 
     # Compute the number of solutions and
-    n_sol, x1_sol, x2_sol, numiter = xlamb(m, q, qsqfm1, t, maxiter, atol, rtol)
+    n_sol, x1_sol, x2_sol, numiter, tpi = xlamb(m, q, qsqfm1, t, maxiter, atol, rtol)
 
     # Filter the solution
     if n_sol > 1:
@@ -655,4 +665,4 @@ def vlamb(mu, r1_norm, r2_norm, dtheta, tof, low_path, maxiter, atol, rtol):
     vr2 = -mus * (qzminx + qzplx * rho) / r2_norm
     vt2 = vt2 / r2_norm
 
-    return vr1, vt1, vr2, vt2, numiter
+    return vr1, vt1, vr2, vt2, numiter, tpi
