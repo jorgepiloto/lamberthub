@@ -88,4 +88,4 @@ nbsphinx_custom_formats = {
 
 # The performance comparison takes a bit long. This avoids the documentation to
 # assume something has failed due to long time computations
-execution_timeout = 300
+execution_timeout = 600
