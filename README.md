@@ -76,7 +76,8 @@ can be used.
 * `v2`: final velocity vector.
 
 **Additional returns**
-* `numiter`: number of iterations. Only of `full_output` has been set to `True`.
+* `numiter`: number of iterations. Only if `full_output` has been set to `True`.
+* `tpi`: time per iteration. Only if `full_output` has been set to `True`.
 
 ## Documentation and performance comparison tools
 

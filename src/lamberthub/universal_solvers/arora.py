@@ -1,6 +1,8 @@
 """ A module hosting all algorithms devised by Arora """
 
 
+import time
+
 import numpy as np
 from numpy.linalg import norm
 
@@ -20,8 +22,8 @@ def arora2013(
     prograde=True,
     low_path=True,
     maxiter=35,
-    atol=1e-7,
-    rtol=1e-10,
+    atol=1e-5,
+    rtol=1e-7,
     full_output=False,
 ):
     r"""
@@ -47,9 +49,8 @@ def arora2013(
         Absolute tolerance :math:`abs(x_{i+1} - x_{i})`
     rtol: float
         Relative tolerance :math:`abs(\frac{x_{i+1}}{x_{i}} - 1)`
-    dense_output: bool
-        If True, additional information such us number of iterations, absolute
-        and relative achieved tolerances are returned in the form of a list.
+    full_output: bool
+        If True, the number of iterations and time per iteration are also returned.
 
     Returns
     -------
@@ -57,9 +58,10 @@ def arora2013(
         Initial velocity vector
     v2: numpy.array
         Final velocity vector
-    status: list
-        A list holding actual absolute tolerance, relative one and required
-        number of iterations. Its final purpose is performance comparison.
+    numiter: int
+        Number of iterations.
+    tpi: float
+        Time per iteration in seconds.
 
     Notes
     -----
@@ -264,7 +266,8 @@ def arora2013(
             raise NotImplementedError("Still need to implement Arora's multirev.")
 
     # Now that the initial guess has been performed, it is possible to start the
-    # iterative process.
+    # iterative process. Initialize the timer also.
+    tic = time.perf_counter()
     for numiter in range(1, maxiter + 1):
 
         # Evaluate the auxiliary function, its first and second derivative
@@ -279,6 +282,7 @@ def arora2013(
 
         # Check computed time of flight matches target one
         if np.abs(tof - tofc) <= atol:
+            tac = time.perf_counter()
             break
 
         # Compute the time derivatives to proceed by using Halley's method
@@ -306,6 +310,9 @@ def arora2013(
         if tof < tof_p and d > 0 and (1 - tau * k) < 0:
             k = 1 / tau - 1e-12
 
+    # Compute the time per iteration
+    tpi = (tac - tic) / numiter
+
     # Evaluate f and g functions. These are equations (32) and (33)
     f = 1 - (1 - k * tau) * (r1hat_norm + r2hat_norm) / r1hat_norm
     g = S * tau * np.sqrt((1 - k * tau) * mu_hat)
@@ -316,7 +323,7 @@ def arora2013(
     v1 = (r2_hat - f * r1_hat) / g * (L_ref / T_ref)
     v2 = (g_dot * r2_hat - r1_hat) / g * (L_ref / T_ref)
 
-    return (v1, v2, numiter) if full_output is True else (v1, v2)
+    return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
 def _get_gammas(F_i, F_n, F_star):

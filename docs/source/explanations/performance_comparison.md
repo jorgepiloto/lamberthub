@@ -50,13 +50,13 @@ def plot_iterations_performance(SOLVERS_LIST):
     for solver in SOLVERS_LIST:
         fig, ax = plt.subplots()
         iter_plotter = IterationsPlotter(ax=ax, fig=fig)
-        iter_plotter.plot_performance(solver, maxiter=10, cmap=plt.get_cmap("YlOrRd"))
+        iter_plotter.plot_performance(solver, maxiter=10)
     plt.show()
 
 plot_iterations_performance(ALL_SOLVERS)
 ```
 
-## Time contour maps
+## Time required per iteration
 
 The number of iterations does not provide a full insight of the problem, as an
 algorithm with low iterations number might require a lot of time per iteration
@@ -79,46 +79,38 @@ server computer which builds the documentation.
 import matplotlib.pyplot as plt
 
 from lamberthub import ALL_SOLVERS
-from lamberthub.plotting import TimePlotter
+from lamberthub.plotting import TPIPlotter
 
 def plot_time_performance(SOLVERS_LIST):
     """ Plots the contour maps and a bar chart for a given set of solvers """
 
-    # Allocate an list for hosting the mean time, useful for next section 
-    # performance analysis
-    MEAN_TIMES = []
+    # Plots iterations performance for each one of the solvers from given set
+    for solver in SOLVERS_LIST:
+        fig_ctime, ax_ctime = plt.subplots()
+        iter_plotter = TPIPlotter(ax=ax_ctime, fig=fig_ctime)
+        iter_plotter.plot_performance(solver, N_samples=5)
+    plt.show()
+
+plot_time_performance(ALL_SOLVERS)
+```
+
+## Total time required
+
+```{code-cell}
+import matplotlib.pyplot as plt
+
+from lamberthub import ALL_SOLVERS
+from lamberthub.plotting import TTCPlotter
+
+def plot_time_performance(SOLVERS_LIST):
+    """ Plots the contour maps and a bar chart for a given set of solvers """
 
     # Plots iterations performance for each one of the solvers from given set
     for solver in SOLVERS_LIST:
         fig_ctime, ax_ctime = plt.subplots()
-        iter_plotter = TimePlotter(ax=ax_ctime, fig=fig_ctime)
-        iter_plotter.plot_performance(solver, N_samples=5, cmap=plt.get_cmap("YlOrRd"))
-        MEAN_TIMES.append(iter_plotter.mean_time)
+        iter_plotter = TTCPlotter(ax=ax_ctime, fig=fig_ctime)
+        iter_plotter.plot_performance(solver, N_samples=5)
     plt.show()
 
-    return MEAN_TIMES
-
-MEAN_TIMES = plot_time_performance(ALL_SOLVERS)
+plot_time_performance(ALL_SOLVERS)
 ```
-
-## Average time per iteration
-
-Previous time contour maps can be summarized using the average time per
-iteration required by each one of the algorithms. Using the previous variable
-named `MEAN_TIME`, we collected all the average times for the different solvers.
-We can now plot those into an horizontal bar to better see which one performs
-the fastest:
-
-```{code-cell}
-from lamberthub.utils.misc import get_solver_name
-
-# Generate a bar chart showing the algoritms mean time
-fig_btime, ax_btime = plt.subplots()
-
-for solver, time in zip(ALL_SOLVERS, MEAN_TIMES):
-    ax_btime.barh(get_solver_name(solver), time, height=0.4, color="salmon", edgecolor="black")
-    ax_btime.set_xlabel("Mean time per iteration in " + r"$\mu$" + "s / iter")
-
-plt.show()
-```
-
