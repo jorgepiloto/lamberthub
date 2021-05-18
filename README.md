@@ -44,7 +44,7 @@ which accepts the following parameters:
 ```python
 # Import a solver of your choice from the ones listed above
 from lamberthub import authorYYYY
-v1, v2 = authorYYYY(mu, r1, r2, tof, prograde=True, low_path=True, maxiter=35, atol=1e-5, rtol=1e-5, full_output=False)
+v1, v2 = authorYYYY(mu, r1, r2, tof, prograde=True, low_path=True, maxiter=35, atol=1e-5, rtol=1e-7, full_output=False)
 ```
 
 where `author` is the name of the author which developed the solver and `YYYY`
