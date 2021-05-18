@@ -91,6 +91,7 @@ Python function built with the following API architecture:
 
 **Additional returns**
 * `numiter`: number of iterations. Only of `full_output` has been set to `True`.
+* `tpi`: time per iteration. Only if `full_output` has been set to `True`.
 
 
 ## A real example
