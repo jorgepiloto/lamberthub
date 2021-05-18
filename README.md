@@ -4,6 +4,7 @@
 
 ![Python shield](https://img.shields.io/badge/%F0%9F%90%8D%20Python-%3E%3D%203.8-blue)
 ![CI shield](https://github.com/jorgepiloto/lamberthub/actions/workflows/ci_actions.yml/badge.svg?branch=main)
+[![Documentation Status](https://readthedocs.org/projects/lamberthub/badge/?version=latest)](https://lamberthub.readthedocs.io/en/latest/?badge=latest)
 
 A collection of Lambert's problem solvers implemented using modern Python.
 
@@ -17,9 +18,9 @@ pip install lamberthub
 
 Just in case you are interested on knowing what the problem is about, how to
 solve it or which applications it has, please check the [official documentation
-of the project](https://github.com/jorgepiloto/lamberthub/). For further
+of the project](https://lamberthub.readthedocs.io/en/latest/). For further
 information about software internals, refer to [API
-documentation](https://github.com/jorgepiloto/lamberthub/).
+documentation](https://lamberthub.readthedocs.io/en/latest/autoapi/lamberthub/index.html).
 
 
 ## Which solvers are available?
@@ -84,9 +85,10 @@ can be used.
 ## Documentation and performance comparison tools
 
 The [official lamberthub
-documentation](https://github.com/jorgepiloto/lamberthub) contains different
+documentation](https://lamberthub.readthedocs.io/en/latest/) contains different
 how-to guides, explanations, tutorials and references related to the package.
 
 If you are interested in the performance comparison tools provided, please refer
-to [this documentation chapter](https://github.com/jorgepiloto/lamberthub), were
-you can find a brief tutorials on how to use those tools.
+to [this documentation
+chapter](https://lamberthub.readthedocs.io/en/latest/explanations/performance_comparison.html),
+were you can find a brief tutorials on how to use those tools.
