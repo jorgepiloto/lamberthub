@@ -9,6 +9,8 @@ A collection of Lambert's problem solvers implemented using modern Python.
 
 **Install the latest stable release by running:**
 
+⚠️ Package under heavy development. Stable version not provided yet ⚠️
+
 ```bash
 pip install lamberthub
 ```
