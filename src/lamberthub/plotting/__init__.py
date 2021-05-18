@@ -1,6 +1,6 @@
 """ A sub-package holding a collection of plotting utilities """
 
-from .iterations import IterationsPlotter
-from .time import TimePlotter
+from lamberthub.plotting.iterations import IterationsPlotter
+from lamberthub.plotting.time import TPIPlotter, TTCPlotter
 
-__all__ = ["IterationsPlotter", "TimePlotter"]
+__all__ = ["IterationsPlotter", "TPIPlotter", "TTCPlotter"]
