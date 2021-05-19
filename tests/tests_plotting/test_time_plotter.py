@@ -16,6 +16,6 @@ def test_time_per_iteration_performance_plotter():
 @pytest.mark.mpl_image_compare
 def test_total_time_performance_plotter():
     fig, ax = plt.subplots()
-    ipp = TTCPlotter(ax=ax, fig=fig)
-    ipp.plot_performance(gooding1990, N_samples=3)
+    ttc = TTCPlotter(ax=ax, fig=fig)
+    ttc.plot_performance(gooding1990, N_samples=3, maxttc=3000)
     return fig
