@@ -96,7 +96,8 @@ class TauThetaPlotter:
 
         # Properly size the aspect ratio of the colorbar
         digits = int(np.log10(maxval)) + 1
-        self.cbar.aspect = 50 * digits
+        cbar_title = r"$\times 10^" + f"{digits-2}$" if digits > 2 else None
+        self.cbar.ax.set_title(cbar_title)
 
         # Compute the step which separates two different levels
         step = maxval / cmap.N
@@ -112,7 +113,7 @@ class TauThetaPlotter:
             self.cbar.ax.text(
                 0.5 * maxval,
                 step / 2 + step * n,
-                str(int(step * n)),
+                str(int(step * n / 10 ** (digits - 2))),
                 ha="center",
                 va="center",
                 color=fontcolor,
