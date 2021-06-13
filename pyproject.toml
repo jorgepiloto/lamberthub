@@ -65,5 +65,6 @@ dev = [
 
 [tool.flit.sdist]
 exclude = [
-    "docs/"
+    "docs/",
+    "art/",
 ]
