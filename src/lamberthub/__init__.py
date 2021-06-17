@@ -5,7 +5,7 @@ from lamberthub.universal_solvers.arora import arora2013
 from lamberthub.universal_solvers.gooding import gooding1990
 from lamberthub.universal_solvers.izzo import izzo2015
 
-__version__ = "0.1.dev0"
+__version__ = "0.2.dev0"
 
 ALL_SOLVERS = [gooding1990, avanzini2008, arora2013, izzo2015]
 """ A list holding all lamberthub available solvers """
