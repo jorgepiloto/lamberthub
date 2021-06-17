@@ -4,4 +4,4 @@ import lamberthub
 
 
 def test_version():
-    assert lamberthub.__version__ == "0.1.dev0"
+    assert lamberthub.__version__ == "0.2.dev0"
