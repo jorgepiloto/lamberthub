@@ -5,6 +5,7 @@
 ![Python shield](https://img.shields.io/badge/%F0%9F%90%8D%20Python-%3E%3D%203.8-blue)
 ![CI shield](https://github.com/jorgepiloto/lamberthub/actions/workflows/ci_actions.yml/badge.svg?branch=main)
 [![Documentation Status](https://readthedocs.org/projects/lamberthub/badge/?version=latest)](https://lamberthub.readthedocs.io/en/latest/?badge=latest)
+[![codecov](https://codecov.io/gh/jorgepiloto/lamberthub/branch/main/graph/badge.svg?token=3BY2J5AB8D)](https://codecov.io/gh/jorgepiloto/lamberthub)
 
 A collection of Lambert's problem solvers implemented using modern Python.
 
