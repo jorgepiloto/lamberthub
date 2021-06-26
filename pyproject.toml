@@ -39,7 +39,6 @@ dependencies = ["cmaps", "matplotlib", "numpy", "scipy"]
 dynamic = ["version", "description"]
 
 [project.urls]
-Homepage = "https://www.poliastro.space"
 Source = "https://github.com/jorgepiloto/lamberthub"
 Tracker = "https://github.com/jorgepiloto/lamberthub/issues"
 
