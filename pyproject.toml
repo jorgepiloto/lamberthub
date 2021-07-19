@@ -58,7 +58,7 @@ dev = [
     "pytest-mpl",
     "sphinx",
     "sphinx-autoapi",
-    "sphinx-book-theme",
+    "sphinx-rtd-theme",
     "tox",
 ]
 

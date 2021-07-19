@@ -15,6 +15,7 @@
 # sys.path.insert(0, os.path.abspath('.'))
 
 import lamberthub
+import sphinx_rtd_theme
 
 
 # -- Project information -----------------------------------------------------
@@ -59,12 +60,12 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_book_theme"
-html_theme_options = {
-        "toc_title": "Sections in this page",
-        "extra_navbar": "",
-}
-html_title = "lamberthub\ndocumentation"
+html_theme = "sphinx_rtd_theme"
+#html_theme_options = {
+#        "toc_title": "Sections in this page",
+#        "extra_navbar": "",
+#}
+#html_title = "lamberthub\ndocumentation"
 #html_logo = "_static/lamberts_problem_geometry.png"
 
 # Add any paths that contain custom static files (such as style sheets) here,
