@@ -19,12 +19,9 @@ jobs:
       # The list of OS and tox environments to be tested
       matrix:
         platform: [ubuntu-latest]
-        tox-env: [check, docs, py38, py39]
+        tox-env: [check, py38, py39]
         include:
           - tox-env: check 
-            python-version: 3.8
-
-          - tox-env: docs
             python-version: 3.8
 
           - tox-env: py38
