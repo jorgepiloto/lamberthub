@@ -128,3 +128,6 @@ dmypy.json
 
 # Ignore virtual environments
 venv/
+
+# Ignore ctags file
+tags
