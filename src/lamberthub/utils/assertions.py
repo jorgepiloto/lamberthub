@@ -118,7 +118,7 @@ def assert_number_of_revolutions_not_negative(M):
 
 def assert_transfer_angle_not_zero(dtheta):
     """
-    Checks if the transfer angle is the null value, if so, raises an exception.
+    Checks if the transfer angle is the null value. If so, raises an exception.
 
     Parameters
     ----------
@@ -129,5 +129,23 @@ def assert_transfer_angle_not_zero(dtheta):
 
     if dtheta == 0:
         raise ValueError("Transfer angle was found to be zero!")
+    else:
+        return True
+
+
+def assert_transfer_angle_not_pi(dtheta):
+    """
+    Checks if the transfer angle is pi radians or 180 degrees. If so, raises an
+    exception.
+
+    Parameters
+    ----------
+    dtheta: float
+        Transfer angle value.
+
+    """
+
+    if dtheta == np.pi:
+        raise ValueError("Transfer angle was found to be 180 degrees!")
     else:
         return True
