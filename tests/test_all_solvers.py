@@ -4,7 +4,14 @@ import numpy as np
 import pytest
 from numpy.testing import assert_allclose
 
-from lamberthub import ALL_SOLVERS
+from lamberthub import ALL_SOLVERS as ALL_SOLVERS_LAMBERTHUB
+from lamberthub import NON_ROBUST_SOLVERS
+
+ALL_SOLVERS = [
+    solver for solver in ALL_SOLVERS_LAMBERTHUB if solver not in NON_ROBUST_SOLVERS
+]
+"""A list holding all solvers which present a decent accuracy. Most of the
+solvers from the NON_ROBUST_SOLVERS macro were developed in the old days."""
 
 
 @pytest.mark.parametrize("solver", ALL_SOLVERS)
@@ -57,7 +64,7 @@ def test_case_from_curtiss_book(solver):
     assert_allclose(v2, expected_v2, rtol=1e-4)
 
 
-@pytest.mark.parametrize("solver", ALL_SOLVERS)
+@pytest.mark.parametrize("solver", ALL_SOLVERS_LAMBERTHUB)
 def test_case_from_battin_book(solver):
     """
     Example 7.12 from An Introduction to the Mathematics and Methods of
