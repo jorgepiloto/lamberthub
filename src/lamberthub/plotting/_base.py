@@ -193,19 +193,22 @@ def _measure_performance(solver, theta, tau):
 
     # Solve the problem but only collect the number of iterations
     tic = time.perf_counter()
-    _, _, numiter, tpi = solver(
-        mu,
-        r1_vec,
-        r2_vec,
-        tof,
-        M=0,
-        prograde=True,
-        maxiter=35,
-        atol=1e-5,
-        rtol=1e-7,
-        full_output=True,
-    )
-    tac = time.perf_counter()
+    try:
+        _, _, numiter, tpi = solver(
+            mu,
+            r1_vec,
+            r2_vec,
+            tof,
+            M=0,
+            prograde=True,
+            maxiter=35,
+            atol=1e-5,
+            rtol=1e-7,
+            full_output=True,
+        )
+        tac = time.perf_counter()
+    except ValueError:
+        numiter, tpi, tic, tac = (0, 0, 0, 0)
 
     return numiter, tpi, (tac - tic)
 
