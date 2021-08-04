@@ -6,9 +6,11 @@ import numpy as np
 from numpy.linalg import norm
 
 from lamberthub.utils.angles import get_transfer_angle
-from lamberthub.utils.assertions import (assert_parameters_are_valid,
-                                         assert_transfer_angle_not_pi,
-                                         assert_transfer_angle_not_zero)
+from lamberthub.utils.assertions import (
+    assert_parameters_are_valid,
+    assert_transfer_angle_not_pi,
+    assert_transfer_angle_not_zero,
+)
 
 
 def gauss1809(
