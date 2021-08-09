@@ -13,6 +13,9 @@ ALL_SOLVERS = [
 """A list holding all solvers which present a decent accuracy. Most of the
 solvers from the NON_ROBUST_SOLVERS macro were developed in the old days."""
 
+(ATOL, RTOL) = (0.02, 0.001)
+"""The absolute and relative tolerances for the tests."""
+
 
 @pytest.mark.parametrize("solver", ALL_SOLVERS)
 def test_case_from_vallado_book(solver):
@@ -35,8 +38,8 @@ def test_case_from_vallado_book(solver):
     expected_v2 = np.array([-3.451565, 0.910315, 0.0])  # [km / s]
 
     # Assert the results
-    assert_allclose(v1, expected_v1, rtol=1e-5)
-    assert_allclose(v2, expected_v2, rtol=1e-4)
+    assert_allclose(v1, expected_v1, atol=ATOL, rtol=RTOL)
+    assert_allclose(v2, expected_v2, atol=ATOL, rtol=ATOL)
 
 
 @pytest.mark.parametrize("solver", ALL_SOLVERS)
@@ -60,8 +63,8 @@ def test_case_from_curtiss_book(solver):
     expected_v2 = np.array([-3.3125, -4.1966, -0.38529])  # [ km / s ]
 
     # Assert the results
-    assert_allclose(v1, expected_v1, rtol=1e-4)
-    assert_allclose(v2, expected_v2, rtol=1e-4)
+    assert_allclose(v1, expected_v1, atol=ATOL, rtol=RTOL)
+    assert_allclose(v2, expected_v2, atol=ATOL, rtol=RTOL)
 
 
 @pytest.mark.parametrize("solver", ALL_SOLVERS_LAMBERTHUB)
@@ -83,7 +86,7 @@ def test_case_from_battin_book(solver):
     expected_v1 = np.array([-9.303603251, 3.018641330, 1.536362143])  # [AU / year]
 
     # Assert the results
-    assert_allclose(v1, expected_v1, rtol=1e-5)
+    assert_allclose(v1, expected_v1, atol=ATOL, rtol=RTOL)
 
 
 @pytest.mark.parametrize("solver", ALL_SOLVERS)
@@ -110,8 +113,8 @@ def test_case_from_GMAT_hyperbolic_prograde(solver):
     expected_v2 = np.array([-3.6379, 4.4932, 1.7735])  # [km / s]
 
     # Assert the results
-    assert_allclose(v1, expected_v1, atol=5e-3, rtol=1e-4)
-    assert_allclose(v2, expected_v2, atol=5e-3, rtol=1e-4)
+    assert_allclose(v1, expected_v1, atol=ATOL, rtol=RTOL)
+    assert_allclose(v2, expected_v2, atol=ATOL, rtol=RTOL)
 
 
 @pytest.mark.parametrize("solver", ALL_SOLVERS)
@@ -138,8 +141,8 @@ def test_case_from_GMAT_hyperbolic_retrograde(solver):
     expected_v2 = np.array([-4.3016, -3.4314, -2.5467])  # [km / s]
 
     # Assert the results
-    assert_allclose(v1, expected_v1, atol=5e-3, rtol=1e-4)
-    assert_allclose(v2, expected_v2, atol=5e-3, rtol=1e-4)
+    assert_allclose(v1, expected_v1, atol=ATOL, rtol=RTOL)
+    assert_allclose(v2, expected_v2, atol=ATOL, rtol=RTOL)
 
 
 TABLE_OF_TRANSFERS_I = {
@@ -183,8 +186,8 @@ def test_case_from_der_article_I(solver, case):
     expected_v1, expected_v2 = TABLE_OF_TRANSFERS_I[case]
 
     # Assert the results
-    assert_allclose(v1, expected_v1, rtol=5e-6)
-    assert_allclose(v2, expected_v2, rtol=5e-6)
+    assert_allclose(v1, expected_v1, atol=ATOL, rtol=RTOL)
+    assert_allclose(v2, expected_v2, atol=ATOL, rtol=RTOL)
 
 
 TABLE_OF_TRANSFERS_II = {
@@ -228,5 +231,5 @@ def test_case_from_der_article_II(solver, case):
     expected_v1, expected_v2 = TABLE_OF_TRANSFERS_II[case]
 
     # Assert the results
-    assert_allclose(v1, expected_v1, rtol=5e-6)
-    assert_allclose(v2, expected_v2, rtol=5e-6)
+    assert_allclose(v1, expected_v1, atol=ATOL, rtol=RTOL)
+    assert_allclose(v2, expected_v2, atol=ATOL, rtol=RTOL)
