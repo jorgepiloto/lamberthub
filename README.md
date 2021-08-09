@@ -7,6 +7,7 @@
 [![Documentation Status](https://readthedocs.org/projects/lamberthub/badge/?version=latest)](https://lamberthub.readthedocs.io/en/latest/?badge=latest)
 [![codecov](https://codecov.io/gh/jorgepiloto/lamberthub/branch/main/graph/badge.svg?token=3BY2J5AB8D)](https://codecov.io/gh/jorgepiloto/lamberthub)
 [![DOI](https://zenodo.org/badge/364482782.svg)](https://zenodo.org/badge/latestdoi/364482782)
+[![PyPI version](https://badge.fury.io/py/lamberthub.svg)](https://badge.fury.io/py/lamberthub)
 
 A collection of Lambert's problem solvers implemented using modern Python.
 
