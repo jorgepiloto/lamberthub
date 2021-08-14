@@ -72,6 +72,13 @@ def vallado2013(
     Although detrimental from the point of view of performance, this algorithm
     properly reaches solution in the majority of the cases.
 
+    All credits of the implementation go to Juan Luis Cano Rodríguez and the
+    poliastro development team, from which this routine inherits. Some changes
+    were made to adapt it to `lamberthub` API.
+
+    Copyright (c) 2012-2021 Juan Luis Cano Rodríguez and the poliastro
+    development team.
+
     References
     ----------
     [1] Vallado, D. A. (2001). Fundamentals of astrodynamics and applications
