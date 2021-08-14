@@ -37,7 +37,7 @@ print([solver.__name__ for solver in ALL_SOLVERS])
 At this moment, the following algorithms are available:
 
 ```bash
->>> ['gauss1809', 'battin1984', 'gooding1990', 'avanzini2008', 'arora2013', 'izzo2015']
+>>> ['gauss1809', 'battin1984', 'gooding1990', 'avanzini2008', 'arora2013', 'vallado2013', 'izzo2015']
 ```
 
 ## How can I use a solver?
