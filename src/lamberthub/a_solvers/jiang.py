@@ -5,6 +5,7 @@ import time
 import numpy as np
 from scipy.optimize import bisect, newton
 
+from lamberthub.a_solvers.utils import _get_alpha0, _get_beta0
 from lamberthub.utils.angles import get_transfer_angle
 from lamberthub.utils.assertions import assert_parameters_are_valid
 
@@ -17,7 +18,7 @@ def jiang2016(
     M=0,
     prograde=True,
     low_path=True,
-    maxiter=35,
+    maxiter=100,
     atol=1e-5,
     rtol=1e-7,
     full_output=False,
@@ -71,77 +72,141 @@ def jiang2016(
     semiperimeter = (r1_norm + r2_norm + c_norm) / 2
     dtheta = get_transfer_angle(r1, r2, prograde)
 
-    # Compute the parabolic transfer time using equation (3) from the report [1]
-    mp = -1 if dtheta < np.pi else 1
-    tof_p = (
-        1 / 6 * (r1_norm + r2_norm + c_norm) ** (3 / 2)
-        + mp * 1 / 6 * (r1_norm + r2_norm - c_norm) ** (3 / 2)
-    ) / np.sqrt(mu)
+    # Solve the minimum energy orbit
+    a_min = semiperimeter / 2
 
-    # Compute the semi-major axis of the minimum energy orbit. This is used in
-    # the computation of the initial guess.
-    a_m = semiperimeter / 2
+    # Compute the time of flight for a parabolic transfer
+    tof_parabolic = _lagrange_tof_parabolic(mu, r1_norm, r2_norm, c_norm)
 
-    # The current time of flight is compared against the parabolic one. If it is
-    # greater or lower it means that the transfer orbit is elliptic or
-    # hyperbolic respectively.
-    if tof > tof_p:
-        print(f"Found elliptic orbit")
-
-        a = newton(
-            _kepler_elliptic,
-            a_m,
-            args=(mu, tof, tof_p, dtheta, c_norm, semiperimeter),
-            tol=atol,
-            maxiter=maxiter,
+    # Check if the current time of flight is greater (elliptic) or lower
+    # (hyperbolic)
+    if tof > tof_parabolic:
+        a_lower, a_upper = _initial_guess_elliptic(
+            a_min, mu, tof, dtheta, c_norm, semiperimeter, maxiter
         )
 
-        (alpha, beta) = _alpha_beta_elliptic(a, dtheta, tof, tof_p, c_norm, semiperimeter)
-        p = (
-            (4 * a * (semiperimeter - r1_norm) * (semiperimeter - r2_norm))
-            / (c_norm)
-            * np.sin((alpha + beta) / 2) ** 2
-        )
+        for numiter in range(1, maxiter + 1):
 
-    elif tof == tof_p:
-        a = np.inf
-    else:
-        pass
+            a = (a_lower + a_upper) / 2
+            print(f"{a = }")
 
-    # Compute the velocity vectors
+            # Get the value at the mean point
+            f_a_lower = _f_elliptic(a_lower, mu, tof, dtheta, c_norm, semiperimeter)
+            f_a = _f_elliptic(a, mu, tof, dtheta, c_norm, semiperimeter)
+            f_a_upper = _f_elliptic(a_upper, mu, tof, dtheta, c_norm, semiperimeter)
+
+            if np.abs(f_a) < atol:
+                break
+
+            # Update lower and upper limits
+            if f_a_lower * f_a < 0:
+                a_upper = a
+            else:
+                a_lower = a
+
+    alpha = 2 * np.pi - _get_alpha0(a, semiperimeter)
+    beta = (
+        _get_beta0(a, c_norm, semiperimeter)
+        if dtheta < np.pi
+        else -_get_beta0(a, c_norm, semiperimeter)
+    )
+
+    # f = 1 - a / r1_norm * (1 - np.cos(alpha - beta))
+    # g = tof - np.sqrt(a ** 3 / mu) * (alpha - beta - np.sin(alpha - beta))
+    p = (
+        (4 * a * (semiperimeter - r1_norm) * (semiperimeter - r2_norm))
+        * np.sin((alpha + beta) / 2) ** 2
+        / (c_norm ** 2)
+    )
+
     v1 = (
         np.sqrt(mu * p)
         / (r1_norm * r2_norm * np.sin(dtheta))
         * ((r2 - r1) + r2_norm / p * (1 - np.cos(dtheta)) * r1)
     )
-    v1 = (
+    v2 = (
         np.sqrt(mu * p)
         / (r1_norm * r2_norm * np.sin(dtheta))
         * ((r2 - r1) - r1_norm / p * (1 - np.cos(dtheta)) * r2)
     )
-    return (v1, np.zeros(3))
+    return (v1, v2)
 
 
-def _alpha_beta_elliptic(a, tof, tof_p, dtheta, c, s):
+def _initial_guess_hyperbolic(a_min, mu, tof, dtheta, c, s, maxiter):
+    a0, a1 = -(10 ** 6), -(10 ** 8)
+    found_bounds = False
 
-    # Compute alpha
-    if tof < tof_p:
-        alpha = 2 * np.arcsin((s / (2 * a)) ** (1 / 2))
-    else:
-        alpha = 2 * (np.pi - np.arcsin((s / (2 * a)) ** (1 / 2)))
+    for _ in range(maxiter):
+        f_a0 = _f_elliptic(a0, mu, tof, dtheta, c, s)
+        f_a1 = _f_elliptic(a1, mu, tof, dtheta, c, s)
 
-    # Compute beta
-    if dtheta < np.pi:
-        beta = 2 * np.arcsin(((s - c) / (2 * a)) ** (1 / 2))
-    else:
-        beta = -2 * np.arcsin(((s - c) / (2 * a)) ** (1 / 2))
+        if f_a0 * f_a1 < 0:
+            break
+        else:
+            a0, a1 = a1, 2 * a1
 
-    return (alpha, beta)
+    return a0, a1
 
 
-def _kepler_elliptic(a, mu, tof, tof_p, dtheta, c, s):
-    (alpha, beta) = _alpha_beta_elliptic(a, tof, tof_p, dtheta, c, s)
+def _initial_guess_elliptic(a_min, mu, tof, dtheta, c, s, maxiter):
+    a0, a1 = a_min, 10 * a_min
+    found_bounds = False
 
-    return tof - a ** (3 / 2) / np.sqrt(mu) * (
-        (alpha - np.sin(alpha)) - (beta - np.sin(beta))
+    for _ in range(maxiter):
+        f_a0 = _f_elliptic(a0, mu, tof, dtheta, c, s)
+        f_a1 = _f_elliptic(a1, mu, tof, dtheta, c, s)
+
+        if f_a0 * f_a1 < 0:
+            break
+        else:
+            a0, a1 = a1, 2 * a1
+
+    return a0, a1
+
+
+def _f_elliptic(a, mu, tof, dtheta, c, s):
+    alpha = 2 * np.pi - _get_alpha0(a, s)
+    beta = _get_beta0(a, c, s) if dtheta <= np.pi else -_get_beta0(a, c, s)
+    return tof - _lagrange_tof_elliptic(a, mu, alpha, beta)
+
+
+def _f_hyperbolic(a, mu, tof, dtheta, c, s):
+    alpha = _get_alpha0(a, s)
+    beta = _get_beta0(a, c, s) if dtheta <= np.pi else -_get_beta0(a, c, s)
+    return tof - _lagrange_tof_hyperbolic(a, mu, alpha, beta)
+
+
+def _lagrange_tof_elliptic(a, mu, alpha, beta):
+    tof = (a ** (3 / 2) * ((alpha - np.sin(alpha)) - (beta - np.sin(beta)))) / np.sqrt(
+        mu
     )
+    return tof
+
+
+def _lagrange_tof_parabolic(mu, r1_norm, r2_norm, c_norm):
+    tof = (
+        (1 / 6) * (r1_norm + r2_norm + c_norm) ** (3 / 2)
+        - (1 / 6) * (r1_norm + r2_norm - c_norm) ** (3 / 2)
+    ) / np.sqrt(mu)
+    return tof
+
+
+def _lagrange_tof_hyperbolic(a, mu, alpha, beta):
+    tof = (
+        (-a) ** (3 / 2) * ((np.sinh(alpha) - alpha) - (np.sinh(beta) - beta))
+    ) / np.sqrt(mu)
+    return tof
+
+
+if __name__ == "__main__":
+
+    # Initial conditions
+    mu_earth = 3.986004418e5  # [km ** 3 / s ** 2]
+    r1 = np.array([22592.145603, -1599.915239, -19783.950506])  # [km]
+    r2 = np.array([1922.067697, 4054.157051, -8925.727465])  # [km]
+    tof = 36000  # [s]
+
+    # Retrieve the fundamental geometry of the problem
+    r1_norm, r2_norm, c_norm = [np.linalg.norm(vec) for vec in [r1, r2, r2 - r1]]
+    semiperimeter = (r1_norm + r2_norm + c_norm) / 2
+    dtheta = get_transfer_angle(r1, r2, prograde=True)
