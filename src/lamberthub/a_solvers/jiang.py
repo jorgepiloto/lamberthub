@@ -5,7 +5,7 @@ import time
 import numpy as np
 from scipy.optimize import bisect, newton
 
-from lamberthub.a_solvers.utils import _get_alpha0, _get_beta0
+from lamberthub.a_solvers.utils import _get_alpha0, _get_beta0, _get_orbit_parameter
 from lamberthub.utils.angles import get_transfer_angle
 from lamberthub.utils.assertions import assert_parameters_are_valid
 
@@ -84,41 +84,49 @@ def jiang2016(
         a_lower, a_upper = _initial_guess_elliptic(
             a_min, mu, tof, dtheta, c_norm, semiperimeter, maxiter
         )
+        _f_tof = _f_elliptic
+    else:
+        a_lower, a_upper = _initial_guess_hyperbolic(
+            a_min, mu, tof, dtheta, c_norm, semiperimeter, maxiter
+        )
+        _f_tof = _f_hyperbolic
 
-        for numiter in range(1, maxiter + 1):
+    # The iteration begins
+    for numiter in range(1, maxiter + 1):
 
-            a = (a_lower + a_upper) / 2
-            print(f"{a = }")
+        a = (a_lower + a_upper) / 2
 
-            # Get the value at the mean point
-            f_a_lower = _f_elliptic(a_lower, mu, tof, dtheta, c_norm, semiperimeter)
-            f_a = _f_elliptic(a, mu, tof, dtheta, c_norm, semiperimeter)
-            f_a_upper = _f_elliptic(a_upper, mu, tof, dtheta, c_norm, semiperimeter)
+        # Get the value at the mean point
+        f_a_lower = _f_tof(a_lower, mu, tof, dtheta, c_norm, semiperimeter)
+        f_a = _f_tof(a, mu, tof, dtheta, c_norm, semiperimeter)
+        f_a_upper = _f_tof(a_upper, mu, tof, dtheta, c_norm, semiperimeter)
 
-            if np.abs(f_a) < atol:
-                break
+        if np.abs(f_a) < atol:
+            break
 
-            # Update lower and upper limits
-            if f_a_lower * f_a < 0:
-                a_upper = a
-            else:
-                a_lower = a
+        # Update lower and upper limits
+        if f_a_lower * f_a < 0:
+            a_upper = a
+        else:
+            a_lower = a
 
-    alpha = 2 * np.pi - _get_alpha0(a, semiperimeter)
+    # Compute the value of alpha
+    if tof > tof_parabolic:
+        alpha = 2 * np.pi - _get_alpha0(a, semiperimeter)
+    else:
+        alpha = _get_alpha0(a, semiperimeter)
+
+    # Compute the value of beta
     beta = (
         _get_beta0(a, c_norm, semiperimeter)
         if dtheta < np.pi
         else -_get_beta0(a, c_norm, semiperimeter)
     )
 
-    # f = 1 - a / r1_norm * (1 - np.cos(alpha - beta))
-    # g = tof - np.sqrt(a ** 3 / mu) * (alpha - beta - np.sin(alpha - beta))
-    p = (
-        (4 * a * (semiperimeter - r1_norm) * (semiperimeter - r2_norm))
-        * np.sin((alpha + beta) / 2) ** 2
-        / (c_norm ** 2)
-    )
+    # Get the orbit parameter
+    p = _get_orbit_parameter(a, r1_norm, r2_norm, c_norm, semiperimeter, alpha, beta)
 
+    # Assembly velocity vectors
     v1 = (
         np.sqrt(mu * p)
         / (r1_norm * r2_norm * np.sin(dtheta))
@@ -137,8 +145,8 @@ def _initial_guess_hyperbolic(a_min, mu, tof, dtheta, c, s, maxiter):
     found_bounds = False
 
     for _ in range(maxiter):
-        f_a0 = _f_elliptic(a0, mu, tof, dtheta, c, s)
-        f_a1 = _f_elliptic(a1, mu, tof, dtheta, c, s)
+        f_a0 = _f_hyperbolic(a0, mu, tof, dtheta, c, s)
+        f_a1 = _f_hyperbolic(a1, mu, tof, dtheta, c, s)
 
         if f_a0 * f_a1 < 0:
             break
