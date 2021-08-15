@@ -92,6 +92,7 @@ def jiang2016(
         _f_tof = _f_hyperbolic
 
     # The iteration begins
+    tic = time.perf_counter()
     for numiter in range(1, maxiter + 1):
 
         a = (a_lower + a_upper) / 2
@@ -102,6 +103,8 @@ def jiang2016(
         f_a_upper = _f_tof(a_upper, mu, tof, dtheta, c_norm, semiperimeter)
 
         if np.abs(f_a) < atol:
+            tac = time.perf_counter()
+            tpi = (tac - tic) / numiter
             break
 
         # Update lower and upper limits
@@ -109,6 +112,8 @@ def jiang2016(
             a_upper = a
         else:
             a_lower = a
+    else:
+        raise ValueError
 
     # Compute the value of alpha
     if tof > tof_parabolic:
@@ -137,12 +142,12 @@ def jiang2016(
         / (r1_norm * r2_norm * np.sin(dtheta))
         * ((r2 - r1) - r1_norm / p * (1 - np.cos(dtheta)) * r2)
     )
-    return (v1, v2)
+
+    return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
 def _initial_guess_hyperbolic(a_min, mu, tof, dtheta, c, s, maxiter):
     a0, a1 = -(10 ** 6), -(10 ** 8)
-    found_bounds = False
 
     for _ in range(maxiter):
         f_a0 = _f_hyperbolic(a0, mu, tof, dtheta, c, s)
@@ -150,15 +155,14 @@ def _initial_guess_hyperbolic(a_min, mu, tof, dtheta, c, s, maxiter):
 
         if f_a0 * f_a1 < 0:
             break
-        else:
-            a0, a1 = a1, 2 * a1
+        
+        a0, a1 = a1, 2 * a1
 
     return a0, a1
 
 
 def _initial_guess_elliptic(a_min, mu, tof, dtheta, c, s, maxiter):
     a0, a1 = a_min, 10 * a_min
-    found_bounds = False
 
     for _ in range(maxiter):
         f_a0 = _f_elliptic(a0, mu, tof, dtheta, c, s)
@@ -166,8 +170,8 @@ def _initial_guess_elliptic(a_min, mu, tof, dtheta, c, s, maxiter):
 
         if f_a0 * f_a1 < 0:
             break
-        else:
-            a0, a1 = a1, 2 * a1
+
+        a0, a1 = a1, 2 * a1
 
     return a0, a1
 
@@ -204,17 +208,3 @@ def _lagrange_tof_hyperbolic(a, mu, alpha, beta):
         (-a) ** (3 / 2) * ((np.sinh(alpha) - alpha) - (np.sinh(beta) - beta))
     ) / np.sqrt(mu)
     return tof
-
-
-if __name__ == "__main__":
-
-    # Initial conditions
-    mu_earth = 3.986004418e5  # [km ** 3 / s ** 2]
-    r1 = np.array([22592.145603, -1599.915239, -19783.950506])  # [km]
-    r2 = np.array([1922.067697, 4054.157051, -8925.727465])  # [km]
-    tof = 36000  # [s]
-
-    # Retrieve the fundamental geometry of the problem
-    r1_norm, r2_norm, c_norm = [np.linalg.norm(vec) for vec in [r1, r2, r2 - r1]]
-    semiperimeter = (r1_norm + r2_norm + c_norm) / 2
-    dtheta = get_transfer_angle(r1, r2, prograde=True)
