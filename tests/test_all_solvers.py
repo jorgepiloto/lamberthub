@@ -238,3 +238,7 @@ def test_case_from_der_article_II(solver, case):
     # Assert the results
     assert_allclose(v1, expected_v1, atol=ATOL, rtol=RTOL)
     assert_allclose(v2, expected_v2, atol=ATOL, rtol=RTOL)
+
+if __name__ == "__main__":
+    from lamberthub import jiang2016
+    test_case_from_battin_book(jiang2016)

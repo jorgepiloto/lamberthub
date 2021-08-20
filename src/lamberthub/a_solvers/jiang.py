@@ -91,29 +91,8 @@ def jiang2016(
         )
         _f_tof = _f_hyperbolic
 
-    # The iteration begins
-    tic = time.perf_counter()
-    for numiter in range(1, maxiter + 1):
-
-        a = (a_lower + a_upper) / 2
-
-        # Get the value at the mean point
-        f_a_lower = _f_tof(a_lower, mu, tof, dtheta, c_norm, semiperimeter)
-        f_a = _f_tof(a, mu, tof, dtheta, c_norm, semiperimeter)
-        f_a_upper = _f_tof(a_upper, mu, tof, dtheta, c_norm, semiperimeter)
-
-        if np.abs(f_a) < atol:
-            tac = time.perf_counter()
-            tpi = (tac - tic) / numiter
-            break
-
-        # Update lower and upper limits
-        if f_a_lower * f_a < 0:
-            a_upper = a
-        else:
-            a_lower = a
-    else:
-        raise ValueError
+    # Apply the bisection method
+    a = bisect(_f_tof, a_lower, a_upper, args=(mu, tof, dtheta, c_norm, semiperimeter))
 
     # Compute the value of alpha
     if tof > tof_parabolic:
@@ -121,12 +100,15 @@ def jiang2016(
     else:
         alpha = _get_alpha0(a, semiperimeter)
 
-    # Compute the value of beta
-    beta = (
-        _get_beta0(a, c_norm, semiperimeter)
-        if dtheta < np.pi
-        else -_get_beta0(a, c_norm, semiperimeter)
-    )
+    # Compute the value of beta 
+    if a > 0:
+        beta = (
+            _get_beta0(a, c_norm, semiperimeter)
+            if dtheta < np.pi
+            else -_get_beta0(a, c_norm, semiperimeter)
+        )
+    else:
+        beta = _get_beta0
 
     # Get the orbit parameter
     p = _get_orbit_parameter(a, r1_norm, r2_norm, c_norm, semiperimeter, alpha, beta)
