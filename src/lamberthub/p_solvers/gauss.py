@@ -103,10 +103,10 @@ def gauss1809(
     ]
 
     # Obtain the constants l and m
-    ll = (r1_norm + r2_norm) / (
+    s = (r1_norm + r2_norm) / (
         4 * np.sqrt(r1_norm * r2_norm) * np.cos(dtheta / 2)
     ) - 1 / 2
-    m = (mu * tof ** 2) / (2 * np.sqrt(r1_norm * r2_norm) * np.cos(dtheta / 2)) ** 3
+    w = (mu * tof ** 2) / (2 * np.sqrt(r1_norm * r2_norm) * np.cos(dtheta / 2)) ** 3
 
     # Initial guess formulation is of the arbitrary type
     y0 = 1.00
@@ -115,12 +115,11 @@ def gauss1809(
     tic = time.perf_counter()
     for numiter in range(1, maxiter + 1):
 
-        # Find for the value of capital X
-        x = m / y0 ** 2 - ll
-        X = _X_at_x(x)
+        # Compute the value of the free-parameter
+        x = _gauss_first_equation(y0, s, w)
 
-        # Use previously computed value of X for a better approximation of y
-        y = 1 + X * (ll + x)
+        # Evaluate the new value of the dependent variable
+        y = _gauss_second_equation(x, s)
 
         # Check the convergence of the method
         if np.abs(y - y0) <= atol:
@@ -169,27 +168,80 @@ def gauss1809(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
-def _X_at_x(x):
+def _gauss_first_equation(y, s, w):
+    """Evaluates Gauss' first equation.
+
+    Parameters
+    ----------
+    y: float
+        The dependent variable.
+    s: float
+        First auxiliary variable.
+    w: float
+        Second auxiliary variable.
+
+    Returns
+    -------
+    x: float
+        The independent variable or free-parameter.
+
+    Notes
+    -----
+    This is equation (5.6-13) from Bate's book [2].
+
+    """
+    x = w / y ** 2 - s
+    return x
+
+
+def _gauss_second_equation(x, s):
+    """Evaluates Gauss' second equation.
+
+    Parameters
+    ----------
+    x: float
+        The independent variable.
+    s: float
+        First auxiliary variable
+
+    Returns
+    -------
+    y: float
+        Dependent variable.
+
+    Notes
+    -----
+    This is equation (5.6-14) from Bate's book, reference [2].
+
+    """
+    y = 1 + _X_at_x(x) * (s + x)
+    return y
+
+
+def _X_at_x(x, order=1):
     """Computes capital X as function of lower x.
 
     Parameters
     ----------
     x: float
+        The independent variable.
+    n_items: int
+        The number of terms to be considered in the series.
 
     Returns
     -------
     X: float
+        The series summation.
+
+    Notes
+    -----
+    This is equation (5.6-15) from Bate's book, in reference [2].
 
     """
-    # The first two coefficients are stored so the list can be updated
-    # dynamically in the following statement
-    coeff = [1, 6 / 5 * x]
-    # Compute only up to the tenth power. Gauss' method is a non-robust one and
-    # computing additional series elements does not change its nature. In fact,
-    # it is seen to be detrimental from the point of view of memory.
-    [
-        coeff.append(coeff[i - 1] * (2 * i + 4) / (2 * i + 3) * x ** i)
-        for i in range(2, 10)
-    ]
-    X = 4 / 3 * sum(coeff)
+
+    coefficients = [1]
+    for n in range(3, (3 + order)):
+        coeff = (2 * n) / (2 * n - 1)
+        coefficients.append(np.prod(coefficients[-1]) * coeff * x)
+    X = (4 / 3) * np.sum(coefficients)
     return X
