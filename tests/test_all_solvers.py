@@ -17,7 +17,7 @@ solvers from the NON_ROBUST_SOLVERS macro were developed in the old days."""
 """The absolute and relative tolerances for the tests."""
 
 
-@pytest.mark.parametrize("solver", ALL_SOLVERS)
+@pytest.mark.parametrize("solver", ALL_SOLVERS_LAMBERTHUB)
 def test_case_from_vallado_book(solver):
     """
     Example 5.7 from Fundamentals of Astrodynamics and Applications (4th
