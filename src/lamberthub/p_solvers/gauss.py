@@ -102,11 +102,9 @@ def gauss1809(
         ]
     ]
 
-    # Obtain the constants l and m
-    s = (r1_norm + r2_norm) / (
-        4 * np.sqrt(r1_norm * r2_norm) * np.cos(dtheta / 2)
-    ) - 1 / 2
-    w = (mu * tof ** 2) / (2 * np.sqrt(r1_norm * r2_norm) * np.cos(dtheta / 2)) ** 3
+    # Compute the s and w constants
+    s = _get_s(r1_norm, r2_norm, dtheta)
+    w = _get_w(mu, tof, r1_norm, r2_norm, dtheta)
 
     # Initial guess formulation is of the arbitrary type
     y0 = 1.00
@@ -166,6 +164,64 @@ def gauss1809(
     v2 = f_dot * r1 + g_dot * v1
 
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
+
+
+def _get_s(r1_norm, r2_norm, dtheta):
+    """Returns the s auxiliary constant.
+
+    Parameters
+    ----------
+    r1_norm: float
+        The norm of the initial position vector.
+    r2_norm: float
+        The norm of the final position vector.
+    dtheta: float
+        The transfer angle.
+
+    Returns
+    -------
+    s: float
+        An auxiliary constant.
+
+    Notes
+    -----
+    This is equation number (5.6-2) from Bate's book [2].
+
+    """
+    s = (r1_norm + r2_norm) / (
+        4 * np.sqrt(r1_norm * r2_norm) * np.cos(dtheta / 2)
+    ) - 1 / 2
+    return s
+
+
+def _get_w(mu, tof, r1_norm, r2_norm, dtheta):
+    """Returns the w auxiliary constant.
+
+    Parameters
+    ----------
+    mu: float
+        The gravitational constant.
+    tof: float
+        The time of flight.
+    r1_norm: float
+        The norm of the initial position vector.
+    r2_norm: float
+        The norm of the final position vector.
+    dtheta: float
+        The transfer angle.
+
+    Returns
+    -------
+    w: float
+        An auxiliary constant.
+
+    Notes
+    -----
+    This is equation number (5.6-3) from Bate's book [2].
+
+    """
+    w = (mu * tof ** 2) / (2 * np.sqrt(r1_norm * r2_norm) * np.cos(dtheta / 2)) ** 3
+    return w
 
 
 def _gauss_first_equation(y, s, w):
