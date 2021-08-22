@@ -98,13 +98,12 @@ def battin1984(
     # angle, being positive if lower than 180 degrees or negative if greater.
     # Therefore, Battin's lambda variable is the so-called transfer angle
     # parameter.
-    _lambda = np.sqrt(semiperimeter * (semiperimeter - c_norm)) / semiperimeter
-    _lambda = np.abs(_lambda) if dtheta < np.pi else -np.abs(_lambda)
+    _lambda = _get_lambda(c_norm, semiperimeter, dtheta)
 
     # Solve for the new auxiliary variables developed by Battin. Equations (30)
     # and (31) from the report [1] apply here.
-    ll = ((1 - _lambda) / (1 + _lambda)) ** 2
-    m = (8 * mu * tof ** 2) / (semiperimeter ** 3 * (1 + _lambda) ** 6)
+    ll = _get_ll(_lambda)
+    m = _get_m(mu, tof, semiperimeter, _lambda)
 
     # The non-dimensional transfer time is computed using equation (54) from
     # Battin's report [1]. The non-dimensional time for the parabolic case is
@@ -125,34 +124,20 @@ def battin1984(
     tic = time.perf_counter()
     for numiter in range(1, maxiter + 1):
 
-        # Evaluate the xi function at particular value of x. This is equation
-        # (53) from original report [1] or expression (7.121) from the book [2].
-        # The function follows the series technique for an easy implementation
-        # from the computational point of view.
-        xi = _xi_at_x(x0)
-
         # Evaluate the h coefficients given by equations (47) and (48) from the
         # report [1] or the relations (7.111) and (7.112) from the book [2]. The
         # denominator is common for both h1 and h2 coefficients, so it is
         # to avoid computing it twice
-        h_denominator = (1 + 2 * x0 + ll) * (4 * x0 + xi * (3 + x0))
-        h1 = ((ll + x0) ** 2 * (1 + 3 * x0 + xi)) / h_denominator
-        h2 = (m * (x0 - ll + xi)) / (h_denominator)
+        h1, h2 = _get_h_coefficients(x0, ll, m)
 
-        # For a better convergence of the solution, Battin introduced in [1] the
-        # equations (55), (56) and (58), being this last one a continued
-        # fraction again.
-        B = (27 * h2) / (4 * (1 + h1) ** 3)
-        u = -B / (2 * np.sqrt(1 + B) + 1)
-        K = _K_at_u(u)
+        # Compute the auxiliary variable u, which is used in the computation of
+        # the real positive root in Battin's second equation.
+        u = _u_at_h(h1, h2)
 
-        # Compute the desired positive root via an explicit equation defined in
-        # [1] under the number (57).
-        y = ((1 + h1) / 3) * (2 + np.sqrt(B + 1) / (1 - 2 * u * K))
+        y = _battin_second_equation(u, h1, h2)
 
-        # Compute the new value for x using equation (49) from original report
-        # [1], who's alternative from the book [2] is expression (7.113)
-        x = np.sqrt(((1 - ll) / 2) ** 2 + m / y ** 2) - (1 + ll) / 2
+        # Compute the new value for the free-parameter
+        x = _battin_first_equation(y, ll, m)
 
         # Check if the new computed value lies within desired tolerance. If so,
         # stop the iteration procedure, otherwise update the initial guess and
@@ -175,6 +160,241 @@ def battin1984(
     v2 = -r11 * (s11 * (r1 - r2) + t11 * r2 / r2_norm)
 
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
+
+
+def _battin_first_equation(y, ll, m):
+    """Battin's first equation.
+
+    Parameters
+    ----------
+    y: float
+        The dependent variable.
+    ll: float
+        First auxiliary variable.
+    m: float
+        Second auxiliary variable.
+
+    Returns
+    -------
+    x: float
+        The independent variable.
+
+    Notes
+    -----
+    This is equaiton (49) from original report [1], which is alternative from
+    the book [2] is expression (7.113)
+
+    """
+    x = np.sqrt(((1 - ll) / 2) ** 2 + m / y ** 2) - (1 + ll) / 2
+    return x
+
+
+def _battin_second_equation(u, h1, h2):
+    """Battin's second equation.
+
+    Parameters
+    ----------
+    u: float
+        The dependent variable.
+    h1: float
+        The first of the h coefficients.
+    h2: float
+        The second of the h coefficients.
+
+    Returns
+    -------
+    y: float
+        The dependent variable.
+
+    Notes
+    -----
+    Computes the desired positive root via an explicit equation defined in
+    [1] under number (57).
+    """
+    # Evaluate the auxiliary parameter B and the K function
+    B, K = _B_at_h(h1, h2), _K_at_u(u)
+    y = ((1 + h1) / 3) * (2 + np.sqrt(B + 1) / (1 - 2 * u * K))
+    return y
+
+
+def _get_lambda(c, s, dtheta):
+    """Comptues the transfer angle parameter.
+
+    Parameters
+    ----------
+    c: float
+        The norm of the chord vector.
+    s: float
+        The semiperimeter.
+    dtheta: float
+        The transfer angle in radians.
+
+    Returns
+    -------
+    _lambda: float
+        The transfer angle parameter.
+
+    Notes
+    -----
+    This is inline equation in the very first page of report [1].
+
+    """
+    _lambda = np.sqrt(s * (s - c)) / s
+    _lambda = np.abs(_lambda) if dtheta < np.pi else -np.abs(_lambda)
+    return _lambda
+
+
+def _get_ll(_lambda):
+    """Computes the l variable.
+
+    Parameters
+    ----------
+    _lambda: float
+        The transfer angle parameter.
+
+    Returns
+    -------
+    ll: float
+        Auxiliary variable.
+
+    Notes
+    -----
+    This is equation (30) from original report.
+
+    """
+    ll = ((1 - _lambda) / (1 + _lambda)) ** 2
+    return ll
+
+
+def _get_m(mu, tof, s, _lambda):
+    """Computes the m auxiliary variable.
+
+    Parameters
+    ----------
+    mu: float
+        The gravitational parameter.
+    tof: float
+        The time of flight.
+    s: float
+        The semiperimeter of the orbit.
+    _lambda: float
+        The transfer angle parameter.
+
+    Returns
+    -------
+    m: float
+        Auxiliary variable.
+
+    Notes
+    -----
+    This is equation (31) from official report [1].
+
+    """
+    m = (8 * mu * tof ** 2) / (s ** 3 * (1 + _lambda) ** 6)
+    return m
+
+
+def _get_h_coefficients(x, ll, m):
+    """Evaluates the h1 and h2 coefficients.
+
+    Parameters
+    ----------
+    x: float
+        The free-parameter.
+    ll: float
+        The first auxiliary variable.
+    m: float
+        The second auxiliary variable.
+
+    Returns
+    -------
+    h1: float
+        The first of the h coefficients.
+    h2: float
+        The second of the h coefficients.
+
+    Notes
+    -----
+    These are equations (47) and (48) from report [1].
+
+    """
+    # Evaluate the xi function at particular value of x. This is equation
+    # (53) from original report [1] or expression (7.121) from the book [2].
+    # The function follows the series technique for an easy implementation
+    # from the computational point of view.
+    xi = _xi_at_x(x)
+
+    # Compute the value of the h coefficients
+    h_denominator = (1 + 2 * x + ll) * (4 * x + xi * (3 + x))
+    h1 = ((ll + x) ** 2 * (1 + 3 * x + xi)) / h_denominator
+    h2 = (m * (x - ll + xi)) / (h_denominator)
+    return (h1, h2)
+
+
+def _u_at_h(h1, h2):
+    """Evaluates u at h coefficients.
+
+    Parameters
+    ----------
+    h1: float
+        The first of the h coefficients.
+    h2: float
+        The second of the h coefficients.
+
+    Returns
+    -------
+    u: float
+        Auxiliary variable.
+
+    """
+    u = _u_at_B(_B_at_h(h1, h2))
+    return u
+
+
+def _u_at_B(B):
+    """Evaluates u auxiliary variable at given B.
+
+    Parameters
+    ----------
+    B: float
+        Auxiliary variable.
+
+    Returns
+    -------
+    u: float
+        Auxiliary variable.
+
+    Notes
+    -----
+    This is equation (55) from the original report [1].
+
+    """
+    u = -B / (2 * np.sqrt(1 + B) + 1)
+    return u
+
+
+def _B_at_h(h1, h2):
+    """Evaluates B auxiliary variable at given h coefficients.
+
+    Parameters
+    ----------
+    h1: float
+        The first of the h coefficients.
+    h2: float
+        The second of the h coefficients.
+
+    Returns
+    -------
+    B: float
+        Auxiliary variable.
+
+    Notes
+    -----
+    This is equation (56) from the original report.
+
+    """
+    B = (27 * h2) / (4 * (1 + h1) ** 3)
+    return B
 
 
 def _xi_at_x(x, levels=125):
