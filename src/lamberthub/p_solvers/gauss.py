@@ -274,7 +274,7 @@ def _gauss_second_equation(x, s):
     return y
 
 
-def _X_at_x(x, order=1):
+def _X_at_x(x, order=50):
     """Computes capital X as function of lower x.
 
     Parameters
