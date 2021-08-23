@@ -93,39 +93,33 @@ def vallado2013(
     r1_norm, r2_norm, c_norm = [np.linalg.norm(vec) for vec in [r1, r2, r2 - r1]]
     dtheta = get_transfer_angle(r1, r2, prograde)
 
-    t_m = 1 if dtheta < np.pi else -1
-
-    norm_r1_times_norm_r2 = r1_norm * r2_norm
-    norm_r1_plus_norm_r2 = r1_norm + r2_norm
-
-    cos_dnu = np.dot(r1, r2) / norm_r1_times_norm_r2
-
-    A = t_m * (r1_norm * r2_norm * (1 + cos_dnu)) ** 0.5
-
+    # Compute Vallado's transfer angle parameter
+    A = _get_A(r1_norm, r2_norm, dtheta)
     if A == 0.0:
         raise RuntimeError("Cannot compute orbit, phase angle is 180 degrees")
 
-    psi = 0.0
-    psi_low = -4 * np.pi ** 2
-    psi_up = 4 * np.pi ** 2
+    # The initial guess and limits for the bisection method
+    psi, psi_low, psi_up = 0.0, -4 * np.pi ** 2, 4 * np.pi ** 2
 
     tic = time.perf_counter()
     for numiter in range(1, maxiter + 1):
-        y = norm_r1_plus_norm_r2 + A * (psi * c3(psi) - 1) / c2(psi) ** 0.5
+
+        # Evaluate the value of y at a given psi
+        y = _y_at_psi(psi, r1_norm, r2_norm, A)
+
         if A > 0.0:
             # Readjust xi_low until y > 0.0
-            # Translated directly from Vallado
             while y < 0.0:
                 psi_low = psi
                 psi = (
                     0.8
                     * (1.0 / c3(psi))
-                    * (1.0 - norm_r1_times_norm_r2 * np.sqrt(c2(psi)) / A)
+                    * (1.0 - (r1_norm * r2_norm) * np.sqrt(c2(psi)) / A)
                 )
-                y = norm_r1_plus_norm_r2 + A * (psi * c3(psi) - 1) / c2(psi) ** 0.5
+                y = _y_at_psi(psi, r1_norm, r2_norm, A)
 
-        xi = np.sqrt(y / c2(psi))
-        tof_new = (xi ** 3 * c3(psi) + A * np.sqrt(y)) / np.sqrt(mu)
+        X = _X_at_psi(psi, y)
+        tof_new = _tof_vallado(mu, psi, X, A, y)
 
         # Convergence check
         if np.abs((tof_new - tof) / tof) < rtol:
@@ -151,3 +145,100 @@ def vallado2013(
     v2 = (gdot * r2 - r1) / g
 
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
+
+
+def _tof_vallado(mu, psi, X, A, y):
+    """Evaluates universal Kepler's equation.
+
+    Parameters
+    ----------
+    mu: float
+        The gravitational parameter.
+    psi: float
+        The free-parameter or independent variable.
+    X: float
+        Auxiliary variable.
+    A: float
+        The transfer angle parameter.
+    y: float
+        Auxiliary variable.
+
+    Returns
+    -------
+    tof: float
+        The computed time of flight.
+
+    """
+    tof = (X ** 3 * c3(psi) + A * np.sqrt(y)) / np.sqrt(mu)
+    return tof
+
+
+def _X_at_psi(psi, y):
+    """Computes the value of X at given psi.
+
+    Parameters
+    ----------
+    psi: float
+        The free-parameter or independent variable.
+    y: float
+        Auxiliary variable.
+
+    Returns
+    -------
+    X: float
+        Auxiliary variable.
+
+    """
+    X = np.sqrt(y / c2(psi))
+    return X
+
+
+def _get_A(r1_norm, r2_norm, dtheta):
+    """Computes the value of the A constant.
+
+    Parameters
+    ----------
+    r1_norm: float
+        Initial position vector norm.
+    r2_norm: float
+        Final position vector norm.
+    dtheta: float
+        The transfer angle in radians.
+
+    Returns
+    -------
+    A: float
+        The transfer angle parameter.
+
+    """
+    t_m = 1 if dtheta < np.pi else -1
+    A = t_m * (r1_norm * r2_norm * (1 + np.cos(dtheta))) ** 0.5
+    return A
+
+
+def _y_at_psi(psi, r1_norm, r2_norm, A):
+    """Evaluates the value of y at given psi.
+
+    Parameters
+    ----------
+    psi: float
+        The free-parameter or independent variable.
+    r1_norm: float
+        Initial position vector norm.
+    r2_norm: float
+        Final position vector norm.
+    A: float
+        The transfer angle parameter.
+
+    Returns
+    -------
+    y: float
+        Auxiliary variable.
+
+    Notes
+    -----
+    This is equation (7-59) simplified, similarly as made in [1].
+
+    """
+    y = (r1_norm + r2_norm) + A * (psi * c3(psi) - 1) / c2(psi) ** 0.5
+    return y
