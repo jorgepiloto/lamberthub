@@ -72,7 +72,7 @@ class IterationsPlotter(TauThetaPlotter):
 
         # Solve for the number of iterations
         NN_ITER = self._get_iterations(solver, theta_span, tau_span)
-        MEAN_NN_ITER = np.mean(NN_ITER)
+        MEAN_NN_ITER = np.mean(NN_ITER[NN_ITER > 0])
 
         # Prepare the levels for the contour
         levels = MaxNLocator(nbins=11).tick_values(0, maxiter)
