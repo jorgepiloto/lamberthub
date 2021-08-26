@@ -86,7 +86,7 @@ class TPIPlotter(TauThetaPlotter):
         TPI = TPI_SUM / N_samples * 1e6
 
         # Store the mean time in microseconds per iteration
-        MEAN_TPI = np.mean(TPI)
+        MEAN_TPI = np.mean(TPI[TPI_SUM > 0])
 
         # Prepare the levels for the contour
         levels = MaxNLocator(nbins=11).tick_values(0, maxtpi)
@@ -193,8 +193,9 @@ class TTCPlotter(TauThetaPlotter):
         # The time per iteration is computed and stored in microseconds per iteration
         TTC = TTC_SUM / N_samples * 1e6
 
-        # Store the mean time in microseconds per iteration
-        MEAN_TTC = np.mean(TTC)
+        # Store the mean time in microseconds per iteration. Do not consider
+        # points which did not converge
+        MEAN_TTC = np.mean(TTC[TTC_SUM > 0])
 
         # Prepare the levels for the contour
         levels = MaxNLocator(nbins=11).tick_values(0, maxttc)
