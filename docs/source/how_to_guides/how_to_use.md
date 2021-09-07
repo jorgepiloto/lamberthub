@@ -72,6 +72,7 @@ Python function built with the following API architecture:
 * `tof`: time of flight between initial and final vectors.
 
 **Additional parameters**
+* `M`: the number of desired revolutions. If zero, direct transfer is assumed.
 * `prograde`: this parameter controls the inclination of the final orbit. If set
   to `True`, the transfer will have an inclination between 0 and 90 degrees
   while if `False` inclinations between 90 and 180 are provided.
