@@ -47,7 +47,9 @@ dev = [
     "black",
     "coverage",
     "isort",
+    "jupytext",
     "myst-nb",
+    "nbsphinx",
     "notebook",
     "pycodestyle",
     "pytest>=3.2",
@@ -56,6 +58,7 @@ dev = [
     "pytest-mpl",
     "sphinx",
     "sphinx-autoapi",
+    "sphinx-gallery",
     "sphinx-rtd-theme",
     "tox",
 ]
