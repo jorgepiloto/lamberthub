@@ -1,0 +1,131 @@
+---
+jupytext:
+  text_representation:
+    extension: .mystnb
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.12.0
+kernelspec:
+  display_name: Python 3
+  language: python
+  name: python3
+---
+
+# Gauss' solver and the discovery of Ceres
+
+![Gauss portrait](../_static/tutorials/gauss_thumbnail.png)
+
+The often called *Prince of Mathematics*, [Carl Friedrich Gauss](https://en.wikipedia.org/wiki/Carl_Friedrich_Gauss), made his greatest contribution to the astronomy subject by determining the orbit of the dwarf planet Ceres, who was discovered by Giuseppe Piazzi but lost in the night sky some days later.
+
+Gauss developed a method based on three angles for determining the orbit of a body within the model of the two-body problem. However, the genius also devised a method for solving the Lambert's problem, which will be presented in this notebook.
+
++++
+
+## The ratio of the triangle area to sector one
+
+His algorithm exploited the ratio between the sector triangle areas. By its time, it was considered to be a great improvement within initial orbit determination subject. However, the algorithm is also known for its low accuracy when the transfer angle exceeds around 90 degrees although performs well for lower transfer angles and times.
+
+The following figure represents the geometry of the ratio of triangle area to sector one as from Bate's book, see [1].
+
+![Ratio of triangle area to sector one as from Bate's book](../_static/tutorials/gauss_area_ratio.png)
+
+In this subsection, only the fundamental equations required for solving this method will be presented. However, if reader wants to review the original work made by Gauss, then refer to his famous book *Theoria Motus Corporum Coelestium in Sectionibus Conicis Solem Ambientium*. A modern revision of the problem was made by Teets in [2] using the original notation when possible. Let us present in the following lines, the basic expressions for the method devised by Gauss. The notation from [1] is used in this notebook.
+
+The independent variable employed by Gauss is named $x$, while the dependent one is $y$. These two variables are related via the so-called \textit{two equations of Gauss}, being those:
+
+\begin{equation}
+x = \frac{w}{y^2} - s\quad\quad\quad
+y = 1 + X(s + x)
+\label{eq:gauss_equations}
+\end{equation}
+
+where in previous equation, the auxiliary variables are the semi-perimeter $s$ and a variable $w$ related with the non-dimensional transfer time:
+
+$$
+s = \frac{r_1 + r_2}{2 \sqrt{r_1 r_2} \cos{\left(\frac{\Delta \theta}{2} \right)}} - \frac{1}{2}\quad\quad\quad
+w = \frac{\mu \Delta t^2}{\left(2\sqrt{r_1 r_2} \cos{\left(\frac{\Delta \theta}{2} \right)}\right)^3}
+$$
+
+
+Finally, $X$ is given by the expression developed in Moulton's book, see [3]:
+
+$$
+X = \frac{4}{3}\left(1 + \frac{6}{5}x + \frac{6 \cdot 8}{5 \cdot 7}x^2 + \frac{6 \cdot 8 \cdot 10}{5 \cdot 7 \cdot 9}x^3 + ...\right)
+$$
+
+For solving the value of $x$, an initial guess about $y$ needs to be made, such that $y_0=1.00$ for example. Then, the value of $x(y_0)$ is solved via Gauss' equations so a new value of $X(x)$ can be computed. Finally, a new
+value of $y(x)$ is found. This value is compared with the initial one $y_0$ used for the iteration. If $\left \| y - y_0 \right \| < \text{atol}$, then the method has converged and the value for the free-parameter has been found.
+
++++
+
+## Time of flight curves
+
+For building the curves of the time of flight, we first need to generate a span of transfer angles. By imposing a particular $\vec{r_1}$ and the non-dimensional radius $\rho=\frac{r_2}{r_1}$, it is possible to rotate and scale the initial position vector to obtain the final one $\vec{r_2}$. Therefore, let us define a function which returns these vectors for a particular $\Delta \theta$ and $\rho$.
+
+```{code-cell} ipython3
+# Import some of the uitilities installed by deafult with lamberthub
+import cmaps
+import matplotlib.pyplot as plt
+import numpy as np
+```
+
+Now, we can create an array of transfer angles, ranging from $0$ up to $360$ degrees. However, because all the mathematical functions involved deal with radians, a conversion will be applied to the generated array.
+
+```{code-cell} ipython3
+# Declare and show the array of transfer angles
+theta_array = np.linspace(0, 360, 8+1) * np.pi / 180
+print(f"Transfer angles: {theta_array * 180 / np.pi}")
+```
+
+Now, the curves for the time of flight can be computed using the second equation of Gauss, which is provided in the `lamberthub` package. To do so, the figure is allocated and the problem is computed in the *non-transcendental* path, whihc means solving the dependent variable from the free-parameter.
+
+Let us start by importing previously presented equations from the `lamberthub` library:
+
+```{code-cell} ipython3
+from lamberthub.p_solvers.gauss import _get_s, _get_w, _gauss_second_equation
+from lamberthub.utils.angles import get_transfer_angle
+from lamberthub.utils.misc import _get_sample_vectors_from_theta_and_rho
+```
+
+```{code-cell} ipython3
+# Allocate the figure
+fig, ax = plt.subplots(figsize=(10, 6))
+
+# Declare the color pallete
+COLORS = cmaps.amwg(np.linspace(0,1,len(theta_array)))
+
+for i, theta in enumerate(theta_array):
+    
+    # Gauss is singular for the following angles
+    if theta in [0, np.pi, np.pi, 2 * np.pi]:
+        continue      
+        
+    # Compute the initial and final position vectors
+    r1, r2 = _get_sample_vectors_from_theta_and_rho(theta, 2.00)
+    r1_norm, r2_norm = [np.linalg.norm(vec) for vec in [r1, r2]]
+    
+    # Solve the values of s and w. Gravitational parameter and time of flight are assumed to be unitary
+    s, w = _get_s(r1_norm, r2_norm, theta), _get_w(1, 1, r1_norm, r2_norm, theta)
+    
+    # Generate an x and y arrays
+    x_array = np.linspace(0, 1)
+    y_array = [_gauss_second_equation(x, s) for x in x_array]
+    
+    # Plot the lines for a particular transfer angle
+    ax.plot(x_array, y_array, color=COLORS[i], label=r"$\Delta \theta = $" + f"{theta * 180/ np.pi:.0f} deg") 
+    
+    
+# Beautify the figure by adding axes labels and legend
+ax.set_xlabel(r"$x$")
+ax.set_ylabel(r"$y$")
+ax.set_xlim(0, 1)
+ax.set_ylim(-10, 10)
+ax.legend(shadow=True)
+plt.show()
+```
+
+## References
+
+1. Bate, R. R., Mueller, D. D., White, J. E., & Saylor, W. W. (2020). Fundamentals of astrodynamics. Courier Dover Publications.
+2. Teets, D., & Whitehead, K. (1999). The discovery of Ceres: How Gauss became famous. Mathematics Magazine, 72(2), 83-93.
+3. Moulton, F. R. (1970). An introduction to celestial mechanics. Courier Corporation.
