@@ -4,11 +4,12 @@ import time
 
 import matplotlib.pyplot as plt
 import numpy as np
-from numpy import cos, sin
+
+from lamberthub.utils.misc import _get_sample_vectors_from_theta_and_rho
 
 
 class TauThetaPlotter:
-    """ A class for modelling a discrete grid contour plotter. """
+    """A class for modelling a discrete grid contour plotter."""
 
     def __init__(self, ax=None, fig=None, Nres=50):
         """
@@ -120,7 +121,7 @@ class TauThetaPlotter:
             )
 
     def _draw_ticks(self):
-        """ Draws the ticks within the axes """
+        """Draws the ticks within the axes"""
 
         # Set the X-ticks
         self.ax.set_xticks(np.array([0, 0.5, 1, 1.5, 2]) * np.pi)
@@ -135,7 +136,7 @@ class TauThetaPlotter:
         )
 
     def _draw_labels(self):
-        """ Draws axes labels """
+        """Draws axes labels"""
 
         # Set axes labels and title
         self.ax.set_xlabel(r"$\Delta \theta$")
@@ -166,19 +167,12 @@ def _measure_performance(solver, theta, tau):
 
     """
 
-    # Generate final position vector by rotating initial one a given theta
-    r1_vec = np.array([1, 0])
-    r2_vec = (
-        2.0 * np.array([[cos(theta), sin(theta)], [sin(theta), cos(theta)]]) @ r1_vec
-    )
-
-    # Make vectors three-dimensional
-    r1_vec = np.append(r1_vec, np.array([0]), axis=0)
-    r2_vec = np.append(r2_vec, np.array([0]), axis=0)
+    # Generate r1_vec and r2_vec such that r2_norm = 2 * r1_norm for various theta
+    r1_vec, r2_vec = _get_sample_vectors_from_theta_and_rho(theta, 2.0)
 
     # Compute the norms, the chord and semi-perimeter
     r1, r2 = [np.linalg.norm(rr) for rr in [r1_vec, r2_vec]]
-    c = (r1 ** 2 + r2 ** 2 - 2 * r1 * r2 * cos(theta)) ** 0.5
+    c = (r1 ** 2 + r2 ** 2 - 2 * r1 * r2 * np.cos(theta)) ** 0.5
     s = (r1 + r2 + c) / 2
 
     # Compute the dimensional time from the non-dimensional one using
