@@ -10,7 +10,7 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
+import os
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
@@ -36,12 +36,18 @@ release = "0.1.dev0"
 extensions = [
     "autoapi.extension",
     "myst_nb",
+    'nbsphinx',
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
+    'sphinx_gallery.load_style',
 ]
 
 # Source files
-source_suffix = [".md", ".rst"]
+source_suffix = {
+    '.rst': 'restructuredtext',
+    '.ipynb': 'myst-nb',
+    '.myst': 'myst-nb',
+}
 
 # Index document
 master_doc = "index"
@@ -52,8 +58,10 @@ templates_path = ["_templates"]
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
-
+if os.environ.get("LAMBERTHUB_SKIP_PERFORMANCE") == "True":
+    exclude_patterns = ["source/explanations/performance_comparison.md"]
+else:
+    exclude_patterns = []
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -87,6 +95,14 @@ nbsphinx_custom_formats = {
     '.mystnb': ['jupytext.reads', {'fmt': 'mystnb'}],
 }
 
+# Custom thumbnails for gallery of examples
+nbsphinx_thumbnails = {
+        "tutorials/gauss_solver": "_static/tutorials/gauss_thumbnail.png"
+}
+
 # The performance comparison takes a bit long. This avoids the documentation to
 # assume something has failed due to long time computations
-execution_timeout = 600
+execution_timeout = 900
+
+# Custom mathjax configuration
+myst_update_mathjax = False
