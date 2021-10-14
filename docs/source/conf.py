@@ -97,7 +97,7 @@ nbsphinx_custom_formats = {
 
 # Custom thumbnails for gallery of examples
 nbsphinx_thumbnails = {
-        "tutorials/gauss_solver": "_static/tutorials/gauss_thumbnail.png"
+        "tutorials/gauss1809_solver": "_static/tutorials/gauss_thumbnail.png"
 }
 
 # The performance comparison takes a bit long. This avoids the documentation to

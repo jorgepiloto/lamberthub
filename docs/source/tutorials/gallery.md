@@ -3,6 +3,6 @@
 ```{eval-rst}
 .. nbgallery::
 
-   gauss_solver.mystnb
+   gauss1809_solver.mystnb
    
 ```
