@@ -5,8 +5,8 @@ python:
     - method: pip
       path: .
       extra_requirements:
-        - dev
+        - doc
 sphinx:
   builder: html
-  configuration: docs/source/conf.py
+  configuration: doc/source/conf.py
   fail_on_warning: true
