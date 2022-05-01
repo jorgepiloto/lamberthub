@@ -102,7 +102,7 @@ nbsphinx_thumbnails = {
 
 # The performance comparison takes a bit long. This avoids the documentation to
 # assume something has failed due to long time computations
-execution_timeout = 900
+nb_execution_timeout = 900
 
 # Custom mathjax configuration
 myst_update_mathjax = False
