@@ -10,8 +10,8 @@ repos:
   hooks:
   - id: isort
 
-- repo: https://github.com/csachs/pyproject-flake8
-  rev: v0.0.1a4
+- repo: https://gitlab.com/PyCQA/flake8
+  rev: 4.0.1
   hooks:
   - id: flake8
 
@@ -19,10 +19,11 @@ repos:
   rev: v2.1.0
   hooks:
   - id: codespell
+    args: ["--skip", "*.css"]
 
-- repo: https://github.com/pycqa/pydocstyle
-  rev: 6.1.1
-  hooks:
-  - id: pydocstyle
-    additional_dependencies: [toml]
-    exclude: "tests/"
+    #- repo: https://github.com/pycqa/pydocstyle
+    #  rev: 6.1.1
+    #  hooks:
+    #  - id: pydocstyle
+    #    additional_dependencies: [toml]
+    #    exclude: "tests/"

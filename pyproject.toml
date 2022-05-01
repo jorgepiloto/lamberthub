@@ -77,10 +77,6 @@ line_length = 79
 default_section = "THIRDPARTY"
 src_paths = ["doc", "src", "tests"]
 
-[tool.flake8]
-max-line-length = 79
-extend-ignore = "E203,"
-
 [tool.coverage.run]
 source = ["lamberthub"]
 

@@ -1,6 +1,6 @@
 import numpy as np
-import pytest
 from numpy.testing import assert_allclose
+import pytest
 
 from lamberthub.utils.elements import rotation_matrix, rv2coe
 
@@ -113,7 +113,11 @@ def test_rv2coe_non_equatorial(orbit_type):
 def test_rotation_matrix_x():
     result = rotation_matrix(0.218, 0)
     expected = np.array(
-        [[1.0, 0.0, 0.0], [0.0, 0.97633196, -0.21627739], [0.0, 0.21627739, 0.97633196]]
+        [
+            [1.0, 0.0, 0.0],
+            [0.0, 0.97633196, -0.21627739],
+            [0.0, 0.21627739, 0.97633196],
+        ]
     )
     assert np.allclose(expected, result)
 
@@ -121,7 +125,11 @@ def test_rotation_matrix_x():
 def test_rotation_matrix_y():
     result = rotation_matrix(0.218, 1)
     expected = np.array(
-        [[0.97633196, 0.0, 0.21627739], [0.0, 1.0, 0.0], [0.21627739, 0.0, 0.97633196]]
+        [
+            [0.97633196, 0.0, 0.21627739],
+            [0.0, 1.0, 0.0],
+            [0.21627739, 0.0, 0.97633196],
+        ]
     )
     assert np.allclose(expected, result)
 
@@ -129,7 +137,11 @@ def test_rotation_matrix_y():
 def test_rotation_matrix_z():
     result = rotation_matrix(0.218, 2)
     expected = np.array(
-        [[0.97633196, -0.21627739, 0.0], [0.21627739, 0.97633196, 0.0], [0.0, 0.0, 1.0]]
+        [
+            [0.97633196, -0.21627739, 0.0],
+            [0.21627739, 0.97633196, 0.0],
+            [0.0, 0.0, 1.0],
+        ]
     )
     assert np.allclose(expected, result)
 

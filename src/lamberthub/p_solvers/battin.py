@@ -22,7 +22,7 @@ def battin1984(
     full_output=False,
 ):
     r"""
-    Battin's elegant algortihm for solving the Lambert's problem. This algorithm
+    Battin's elegant algorithm for solving the Lambert's problem. This algorithm
     is known to improve Gauss original one by removing the singularity for 180
     transfer angles and increasing its performance.
 
@@ -87,7 +87,9 @@ def battin1984(
     assert_parameters_are_valid(mu, r1, r2, tof, M)
 
     # Retrieve the fundamental geometry of the problem
-    r1_norm, r2_norm, c_norm = [np.linalg.norm(vec) for vec in [r1, r2, r2 - r1]]
+    r1_norm, r2_norm, c_norm = [
+        np.linalg.norm(vec) for vec in [r1, r2, r2 - r1]
+    ]
     semiperimeter = (r1_norm + r2_norm + c_norm) / 2
     dtheta = get_transfer_angle(r1, r2, prograde)
 
@@ -110,8 +112,8 @@ def battin1984(
     # also computed here using equation appearing in page 340 of Battin's book
     # [2]. The author did not provide this in the original paper [1], which is a
     # critical errata, as it is used in the initial guess computation.
-    T = np.sqrt(8 * mu / semiperimeter ** 3) * tof
-    T_p = (4 / 3) * (1 - _lambda ** 3)
+    T = np.sqrt(8 * mu / semiperimeter**3) * tof
+    T_p = (4 / 3) * (1 - _lambda**3)
 
     # The initial guess procedure is set according to piece-wise no-numbered
     # equation appearing in the last page of the report [1]. This relation is
@@ -185,7 +187,7 @@ def _battin_first_equation(y, ll, m):
     the book [2] is expression (7.113)
 
     """
-    x = np.sqrt(((1 - ll) / 2) ** 2 + m / y ** 2) - (1 + ll) / 2
+    x = np.sqrt(((1 - ll) / 2) ** 2 + m / y**2) - (1 + ll) / 2
     return x
 
 
@@ -290,7 +292,7 @@ def _get_m(mu, tof, s, _lambda):
     This is equation (31) from official report [1].
 
     """
-    m = (8 * mu * tof ** 2) / (s ** 3 * (1 + _lambda) ** 6)
+    m = (8 * mu * tof**2) / (s**3 * (1 + _lambda) ** 6)
     return m
 
 

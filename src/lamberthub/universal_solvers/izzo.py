@@ -112,10 +112,12 @@ def izzo2015(
 
     # Correct transfer angle parameter and tangential vectors regarding orbit's
     # inclination
-    ll, i_t1, i_t2 = (-ll, -i_t1, -i_t2) if prograde is False else (ll, i_t1, i_t2)
+    ll, i_t1, i_t2 = (
+        (-ll, -i_t1, -i_t2) if prograde is False else (ll, i_t1, i_t2)
+    )
 
     # Non dimensional time of flight
-    T = np.sqrt(2 * mu / s ** 3) * tof
+    T = np.sqrt(2 * mu / s**3) * tof
 
     # Find solutions and filter them
     x, y, numiter, tpi = _find_xy(ll, T, M, maxiter, atol, rtol, low_path)
@@ -123,11 +125,13 @@ def izzo2015(
     # Reconstruct
     gamma = np.sqrt(mu * s / 2)
     rho = (r1_norm - r2_norm) / c_norm
-    sigma = np.sqrt(1 - rho ** 2)
+    sigma = np.sqrt(1 - rho**2)
 
     # Compute the radial and tangential components at initial and final
     # position vectors
-    V_r1, V_r2, V_t1, V_t2 = _reconstruct(x, y, r1_norm, r2_norm, ll, gamma, rho, sigma)
+    V_r1, V_r2, V_t1, V_t2 = _reconstruct(
+        x, y, r1_norm, r2_norm, ll, gamma, rho, sigma
+    )
 
     # Solve for the initial and final velocity
     v1 = V_r1 * (r1 / r1_norm) + V_t1 * i_t1
@@ -151,7 +155,7 @@ def _find_xy(ll, T, M, maxiter, atol, rtol, low_path):
     assert abs(ll) < 1
 
     M_max = np.floor(T / pi)
-    T_00 = np.arccos(ll) + ll * np.sqrt(1 - ll ** 2)  # T_xM
+    T_00 = np.arccos(ll) + ll * np.sqrt(1 - ll**2)  # T_xM
 
     # Refine maximum number of revolutions if necessary
     if T < T_00 + M_max * pi and M_max > 0:
@@ -176,7 +180,7 @@ def _find_xy(ll, T, M, maxiter, atol, rtol, low_path):
 
 def _compute_y(x, ll):
     """Computes y."""
-    return np.sqrt(1 - ll ** 2 * (1 - x ** 2))
+    return np.sqrt(1 - ll**2 * (1 - x**2))
 
 
 def _compute_psi(x, y, ll):
@@ -189,11 +193,11 @@ def _compute_psi(x, y, ll):
     if -1 <= x < 1:
         # Elliptic motion
         # Use arc cosine to avoid numerical errors
-        return np.arccos(x * y + ll * (1 - x ** 2))
+        return np.arccos(x * y + ll * (1 - x**2))
     elif x > 1:
         # Hyperbolic motion
         # The hyperbolic sine is bijective
-        return np.arcsinh((y - x * ll) * np.sqrt(x ** 2 - 1))
+        return np.arcsinh((y - x * ll) * np.sqrt(x**2 - 1))
     else:
         # Parabolic motion
         return 0.0
@@ -210,12 +214,12 @@ def _tof_equation_y(x, y, T0, ll, M):
         eta = y - ll * x
         S_1 = (1 - ll - x * eta) * 0.5
         Q = 4 / 3 * hyp2f1(3, 1, 5 / 2, S_1)
-        T_ = (eta ** 3 * Q + 4 * ll * eta) * 0.5
+        T_ = (eta**3 * Q + 4 * ll * eta) * 0.5
     else:
         psi = _compute_psi(x, y, ll)
         T_ = np.divide(
-            np.divide(psi + M * pi, np.sqrt(np.abs(1 - x ** 2))) - x + ll * y,
-            (1 - x ** 2),
+            np.divide(psi + M * pi, np.sqrt(np.abs(1 - x**2))) - x + ll * y,
+            (1 - x**2),
         )
 
     return T_ - T0
@@ -223,17 +227,19 @@ def _tof_equation_y(x, y, T0, ll, M):
 
 def _tof_equation_p(x, y, T, ll):
     # TODO: What about derivatives when x approaches 1?
-    return (3 * T * x - 2 + 2 * ll ** 3 * x / y) / (1 - x ** 2)
+    return (3 * T * x - 2 + 2 * ll**3 * x / y) / (1 - x**2)
 
 
 def _tof_equation_p2(x, y, T, dT, ll):
-    return (3 * T + 5 * x * dT + 2 * (1 - ll ** 2) * ll ** 3 / y ** 3) / (1 - x ** 2)
+    return (3 * T + 5 * x * dT + 2 * (1 - ll**2) * ll**3 / y**3) / (
+        1 - x**2
+    )
 
 
 def _tof_equation_p3(x, y, _, dT, ddT, ll):
-    return (7 * x * ddT + 8 * dT - 6 * (1 - ll ** 2) * ll ** 5 * x / y ** 5) / (
-        1 - x ** 2
-    )
+    return (
+        7 * x * ddT + 8 * dT - 6 * (1 - ll**2) * ll**5 * x / y**5
+    ) / (1 - x**2)
 
 
 def _compute_T_min(ll, M, maxiter, atol, rtol):
@@ -259,12 +265,12 @@ def _initial_guess(T, ll, M, low_path):
     """Initial guess."""
     if M == 0:
         # Single revolution
-        T_0 = np.arccos(ll) + ll * np.sqrt(1 - ll ** 2) + M * pi  # Equation 19
-        T_1 = 2 * (1 - ll ** 3) / 3  # Equation 21
+        T_0 = np.arccos(ll) + ll * np.sqrt(1 - ll**2) + M * pi  # Equation 19
+        T_1 = 2 * (1 - ll**3) / 3  # Equation 21
         if T >= T_0:
             x_0 = (T_0 / T) ** (2 / 3) - 1
         elif T < T_1:
-            x_0 = 5 / 2 * T_1 / T * (T_1 - T) / (1 - ll ** 5) + 1
+            x_0 = 5 / 2 * T_1 / T * (T_1 - T) / (1 - ll**5) + 1
         else:
             # This is the real condition, which is not exactly equivalent
             # elif T_1 < T < T_0
@@ -281,7 +287,9 @@ def _initial_guess(T, ll, M, low_path):
         )
 
         # Filter out the solution
-        x_0 = np.max([x_0l, x_0r]) if low_path is True else np.min([x_0l, x_0r])
+        x_0 = (
+            np.max([x_0l, x_0r]) if low_path is True else np.min([x_0l, x_0r])
+        )
 
         return x_0
 
@@ -304,7 +312,7 @@ def _halley(p0, T0, ll, atol, rtol, maxiter):
         fder3 = _tof_equation_p3(p0, y, T0, fder, fder2, ll)
 
         # Halley step (cubic)
-        p = p0 - 2 * fder * fder2 / (2 * fder2 ** 2 - fder * fder3)
+        p = p0 - 2 * fder * fder2 / (2 * fder2**2 - fder * fder3)
 
         if abs(p - p0) < rtol * np.abs(p0) + atol:
             return p
@@ -335,8 +343,8 @@ def _householder(p0, T0, ll, M, atol, rtol, maxiter):
 
         # Householder step (quartic)
         p = p0 - fval * (
-            (fder ** 2 - fval * fder2 / 2)
-            / (fder * (fder ** 2 - fval * fder2) + fder3 * fval ** 2 / 6)
+            (fder**2 - fval * fder2 / 2)
+            / (fder * (fder**2 - fval * fder2) + fder3 * fval**2 / 6)
         )
 
         if abs(p - p0) < rtol * np.abs(p0) + atol:

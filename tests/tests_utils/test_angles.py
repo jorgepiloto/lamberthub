@@ -1,8 +1,13 @@
 import numpy as np
-import pytest
 from numpy.testing import assert_allclose
+import pytest
 
-from lamberthub.utils.angles import B_to_nu, E_to_nu, H_to_nu, get_transfer_angle
+from lamberthub.utils.angles import (
+    B_to_nu,
+    E_to_nu,
+    H_to_nu,
+    get_transfer_angle,
+)
 
 
 @pytest.mark.parametrize("sense", [True, False])
@@ -23,8 +28,16 @@ def test_get_transfer_angle_collinear_vectors_same_sense(sense):
 
 TABLE_OF_SOLUTIONS = {
     "elliptic": [0.80521, 1.00220, 0.24649],  # [E, nu, ecc] from Curtis 3.3
-    "parabolic": [3.1481, 2.526364092261792, 1],  # [B, nu, ecc] from Curtis 3.4
-    "hyperbolic": [2.2927, 1.7453292519943295, 2.7696],  # [H, nu, ecc] from Curtis 3.5
+    "parabolic": [
+        3.1481,
+        2.526364092261792,
+        1,
+    ],  # [B, nu, ecc] from Curtis 3.4
+    "hyperbolic": [
+        2.2927,
+        1.7453292519943295,
+        2.7696,
+    ],  # [H, nu, ecc] from Curtis 3.5
 }
 
 

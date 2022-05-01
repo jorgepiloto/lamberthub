@@ -90,7 +90,9 @@ def vallado2013(
     assert_parameters_are_valid(mu, r1, r2, tof, M)
 
     # Retrieve the fundamental geometry of the problem
-    r1_norm, r2_norm, c_norm = [np.linalg.norm(vec) for vec in [r1, r2, r2 - r1]]
+    r1_norm, r2_norm, c_norm = [
+        np.linalg.norm(vec) for vec in [r1, r2, r2 - r1]
+    ]
     dtheta = get_transfer_angle(r1, r2, prograde)
 
     # Compute Vallado's transfer angle parameter
@@ -99,7 +101,7 @@ def vallado2013(
         raise RuntimeError("Cannot compute orbit, phase angle is 180 degrees")
 
     # The initial guess and limits for the bisection method
-    psi, psi_low, psi_up = 0.0, -4 * np.pi ** 2, 4 * np.pi ** 2
+    psi, psi_low, psi_up = 0.0, -4 * np.pi**2, 4 * np.pi**2
 
     tic = time.perf_counter()
     for numiter in range(1, maxiter + 1):
@@ -169,7 +171,7 @@ def _tof_vallado(mu, psi, X, A, y):
         The computed time of flight.
 
     """
-    tof = (X ** 3 * c3(psi) + A * np.sqrt(y)) / np.sqrt(mu)
+    tof = (X**3 * c3(psi) + A * np.sqrt(y)) / np.sqrt(mu)
     return tof
 
 

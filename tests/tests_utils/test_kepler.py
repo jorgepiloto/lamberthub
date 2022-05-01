@@ -1,12 +1,17 @@
 """ Unitary tests related to Kepler's equation """
 
-import pytest
 from numpy.testing import assert_allclose
+import pytest
 
 from lamberthub.utils.kepler import kepler_from_nu
 
 TABLE_OF_SOLUTIONS = {
-    "elliptic": [0.62749, 0.80521, 1.00220, 0.24649],  # [M, E, nu, ecc] from Curtis 3.3
+    "elliptic": [
+        0.62749,
+        0.80521,
+        1.00220,
+        0.24649,
+    ],  # [M, E, nu, ecc] from Curtis 3.3
     "parabolic": [
         2 * 6.7737,
         3.1481,

@@ -126,13 +126,25 @@ class TauThetaPlotter:
         # Set the X-ticks
         self.ax.set_xticks(np.array([0, 0.5, 1, 1.5, 2]) * np.pi)
         self.ax.set_xticklabels(
-            [r"$0$", r"$\frac{\pi}{2}$", r"$\pi$", r"$\frac{2\pi}{3}$", r"$2\pi$"]
+            [
+                r"$0$",
+                r"$\frac{\pi}{2}$",
+                r"$\pi$",
+                r"$\frac{2\pi}{3}$",
+                r"$2\pi$",
+            ]
         )
 
         # Set the Y-ticks
         self.ax.set_yticks(np.array([0, 0.5, 1, 1.5, 2]) * np.pi)
         self.ax.set_yticklabels(
-            [r"$0$", r"$\frac{\pi}{2}$", r"$\pi$", r"$\frac{2\pi}{3}$", r"$2\pi$"]
+            [
+                r"$0$",
+                r"$\frac{\pi}{2}$",
+                r"$\pi$",
+                r"$\frac{2\pi}{3}$",
+                r"$2\pi$",
+            ]
         )
 
     def _draw_labels(self):
@@ -172,14 +184,14 @@ def _measure_performance(solver, theta, tau):
 
     # Compute the norms, the chord and semi-perimeter
     r1, r2 = [np.linalg.norm(rr) for rr in [r1_vec, r2_vec]]
-    c = (r1 ** 2 + r2 ** 2 - 2 * r1 * r2 * np.cos(theta)) ** 0.5
+    c = (r1**2 + r2**2 - 2 * r1 * r2 * np.cos(theta)) ** 0.5
     s = (r1 + r2 + c) / 2
 
     # Compute the dimensional time from the non-dimensional one using
     # Lancaster's expression. This relation is more intuitive as it relates
     # revolution cases with multiples of pi.
     mu = 1.00
-    tof = tau / (8 * mu / s ** 3) ** 0.5
+    tof = tau / (8 * mu / s**3) ** 0.5
 
     # Filter non-valid input: null value is returned if no iterations were run
     if tof == 0 or theta == 0:
@@ -209,5 +221,7 @@ def _measure_performance(solver, theta, tau):
 
 # Vectorize the solver
 _vec_measure_performance = np.vectorize(
-    _measure_performance, otypes=[np.ndarray, np.ndarray, np.ndarray], excluded=[0]
+    _measure_performance,
+    otypes=[np.ndarray, np.ndarray, np.ndarray],
+    excluded=[0],
 )

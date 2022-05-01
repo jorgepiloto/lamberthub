@@ -36,7 +36,7 @@ angle, the non-dimensional time of flight and the number of iterations.
 The following code shows how to create a collection of these figures for a given
 set of solvers. Taking advantage of the `ALL_SOLVERS` macro provided by
 `lamberthub`, it is possible to build a graphical representation for all the
-algoritms currently available.
+algorithms currently available.
 
 ```{code-cell}
 import matplotlib.pyplot as plt

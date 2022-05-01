@@ -31,5 +31,5 @@
   color: 000000
 
 - name: release
-  description: Anything related to an incomming release
+  description: Anything related to an incoming release
   color: ffffff

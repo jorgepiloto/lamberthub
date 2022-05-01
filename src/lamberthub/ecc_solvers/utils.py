@@ -58,7 +58,9 @@ def get_geometry(r1, r2, prograde):
     """
 
     # Solve for the norms
-    r1_norm, r2_norm, c_norm = [np.linalg.norm(vec) for vec in [r1, r2, (r2 - r1)]]
+    r1_norm, r2_norm, c_norm = [
+        np.linalg.norm(vec) for vec in [r1, r2, (r2 - r1)]
+    ]
 
     # Compute angles
     dtheta = get_transfer_angle(r1, r2, prograde)
@@ -71,7 +73,7 @@ def get_geometry(r1, r2, prograde):
 def get_eccF(r1_norm, r2_norm, c_norm):
     """
     Computes the eccentricity component along the chord. This value is kept
-    constant for all the problem as long as the boundary conditons are not
+    constant for all the problem as long as the boundary conditions are not
     changed.
 
     Parameters
@@ -149,7 +151,7 @@ def get_pF(a_F, ecc_F):
     No labeled equation (appears between [3] and [4]) from Avanzini's report
 
     """
-    p_F = a_F * (1 - ecc_F ** 2)
+    p_F = a_F * (1 - ecc_F**2)
     return p_F
 
 
@@ -205,7 +207,7 @@ def ecc_at_eccT(ecc_T, ecc_F):
 
     """
 
-    ecc = np.sqrt(ecc_T ** 2 + ecc_F ** 2)
+    ecc = np.sqrt(ecc_T**2 + ecc_F**2)
     return ecc
 
 
@@ -257,7 +259,7 @@ def a_at_eccT(ecc_T, ecc_F, p):
         Semi-major axis of the transfer orbit.
 
     """
-    a = p / (1 - ecc_F ** 2 - ecc_T ** 2)
+    a = p / (1 - ecc_F**2 - ecc_T**2)
     return a
 
 
@@ -289,7 +291,9 @@ def eap_from_eccT(ecc_T, geometry):
     r1_norm, r2_norm, c_norm, dtheta, w_c = geometry
 
     # Solve for the fundamental ellipse properties
-    ecc_F, a_F, p_F = get_fundamental_ellipse_properties(r1_norm, r2_norm, c_norm)
+    ecc_F, a_F, p_F = get_fundamental_ellipse_properties(
+        r1_norm, r2_norm, c_norm
+    )
 
     # Compute the transfer orbit eccentricity, semi-latus rectum and
     # semi-major axis.
@@ -403,16 +407,16 @@ def kepler_tof_at_eccT(ecc_T, mu, geometry):
     # Compute the time of flight for that particular value of mean motion
     # variation.
     if 0 <= ecc < 1:
-        tof12 = np.sqrt(a ** 3 / mu) * deltaM
+        tof12 = np.sqrt(a**3 / mu) * deltaM
         if tof12 < 0:
             # Add an orbital period so the time of flight becomes positive
-            tof12 += 2 * np.pi * np.sqrt(a ** 3 / mu)
+            tof12 += 2 * np.pi * np.sqrt(a**3 / mu)
     elif ecc == 1:
-        tof12 = (1 / 2) * np.sqrt(p ** 3 / mu) * deltaM
+        tof12 = (1 / 2) * np.sqrt(p**3 / mu) * deltaM
         if tof12 < 0:
             return np.inf
     else:
-        tof12 = np.sqrt(-(a ** 3) / mu) * deltaM
+        tof12 = np.sqrt(-(a**3) / mu) * deltaM
 
     return tof12
 
@@ -500,7 +504,9 @@ def coe_at_eccT(ecc_T, r1, r2, sense):
     nu_1, nu_2 = get_true_anomalies(w, dtheta)
 
     # Compute the orbit inclination and RAAN
-    i_r1, i_r2 = [r / r_norm for r, r_norm in zip([r1, r2], [r1_norm, r2_norm])]
+    i_r1, i_r2 = [
+        r / r_norm for r, r_norm in zip([r1, r2], [r1_norm, r2_norm])
+    ]
 
     # Compute a normal vector normal to orbit plane with proper sense
     i_h = get_orbit_normal_vector(r1, r2, sense)

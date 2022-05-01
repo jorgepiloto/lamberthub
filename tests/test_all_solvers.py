@@ -1,14 +1,16 @@
 """ Basic unitary tests for checking all available solvers """
 
 import numpy as np
-import pytest
 from numpy.testing import assert_allclose
+import pytest
 
 from lamberthub import ALL_SOLVERS as ALL_SOLVERS_LAMBERTHUB
 from lamberthub import NON_ROBUST_SOLVERS
 
 ALL_SOLVERS = [
-    solver for solver in ALL_SOLVERS_LAMBERTHUB if solver not in NON_ROBUST_SOLVERS
+    solver
+    for solver in ALL_SOLVERS_LAMBERTHUB
+    if solver not in NON_ROBUST_SOLVERS
 ]
 """A list holding all solvers which present a decent accuracy. Most of the
 solvers from the NON_ROBUST_SOLVERS macro were developed in the old days."""
@@ -83,7 +85,9 @@ def test_case_from_battin_book(solver):
     v1, v2 = solver(mu_sun, r1, r2, tof)
 
     # Expected final results
-    expected_v1 = np.array([-9.303603251, 3.018641330, 1.536362143])  # [AU / year]
+    expected_v1 = np.array(
+        [-9.303603251, 3.018641330, 1.536362143]
+    )  # [AU / year]
 
     # Assert the results
     assert_allclose(v1, expected_v1, atol=ATOL, rtol=RTOL)
