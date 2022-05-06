@@ -55,7 +55,7 @@ def kepler_parabolic(B):
         Parabolic mean motion
 
     """
-    Mp = B + (1 / 3) * B ** 3
+    Mp = B + (1 / 3) * B**3
     return Mp
 
 

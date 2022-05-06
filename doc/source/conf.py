@@ -11,21 +11,21 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
 
 import lamberthub
-import sphinx_rtd_theme
+
+# import sys
+# sys.path.insert(0, os.path.abspath('.'))
 
 
 # -- Project information -----------------------------------------------------
 
-project = "lamberthub"
-copyright = "2021, Jorge M.G."
-author = "Jorge M.G."
+project = lamberthub.__name__
+copyright = "2022, Jorge Martínez Garrido"
+author = "Jorge Martínez Garrido"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.dev0"
+release = lamberthub.__version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -36,17 +36,17 @@ release = "0.1.dev0"
 extensions = [
     "autoapi.extension",
     "myst_nb",
-    'nbsphinx',
+    "nbsphinx",
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
-    'sphinx_gallery.load_style',
+    "sphinx_gallery.load_style",
 ]
 
 # Source files
 source_suffix = {
-    '.rst': 'restructuredtext',
-    '.ipynb': 'myst-nb',
-    '.myst': 'myst-nb',
+    ".rst": "restructuredtext",
+    ".ipynb": "myst-nb",
+    ".myst": "myst-nb",
 }
 
 # Index document
@@ -68,13 +68,13 @@ else:
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
-#html_theme_options = {
+html_theme = "furo"
+# html_theme_options = {
 #        "toc_title": "Sections in this page",
 #        "extra_navbar": "",
-#}
-#html_title = "lamberthub\ndocumentation"
-#html_logo = "_static/lamberts_problem_geometry.png"
+# }
+# html_title = "lamberthub\ndocumentation"
+# html_logo = "_static/lamberts_problem_geometry.png"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -92,17 +92,17 @@ exclude_patterns.append("_autoapi_templates/index.rst")
 exclude_patterns.append("_autoapi_templates/python/module.rst")
 
 nbsphinx_custom_formats = {
-    '.mystnb': ['jupytext.reads', {'fmt': 'mystnb'}],
+    ".mystnb": ["jupytext.reads", {"fmt": "mystnb"}],
 }
 
 # Custom thumbnails for gallery of examples
 nbsphinx_thumbnails = {
-        "tutorials/gauss1809_solver": "_static/tutorials/gauss_thumbnail.png"
+    "tutorials/gauss1809_solver": "_static/tutorials/gauss_thumbnail.png"
 }
 
 # The performance comparison takes a bit long. This avoids the documentation to
 # assume something has failed due to long time computations
-execution_timeout = 900
+nb_execution_timeout = 900
 
 # Custom mathjax configuration
 myst_update_mathjax = False

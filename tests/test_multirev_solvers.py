@@ -1,8 +1,8 @@
 """ A collection of  tests only for multi-revolution solvers """
 
 import numpy as np
-import pytest
 from numpy.testing import assert_allclose
+import pytest
 
 from lamberthub import MULTI_REV_SOLVERS
 
@@ -61,7 +61,7 @@ def test_multirev_case(solver, case):
 
 @pytest.mark.parametrize("solver", MULTI_REV_SOLVERS)
 def test_exception_try_lower_M(solver):
-    """ Test that solver does not find any solution for particular input """
+    """Test that solver does not find any solution for particular input"""
 
     # Initial conditions
     mu_earth = 3.986004418e5  # [km ** 3 / s ** 2]
@@ -71,4 +71,6 @@ def test_exception_try_lower_M(solver):
 
     with pytest.raises(ValueError) as excinfo:
         solver(mu_earth, r1, r2, tof, M=1)
-    assert "ValueError: No feasible solution, try lower M!" in excinfo.exconly()
+    assert (
+        "ValueError: No feasible solution, try lower M!" in excinfo.exconly()
+    )

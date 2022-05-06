@@ -148,7 +148,9 @@ def avanzini2008(
     p, ecc, inc, raan, argp, nu_1, nu_2 = coe_at_eccT(ecc_T, r1, r2, prograde)
 
     # Compute the velocity vectors from the classic orbital elements
-    (_, v1), (_, v2) = [coe2rv(mu, p, ecc, inc, raan, argp, nu) for nu in [nu_1, nu_2]]
+    (_, v1), (_, v2) = [
+        coe2rv(mu, p, ecc, inc, raan, argp, nu) for nu in [nu_1, nu_2]
+    ]
 
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
@@ -160,12 +162,14 @@ def _get_eccT_limits(geometry):
 
     # Solve for the fundamental ellipse properties
     r1_norm, r2_norm, c_norm, dtheta, _ = geometry
-    ecc_F, a_F, p_F = get_fundamental_ellipse_properties(r1_norm, r2_norm, c_norm)
+    ecc_F, a_F, p_F = get_fundamental_ellipse_properties(
+        r1_norm, r2_norm, c_norm
+    )
 
     # Compute the limits
     ecc_max = -1 / np.cos(dtheta / 2)
-    ecc_H = np.sqrt(ecc_max ** 2 - ecc_F ** 2) if dtheta > np.pi else np.inf
-    ecc_P = np.sqrt(1 - ecc_F ** 2)
+    ecc_H = np.sqrt(ecc_max**2 - ecc_F**2) if dtheta > np.pi else np.inf
+    ecc_P = np.sqrt(1 - ecc_F**2)
 
     return ecc_H, ecc_P
 

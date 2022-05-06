@@ -65,9 +65,9 @@ def rv_pqw(k, p, ecc, nu):
         \end{bmatrix}
 
     """
-    pqw = np.array([[cos(nu), sin(nu), 0], [-sin(nu), ecc + cos(nu), 0]]) * np.array(
-        [[p / (1 + ecc * cos(nu))], [sqrt(k / p)]]
-    )
+    pqw = np.array(
+        [[cos(nu), sin(nu), 0], [-sin(nu), ecc + cos(nu), 0]]
+    ) * np.array([[p / (1 + ecc * cos(nu))], [sqrt(k / p)]])
     return pqw
 
 
@@ -197,7 +197,7 @@ def rv2coe(k, r, v, tol=1e-8):
         N &= \sqrt{\vec{N}\cdot\vec{N}}
         \end{align}
 
-    4. The rigth ascension node is computed:
+    4. The right ascension node is computed:
 
     .. math::
         \Omega = \left\{ \begin{array}{lcc}
@@ -250,7 +250,7 @@ def rv2coe(k, r, v, tol=1e-8):
         argp = 0
         nu = np.arctan2(r[1], r[0]) % (2 * np.pi)  # True longitude
     else:
-        a = p / (1 - (ecc ** 2))
+        a = p / (1 - (ecc**2))
         ka = k * a
         if a > 0:
             e_se = r.dot(v) / sqrt(ka)

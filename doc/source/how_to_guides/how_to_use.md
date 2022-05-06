@@ -19,7 +19,7 @@ All the routines are implemented in the form of Python functions, who's name is
 given by the combination of original author's name plus the year of publication,
 that is: `authorYYYY`.
 
-## Cecking for available solvers
+## Checking for available solvers
 
 To answer this question, simply run the following code snippet or refer to the
 official package API reference:
@@ -151,7 +151,7 @@ v1, v2 = gooding1990(mu_sun, r1, r2, tof)
 print(f"Initial velocity: {v1} [AU / years]\nFinal velocity: {v2} [AU / years]")
 ```
 
-previous values are the same ones comming from the original example.
+previous values are the same ones coming from the original example.
 
 [^1]: Directly taken from *An Introduction to the Mathematics and Methods of
   Astrodynamics, revised edition*, by R.H. Battin, problem 7-12.

@@ -1,8 +1,8 @@
 """ A collection of hard tests only for robust solvers """
 
 import numpy as np
-import pytest
 from numpy.testing import assert_allclose
+import pytest
 
 from lamberthub import ROBUST_SOLVERS
 

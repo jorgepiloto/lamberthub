@@ -1,6 +1,6 @@
 import numpy as np
-import pytest
 from numpy.testing import assert_allclose
+import pytest
 
 from lamberthub import gauss1809
 from lamberthub.p_solvers.gauss import _X_at_x
@@ -42,10 +42,10 @@ def test_X_at_x(x):
     expected_X = (4 / 3) * (
         1
         + (6 / 5) * x
-        + (6 * 8) / (5 * 7) * x ** 2
-        + (6 * 8 * 10) / (5 * 7 * 9) * x ** 3
-        + (6 * 8 * 10 * 12) / (5 * 7 * 9 * 11) * x ** 4
-        + (6 * 8 * 10 * 12 * 14) / (5 * 7 * 9 * 11 * 13) * x ** 5
+        + (6 * 8) / (5 * 7) * x**2
+        + (6 * 8 * 10) / (5 * 7 * 9) * x**3
+        + (6 * 8 * 10 * 12) / (5 * 7 * 9 * 11) * x**4
+        + (6 * 8 * 10 * 12 * 14) / (5 * 7 * 9 * 11 * 13) * x**5
     )
 
     # Assert if both numbers raise the same value

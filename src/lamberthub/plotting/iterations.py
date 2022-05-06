@@ -1,9 +1,9 @@
 """ Holds plotting utilities related with required number of iterations """
 
-import numpy as np
 from cmaps import sunshine_9lev
 from matplotlib.colors import BoundaryNorm
 from matplotlib.ticker import MaxNLocator
+import numpy as np
 
 from lamberthub.plotting._base import TauThetaPlotter, _vec_measure_performance
 from lamberthub.utils.misc import get_solver_name
@@ -84,7 +84,6 @@ class IterationsPlotter(TauThetaPlotter):
             TAU,
             NN_ITER[:-1, :-1],  # For pcolor, the last rows need to be removed
             cmap=cmap,
-            vmin=1,
             edgecolors="k",
             linewidths=1,
             norm=bd_norm,

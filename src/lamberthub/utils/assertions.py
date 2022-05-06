@@ -111,7 +111,9 @@ def assert_number_of_revolutions_not_negative(M):
     """
 
     if M < 0:
-        raise ValueError("Number of revolutions must be equal or greater than zero!")
+        raise ValueError(
+            "Number of revolutions must be equal or greater than zero!"
+        )
     else:
         return True
 

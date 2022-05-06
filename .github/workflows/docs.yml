@@ -1,0 +1,45 @@
+name: Docs
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    tags:
+      - "*"
+    branches:
+      - main
+  repository_dispatch:
+
+jobs:
+
+
+  docs:
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          sudo apt-get install pandoc texlive
+          python -m pip install --upgrade pip tox
+      - name: Generate the documentation with tox
+        run: tox -e doc
+      - name: Upload HTML Documentation
+        uses: actions/upload-artifact@v2
+        with:
+          name: HTML-Documentation
+          path: .tox/doc_out
+          retention-days: 7
+      - name: Deploy documentation
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.DEPLOY_KEY }}
+          external_repository: jorgepiloto/jorgepiloto.github.io
+          publish_branch: gh-pages
+          publish_dir: .tox/doc_out
+          destination_dir: projects/lamberthub
+

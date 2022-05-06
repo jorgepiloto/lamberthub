@@ -3,11 +3,11 @@
 <img align="left" width=350px src="https://github.com/jorgepiloto/lamberthub/blob/main/docs/source/_static/lamberts_problem_geometry.png"/>
 
 ![Python shield](https://img.shields.io/badge/%F0%9F%90%8D%20Python-%3E%3D%203.8-blue)
-![CI shield](https://github.com/jorgepiloto/lamberthub/actions/workflows/ci_actions.yml/badge.svg?branch=main)
-[![Documentation Status](https://readthedocs.org/projects/lamberthub/badge/?version=latest)](https://lamberthub.readthedocs.io/en/latest/?badge=latest)
+![Tests](https://github.com/jorgepiloto/lamberthub/actions/workflows/ci_cd.yml/badge.svg?branch=main)
+[![Docs](https://github.com/jorgepiloto/lamberthub/actions/workflows/docs.yml/badge.svg?branch=main)](https://jorgemartinez.space/projects/lamberthub/)
 [![codecov](https://codecov.io/gh/jorgepiloto/lamberthub/branch/main/graph/badge.svg?token=3BY2J5AB8D)](https://codecov.io/gh/jorgepiloto/lamberthub)
 [![DOI](https://zenodo.org/badge/364482782.svg)](https://zenodo.org/badge/latestdoi/364482782)
-[![PyPI version](https://badge.fury.io/py/lamberthub.svg)](https://badge.fury.io/py/lamberthub)
+[![PyPI](https://img.shields.io/pypi/v/lamberthub.svg?logo=python&logoColor=white)](https://pypi.org/project/lamberthub/)
 
 A collection of Lambert's problem solvers implemented using modern Python.
 

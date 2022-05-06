@@ -1,17 +1,17 @@
 """ Holds plotting utilities related with required number of iterations """
 
 
-import numpy as np
 from cmaps import sunshine_9lev
 from matplotlib.colors import BoundaryNorm
 from matplotlib.ticker import MaxNLocator
+import numpy as np
 
 from lamberthub.plotting._base import TauThetaPlotter, _vec_measure_performance
 from lamberthub.utils.misc import get_solver_name
 
 
 class TPIPlotter(TauThetaPlotter):
-    """ Time per iteration """
+    """Time per iteration"""
 
     def __init__(self, ax=None, fig=None):
         """
@@ -30,7 +30,7 @@ class TPIPlotter(TauThetaPlotter):
         super().__init__(ax, fig)
 
     def _get_tpi(self, solver, theta_span, tau_span):
-        """ Computes the time per iteration for the whole meshgrid """
+        """Computes the time per iteration for the whole meshgrid"""
 
         # Compute the meshgrid holding the number of required iterations
         _, TPI, _ = _vec_measure_performance(
@@ -98,7 +98,6 @@ class TPIPlotter(TauThetaPlotter):
             TAU,
             TPI[:-1, :-1],  # For pcolor, the last rows need to be removed
             cmap=cmap,
-            vmin=1e-12,
             edgecolors="k",
             linewidths=1,
             norm=bd_norm,
@@ -106,7 +105,11 @@ class TPIPlotter(TauThetaPlotter):
         self.collection.cmap.set_under("black")
 
         # Draw the colorbar with proper diemensions and label
-        label = f"Time per iteration\nAverage {MEAN_TPI:.2f} " + r"$\mu$" + "s / iter"
+        label = (
+            f"Time per iteration\nAverage {MEAN_TPI:.2f} "
+            + r"$\mu$"
+            + "s / iter"
+        )
         self._draw_colorbar(maxtpi, step, label, cmap, "black")
 
         # Finally, draw the ticks, labels and title
@@ -118,7 +121,7 @@ class TPIPlotter(TauThetaPlotter):
 
 
 class TTCPlotter(TauThetaPlotter):
-    """ Total time computation """
+    """Total time computation"""
 
     def __init__(self, ax=None, fig=None):
         """
@@ -137,7 +140,7 @@ class TTCPlotter(TauThetaPlotter):
         super().__init__(ax, fig)
 
     def _get_ttc(self, solver, theta_span, tau_span):
-        """ Computes the total time of computation for the whole meshgrid """
+        """Computes the total time of computation for the whole meshgrid"""
 
         # Compute the meshgrid holding the number of required iterations
         _, _, TTC = _vec_measure_performance(
@@ -207,7 +210,6 @@ class TTCPlotter(TauThetaPlotter):
             TAU,
             TTC[:-1, :-1],  # For pcolor, the last rows need to be removed
             cmap=cmap,
-            vmin=1,
             edgecolors="k",
             linewidths=1,
             norm=bd_norm,
@@ -215,7 +217,9 @@ class TTCPlotter(TauThetaPlotter):
         self.collection.cmap.set_under("black")
 
         # Draw the colorbar with proper diemensions and label
-        label = f"Total computation time\nAverage {MEAN_TTC:.2f} " + r"$\mu$" + "s"
+        label = (
+            f"Total computation time\nAverage {MEAN_TTC:.2f} " + r"$\mu$" + "s"
+        )
         self._draw_colorbar(maxttc, step, label, cmap, "black")
 
         # Finally, draw the ticks, labels and title

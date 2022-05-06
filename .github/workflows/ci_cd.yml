@@ -1,0 +1,111 @@
+name: Tests
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    tags:
+      - "*"
+    branches:
+      - main
+  repository_dispatch:
+
+jobs:
+
+  style:
+    name: Code Style
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip tox
+      - name: Run style checks
+        run: tox -e style
+
+  tests:
+    name: Unit Tests
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macos-latest, ubuntu-latest]
+        cfg:
+          - {python-version: "3.7", toxenv: "py37"}
+          - {python-version: "3.8", toxenv: "py38"}
+          - {python-version: "3.9", toxenv: "py39"}
+          - {python-version: "3.10", toxenv: "py310-cov"}
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.cfg.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.cfg.python-version }}
+
+      - name: Install dependencies
+        run: python -m pip install --upgrade pip ${{ matrix.build-system }} tox
+
+      - name: Run Tox
+        run: tox -e ${{ matrix.cfg.toxenv }}
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v2
+        if: matrix.cfg.python-version == '3.10'
+
+  build:
+    name: Build package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip build twine
+      - name: Build wheel and sdist
+        run: |
+          python -m build && python -m twine check dist/*
+      - name: Upload wheel and sdist to artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: pyasys-templates-packages
+          path: dist/
+          retention-days: 7
+
+  release:
+    name: Release
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    needs: [style, tests, build]
+    runs-on: ubuntu-latest
+  
+    steps:
+      - uses: actions/download-artifact@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+      - name: Display structure of downloaded files
+        run: ls -R
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip twine
+      - name: Publish to PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          python -m twine upload --skip-existing ./**/*.whl
+          python -m twine upload --skip-existing ./**/*.tar.gz
+      - name: Publish to GitHub
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./**/*.whl
+            ./**/*.tar.gz

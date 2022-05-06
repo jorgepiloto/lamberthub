@@ -146,7 +146,10 @@ def gauss1809(
     p = (r1_norm * r2_norm * (1 - np.cos(dtheta))) / (
         r1_norm
         + r2_norm
-        - 2 * np.sqrt(r1_norm * r2_norm) * np.cos(dtheta / 2) * np.cos(deltaAnomaly / 2)
+        - 2
+        * np.sqrt(r1_norm * r2_norm)
+        * np.cos(dtheta / 2)
+        * np.cos(deltaAnomaly / 2)
     )
 
     # Evaluate f, g, f_dot and g_dot functions for future solving v1 and v2
@@ -220,7 +223,9 @@ def _get_w(mu, tof, r1_norm, r2_norm, dtheta):
     This is equation number (5.6-3) from Bate's book [2].
 
     """
-    w = (mu * tof ** 2) / (2 * np.sqrt(r1_norm * r2_norm) * np.cos(dtheta / 2)) ** 3
+    w = (mu * tof**2) / (
+        2 * np.sqrt(r1_norm * r2_norm) * np.cos(dtheta / 2)
+    ) ** 3
     return w
 
 
@@ -246,7 +251,7 @@ def _gauss_first_equation(y, s, w):
     This is equation (5.6-13) from Bate's book [2].
 
     """
-    x = w / y ** 2 - s
+    x = w / y**2 - s
     return x
 
 
