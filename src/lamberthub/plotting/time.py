@@ -98,7 +98,6 @@ class TPIPlotter(TauThetaPlotter):
             TAU,
             TPI[:-1, :-1],  # For pcolor, the last rows need to be removed
             cmap=cmap,
-            vmin=1e-12,
             edgecolors="k",
             linewidths=1,
             norm=bd_norm,
@@ -211,7 +210,6 @@ class TTCPlotter(TauThetaPlotter):
             TAU,
             TTC[:-1, :-1],  # For pcolor, the last rows need to be removed
             cmap=cmap,
-            vmin=1,
             edgecolors="k",
             linewidths=1,
             norm=bd_norm,

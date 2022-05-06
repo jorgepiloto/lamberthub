@@ -20,9 +20,9 @@ import lamberthub
 
 # -- Project information -----------------------------------------------------
 
-project = "lamberthub"
-copyright = "2021, Jorge M.G."
-author = "Jorge M.G."
+project = lamberthub.__name__
+copyright = "2022, Jorge Martínez Garrido"
+author = "Jorge Martínez Garrido"
 
 # The full version, including alpha/beta/rc tags
 release = lamberthub.__version__
@@ -68,7 +68,7 @@ else:
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "sphinx_rtd_theme"
+html_theme = "furo"
 # html_theme_options = {
 #        "toc_title": "Sections in this page",
 #        "extra_navbar": "",

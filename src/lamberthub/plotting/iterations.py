@@ -84,7 +84,6 @@ class IterationsPlotter(TauThetaPlotter):
             TAU,
             NN_ITER[:-1, :-1],  # For pcolor, the last rows need to be removed
             cmap=cmap,
-            vmin=1,
             edgecolors="k",
             linewidths=1,
             norm=bd_norm,
