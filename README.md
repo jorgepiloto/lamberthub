@@ -17,10 +17,9 @@ pip install lamberthub
 ```
 
 Just in case you are interested on knowing what the problem is about, how to
-solve it or which applications it has, please check the [official documentation
-of the project](https://lamberthub.readthedocs.io/en/latest/). For further
-information about software internals, refer to [API
-documentation](https://lamberthub.readthedocs.io/en/latest/autoapi/lamberthub/index.html).
+solve it or which applications it has, please check the [official lamberthub
+documentation]. For further information about software internals, refer to [API
+documentation].
 
 
 ## Which solvers are available?
@@ -85,11 +84,16 @@ can be used.
 
 ## Documentation and performance comparison tools
 
-The [official lamberthub
-documentation](https://lamberthub.readthedocs.io/en/latest/) contains different
-how-to guides, explanations, tutorials and references related to the package.
+The [official lamberthub documentation] contains different how-to guides,
+explanations, tutorials and references related to the package.
 
 If you are interested in the performance comparison tools provided, please refer
-to [this documentation
-chapter](https://lamberthub.readthedocs.io/en/latest/explanations/performance_comparison.html),
-were you can find a brief tutorials on how to use those tools.
+to [performance comparison section]. Here you can find a brief tutorials on how
+to use those tools.
+
+
+<!-- Links and References -->
+
+[official lamberthub documentation]: https://lamberthub.readthedocs.io/en/latest/
+[API documentation]: https://lamberthub.readthedocs.io/en/latest/autoapi/lamberthub/index.html
+[performance comparison section]: https://lamberthub.readthedocs.io/en/latest/explanations/performance_comparison.html
