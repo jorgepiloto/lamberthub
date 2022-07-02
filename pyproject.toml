@@ -43,23 +43,6 @@ dynamic = ["version", "description"]
 Source = "https://github.com/jorgepiloto/lamberthub"
 Tracker = "https://github.com/jorgepiloto/lamberthub/issues"
 
-[project.optional-dependencies]
-tests = [
-    "pytest>=7.1.2",
-    "pytest-cov>=3.0.0",
-    "pytest-mpl>=0.15.1",
-]
-doc = [
-    "furo>=2022.4.7",
-    "jupytext>=1.13.8",
-    "myst-nb>=0.14.0",
-    "nbsphinx>=0.8.8",
-    "notebook>=6.4.11",
-    "sphinx>=4.5.0",
-    "sphinx-autoapi>=1.8.4",
-    "sphinx-gallery<=0.7.0",
-]
-
 [tool.flit.sdist]
 exclude = [
     "docs/",
