@@ -3,6 +3,6 @@ jupytext==1.13.8
 myst-nb==0.16.0
 nbsphinx==0.8.8
 notebook==6.4.12
-sphinx==4.5.0
+sphinx==5.0.2
 sphinx-autoapi==1.8.4
 sphinx-gallery==0.7.0
