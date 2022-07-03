@@ -73,7 +73,7 @@ html_theme = "furo"
 #        "toc_title": "Sections in this page",
 #        "extra_navbar": "",
 # }
-# html_title = "lamberthub\ndocumentation"
+html_title = "lamberthub"
 # html_logo = "_static/lamberts_problem_geometry.png"
 
 # Add any paths that contain custom static files (such as style sheets) here,
