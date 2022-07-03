@@ -11,10 +11,15 @@ problem
 solvers](https://github.com/jorgepiloto/lamberthub/tree/main/art/icatt_report.pdf)
 is fully accessible.
 
-The performance comparison work is still under development and it is expected to
-be finished and published by October 2021 as part of the author's final thesis in
-aerospace engineering. Once completed, the document will be made public so
-anyone can benefit from it.
+The performance comparison work was completed and published by October 2021 as
+part of the author's final thesis in aerospace engineering. You can download
+this document using the following link:
+
+<div align="center">
+  <a href="https://raw.githubusercontent.com/jorgepiloto/lamberthub/main/art/thesis_jorge.pdf">
+    Lambert's problem algorithms: a critical review
+  </a>
+</div>
 
 ## Objectives and goals
 

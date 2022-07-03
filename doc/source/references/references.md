@@ -7,7 +7,7 @@
 
 The `lamberthub` library only provides routines for solving the Lambert's
 problem. However, there exist other software packages which offer additional
-capabilities on astronomy, astrodynamics or orbital mechanics. This page
+capabilities on astronomy, astrodynamics, and orbital mechanics. This page
 lists some of the most popular ones available for the Python community:
 
 * **[astropy](https://www.astropy.org/)**: The Astropy Project is a community

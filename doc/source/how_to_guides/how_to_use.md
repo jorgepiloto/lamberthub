@@ -30,7 +30,7 @@ print([solver.__name__ for solver in ALL_SOLVERS])
 ```
 
 In addition, `lamberthub` provides other lists holding algorithms which
-present particular features such us multi-revolutions or high-robustness. These
+present particular features such as multi-revolutions or high-robustness. These
 macros are listed down:
 
 ```{code-cell}
@@ -74,7 +74,7 @@ Python function built with the following API architecture:
 **Additional parameters**
 * `M`: the number of desired revolutions. If zero, direct transfer is assumed.
 * `prograde`: this parameter controls the inclination of the final orbit. If set
-  to `True`, the transfer will have an inclination between 0 and 90 degrees
+  to `True`, the transfer has an inclination between 0 and 90 degrees
   while if `False` inclinations between 90 and 180 are provided.
 * `low_path`: selects the type of path when more than two solutions are available.
   There is no actual advantage on one or another solution, unless you have
@@ -83,7 +83,7 @@ Python function built with the following API architecture:
 * `maxiter`: maximum number of iterations allowed when computing the solution.
 * `atol`: absolute tolerance for the iterative method.
 * `rtol`: relative tolerance for the iterative method.
-* `full_output`: if `True`, it returns additional information such us the number
+* `full_output`: if `True`, it returns additional information such as the number
   of iterations.
 
 **Returns**
@@ -97,9 +97,9 @@ Python function built with the following API architecture:
 
 ## A real example
 
-Let us work over a real example[^1]. Suppose you want to solve for the orbit of
-an interplanetary vehicle (i.e. Sun is the main attractor) form which you know
-that the initial and final positions are given by:
+The following section presents a real example[^1]. Suppose you want to solve for
+the orbit of an interplanetary vehicle (that is Sun is the main attractor) form
+which you know that the initial and final positions are given by:
 
 $$
 \vec{r_1} = \begin{bmatrix}
@@ -116,17 +116,18 @@ $$
 
 the dimension of previous vectors is astronomical units [AU] and the time of
 flight, given in years, is known to be $\Delta t = 0.010794065 \text{[year]}$.
-The orbit is seen to be prograde (inclination is less than $90^{\circ}$) and
+The orbit is prograde since inclination is less than $90^{\circ}$) and
 direct $M=0$. Remember that when $M=0$, there is only one possible solution, so
-the `low_path` flag will not play any role in this problem.
+the `low_path` flag does not play any role in this problem.
 
-To solve for the problem, we first import a solver. Let us use Gooding's one:
+To solve for the problem, we first import a solver. For this problem,
+`gooding1990` is chosen:
 
 ```{code-cell}
 from lamberthub import gooding1990
 ```
 
-Next, we specify the initial conditions of the problem:
+Next, specify the initial conditions of the problem:
 
 ```{code-cell}
 # Import NumPy for declaring position vectors
@@ -139,7 +140,7 @@ r2 = np.array([0.057594337, 0.605750797, 0.068345246])  # [AU]
 tof = 0.010794065  # [year]
 ```
 
-Finally, we just need to solve for it. Notice that, as explained before, the
+Finally, the problem can be solved. Notice that, as explained before, the
 default value for the `prograde` flag is `True`, which matches the one from
 problem's statement.
 

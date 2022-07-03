@@ -41,18 +41,18 @@ environment:
 /lamberthub/.venv/bin/python
 ```
 
-Now, install `flit` package, which is the tool that builds the library:
+Now, update `pip`:
 
 ```bash
-pip install flit
+python -m pip install -U pip
 ```
 
-Finally, you are ready to install `lamberthub` in developer mode by running:
+Finally, install `lamberthub` in development mode:
 
 ```bash
-flit install --symlink
+python -m pip install --editable .
 ```
 
-which will tell your Python environment that the `lamberthub` package is located
-in this actual folder. **Now, any change you apply to source code will affect the
+which tells your Python environment that the `lamberthub` package is located in
+this actual folder. **Now, any change you apply to source code affects the
 behavior of the library**.
