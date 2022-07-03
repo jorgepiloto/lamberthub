@@ -120,7 +120,7 @@ The orbit is prograde since inclination is less than $90^{\circ}$) and
 direct $M=0$. Remember that when $M=0$, there is only one possible solution, so
 the `low_path` flag does not play any role in this problem.
 
-To solve for the problem, we first import a solver. For this problem,
+To solve for the problem, first import a solver. For this problem,
 `gooding1990` is chosen:
 
 ```{code-cell}

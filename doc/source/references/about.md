@@ -29,23 +29,23 @@ this document using the following link:
 
 <p></p>
 
-* To **provide open-source scientific software**, so all the **results can be
+* To **provide open source scientific software**, so all the **results can be
   reproduced by third parties and individuals**.
 
 <p></p>
 
 * To act as a **Lambert's problem algorithms vault**, preserving the knowledge behind
   this great problem and in particular, the very first proposed numerical
-  solvers, playing the role  of "software archaeology".
+  solvers, playing the role of software archaeology.
 
 <p></p>
 
-* To **review Lambert's problem bibliography** in order to establish which
+* To **review Lambert's problem bibliography** to establish which
   authors have addressed the problem and when they did so.
 
 
 ## License
 
-The software is released under [the following open-source
+The software is released under [the following open source
 license](https://github.com/jorgepiloto/lamberthub/blob/main/LICENSE).
 

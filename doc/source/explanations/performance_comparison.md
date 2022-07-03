@@ -72,8 +72,8 @@ of samples.
 
 The following code snippet runs the time performance plotter for all the
 available solvers. Results might vary in your local machine as these ones are
-executed with a low number of samples in order to avoid `RuntimeErrors` in the
-server computer which builds the documentation. 
+executed with a low number of samples to avoid `RuntimeErrors` in the server
+computer which builds the documentation. 
 
 ```{code-cell}
 import matplotlib.pyplot as plt

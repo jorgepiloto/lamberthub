@@ -4,3 +4,5 @@ Astropy
 astropy
 poliastro
 lamberthub
+Lambert's
+prograde

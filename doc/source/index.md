@@ -14,7 +14,7 @@ Since the formulation of the problem, many different solutions have been
 devised, being the latest ones in the form of computer routines. By collecting
 and implementing all of them under a common programming language, it is possible
 to carry out performance comparisons between those. Furthermore, `lamberthub`
-provides a framework for new authors to check the robustness and accuracy of
+provides a framework for new authors to select the robustness and accuracy of
 their routines.
 
 
