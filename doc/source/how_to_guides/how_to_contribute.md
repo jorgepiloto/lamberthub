@@ -16,40 +16,40 @@ Start by making a fork of the [official
 repository](https://github.com/jorgepiloto/lamberthub) into your local machine
 by running:
 
-```bash
+```text
 git clone https://github.com/your_github_username/lamberthub && cd lamberthub
 ```
 
 Next, you must create a Python virtual environment, so the library dependencies
 do not interfere with your system environment:
 
-```bash
+```text
 python -m venv .venv && source .venv/bin/activate
 ```
 
 Check your current Python binary is the one hosted in the virtual environment by
 running:
 
-```bash
+```text
 which python
 ```
 
 which must retrieve the absolute path of the previously created virtual
 environment:
 
-```bash
+```text
 /lamberthub/.venv/bin/python
 ```
 
 Now, update `pip`:
 
-```bash
+```text
 python -m pip install -U pip
 ```
 
 Finally, install `lamberthub` in development mode:
 
-```bash
+```text
 python -m pip install --editable .
 ```
 

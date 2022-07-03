@@ -21,7 +21,7 @@ board](https://github.com/jorgepiloto/lamberthub/issues).
 The installation process is similar to other python packages, meaning that you
 only need to run:
 
-```bash
+```text
 pip install lamberthub
 ```
 
