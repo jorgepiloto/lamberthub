@@ -13,7 +13,7 @@ kernelspec:
 
 This page contains the guide for installing the `lamberthub` package. If you
 experience any kind of problem during one of the steps shown in the following
-lines, please open an new issue (or check similar ones) in the [issues
+lines, please open an new issue (or select similar ones) in the [issues
 board](https://github.com/jorgepiloto/lamberthub/issues).
 
 ## Install from PyPI using pip
@@ -25,16 +25,11 @@ only need to run:
 pip install lamberthub
 ```
 
-previous command will install the latest stable version of the library. Once
-done, you can open the Python terminal and import the package and check its
+previous command installs the latest stable version of the library. Once
+done, you can open the Python terminal and import the package and verify its
 version by running:
 
 ```{code-cell} ipython3
 import lamberthub
 print(f"Current lamberthub version is {lamberthub.__version__}")
 ```
-
-## Install from repository release
-
-To be completed...
-

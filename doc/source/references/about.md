@@ -11,10 +11,15 @@ problem
 solvers](https://github.com/jorgepiloto/lamberthub/tree/main/art/icatt_report.pdf)
 is fully accessible.
 
-The performance comparison work is still under development and it is expected to
-be finished and published by October 2021 as part of the author's final thesis in
-aerospace engineering. Once completed, the document will be made public so
-anyone can benefit from it.
+The performance comparison work was completed and published by October 2021 as
+part of the author's final thesis in aerospace engineering. You can download
+this document using the following link:
+
+<div align="center">
+  <a href="https://raw.githubusercontent.com/jorgepiloto/lamberthub/main/art/thesis_jorge.pdf">
+    Lambert's problem algorithms: a critical review
+  </a>
+</div>
 
 ## Objectives and goals
 
@@ -24,23 +29,23 @@ anyone can benefit from it.
 
 <p></p>
 
-* To **provide open-source scientific software**, so all the **results can be
+* To **provide open source scientific software**, so all the **results can be
   reproduced by third parties and individuals**.
 
 <p></p>
 
 * To act as a **Lambert's problem algorithms vault**, preserving the knowledge behind
   this great problem and in particular, the very first proposed numerical
-  solvers, playing the role  of "software archaeology".
+  solvers, playing the role of software archaeology.
 
 <p></p>
 
-* To **review Lambert's problem bibliography** in order to establish which
+* To **review Lambert's problem bibliography** to establish which
   authors have addressed the problem and when they did so.
 
 
 ## License
 
-The software is released under [the following open-source
+The software is released under [the following open source
 license](https://github.com/jorgepiloto/lamberthub/blob/main/LICENSE).
 

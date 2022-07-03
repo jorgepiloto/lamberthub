@@ -1,4 +1,6 @@
+<!-- vale off -->
 # The Lambert's problem
+<!-- vale on -->
 
 The Lambert's problem is the boundary value problem of the two-body problem
 under the framework of astrodynamics. 

@@ -88,6 +88,24 @@ jobs:
       - name: Run style checks
         run: tox -e style
 
+  docs-style:
+    name: Documentation Style Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Running Vale
+        uses: errata-ai/vale-action@reviewdog
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          files: doc
+          reporter: github-pr-check
+          level: error
+          filter_mode: nofilter
+          fail_on_error: true
+          vale_flags: "--config=doc/.vale.ini"
+
   tests:
     name: Tests
     runs-on: ${{ matrix.os }}
@@ -122,6 +140,7 @@ jobs:
   docs:
     name: Docs
     runs-on: ubuntu-latest
+    needs: [docs-style]
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
