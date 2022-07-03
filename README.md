@@ -96,6 +96,6 @@ to use those tools.
 
 <!-- Links and References -->
 
-[official lamberthub documentation]: https://lamberthub.readthedocs.io/en/latest/
-[API documentation]: https://lamberthub.readthedocs.io/en/latest/autoapi/lamberthub/index.html
-[performance comparison section]: https://lamberthub.readthedocs.io/en/latest/explanations/performance_comparison.html
+[official lamberthub documentation]: https://jorgemartinez.space/projects/lamberthub/index.html
+[API documentation]: https://jorgemartinez.space/projects/lamberthub/autoapi/lamberthub/index.html
+[performance comparison section]: https://jorgemartinez.space/projects/lamberthub/explanations/performance_comparison.html
