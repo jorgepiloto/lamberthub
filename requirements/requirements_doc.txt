@@ -1,7 +1,7 @@
 furo==2022.6.21
 jupytext==1.14.0
 myst-nb==0.16.0
-nbsphinx==0.8.8
+nbsphinx==0.8.9
 notebook==6.4.12
 sphinx==5.0.2
 sphinx-autoapi==1.8.4
