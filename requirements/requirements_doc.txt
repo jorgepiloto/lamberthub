@@ -1,5 +1,5 @@
 furo==2022.6.21
-jupytext==1.13.8
+jupytext==1.14.0
 myst-nb==0.16.0
 nbsphinx==0.8.8
 notebook==6.4.12
