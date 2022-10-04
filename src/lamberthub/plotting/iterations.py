@@ -1,11 +1,11 @@
 """ Holds plotting utilities related with required number of iterations """
 
-from cmaps import sunshine_9lev
 from matplotlib.colors import BoundaryNorm
 from matplotlib.ticker import MaxNLocator
 import numpy as np
 
 from lamberthub.plotting._base import TauThetaPlotter, _vec_measure_performance
+from lamberthub.plotting.colormaps import sunshine_9lev
 from lamberthub.utils.misc import get_solver_name
 
 
