@@ -1,7 +1,7 @@
 """ Holds plotting utilities related with required number of iterations """
 
 
-from cmaps import sunshine_9lev
+import matplotlib as mpl
 from matplotlib.colors import BoundaryNorm
 from matplotlib.ticker import MaxNLocator
 import numpy as np
@@ -39,7 +39,7 @@ class TPIPlotter(TauThetaPlotter):
         return TPI.astype("float")
 
     def plot_performance(
-        self, solver, N_samples=10, maxtpi=200, step=20, cmap=sunshine_9lev
+        self, solver, N_samples=10, maxtpi=200, step=20, cmap=None,
     ):
         """
         Returns a graphical representation on the time per iteration performance
@@ -49,14 +49,14 @@ class TPIPlotter(TauThetaPlotter):
         ----------
         solver: function
             The solver who's performance is to be assessed.
-        N_samples: int
+        N_samples: int, optional
             Number of samples to be computed. The higher, the less spurious
             values in the result.
-        maxtpi: float
+        maxtpi: float, optional
             The maximum value for the time per iterations (in microseconds).
-        step: float
+        step: float, optional
             Step for drawing the colorbar ticks.
-        cmap: matplotlib.colors.Colormap
+        cmap: matplotlib.colors.Colormap, optional
             The map for colouring the grid.
 
         Notes
@@ -87,6 +87,10 @@ class TPIPlotter(TauThetaPlotter):
 
         # Store the mean time in microseconds per iteration
         MEAN_TPI = np.mean(TPI[TPI_SUM > 0])
+
+        # Use the 'YlOrRd' contour map if none has been provided
+        if cmap is None:
+            cmap = mpl.colormaps["YlOrRd"]
 
         # Prepare the levels for the contour
         levels = MaxNLocator(nbins=11).tick_values(0, maxtpi)
@@ -150,7 +154,7 @@ class TTCPlotter(TauThetaPlotter):
         return TTC.astype("float")
 
     def plot_performance(
-        self, solver, N_samples=10, maxttc=1000, step=100, cmap=sunshine_9lev
+        self, solver, N_samples=10, maxttc=1000, step=100, cmap=None
     ):
         """
         Returns a graphical representation on the time per iteration performance
@@ -160,14 +164,14 @@ class TTCPlotter(TauThetaPlotter):
         ----------
         solver: function
             The solver who's performance is to be assessed.
-        N_samples: int
+        N_samples: int, optional
             Number of samples to be computed. The higher, the less spurious
             values in the result.
-        maxttc: float
+        maxttc: float, optional
             The maximum value for the total time of computation (in microseconds).
-        step: float
+        step: float, optional
             Step for drawing the colorbar ticks.
-        cmap: matplotlib.colors.Colormap
+        cmap: matplotlib.colors.Colormap, optional
             The map for colouring the grid.
 
         Notes
@@ -199,6 +203,10 @@ class TTCPlotter(TauThetaPlotter):
         # Store the mean time in microseconds per iteration. Do not consider
         # points which did not converge
         MEAN_TTC = np.mean(TTC[TTC_SUM > 0])
+
+        # Use the 'YlOrRd' contour map if none has been provided
+        if cmap is None:
+            cmap = mpl.colormaps["YlOrRd"]
 
         # Prepare the levels for the contour
         levels = MaxNLocator(nbins=11).tick_values(0, maxttc)

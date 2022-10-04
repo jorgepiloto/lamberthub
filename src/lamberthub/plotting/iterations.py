@@ -1,6 +1,6 @@
 """ Holds plotting utilities related with required number of iterations """
 
-from cmaps import sunshine_9lev
+import matplotlib as mpl
 from matplotlib.colors import BoundaryNorm
 from matplotlib.ticker import MaxNLocator
 import numpy as np
@@ -41,7 +41,7 @@ class IterationsPlotter(TauThetaPlotter):
         )
         return NN_ITER.astype("int")
 
-    def plot_performance(self, solver, maxiter=10, step=1, cmap=sunshine_9lev):
+    def plot_performance(self, solver, maxiter=10, step=1, cmap=None):
         """
         Returns a graphical representation on the iteration performance for a
         particular solver.
@@ -50,11 +50,11 @@ class IterationsPlotter(TauThetaPlotter):
         ----------
         solver: function
             The solver who's performance is to be assessed.
-        maxiter: int
+        maxiter: int, optional
             The maximum number of iterations.
-        step: float
+        step: float, optional
             Step for drawing the colorbar ticks.
-        cmap: matplotlib.colors.Colormap
+        cmap: matplotlib.colors.Colormap, optional
             The map for colouring the grid.
 
         Notes
@@ -73,6 +73,10 @@ class IterationsPlotter(TauThetaPlotter):
         # Solve for the number of iterations
         NN_ITER = self._get_iterations(solver, theta_span, tau_span)
         MEAN_NN_ITER = np.mean(NN_ITER[NN_ITER > 0])
+
+        # Use the 'YlOrRd' contour map if none has been provided
+        if cmap is None:
+            cmap = mpl.colormaps["YlOrRd"]
 
         # Prepare the levels for the contour
         levels = MaxNLocator(nbins=11).tick_values(0, maxiter)
