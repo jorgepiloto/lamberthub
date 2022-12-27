@@ -46,7 +46,7 @@ tests = [
     "pytest-mpl==0.16.1",
 ]
 doc = [
-    "furo==2022.9.29",
+    "furo==2022.12.7",
     "jupytext==1.14.1",
     "myst-nb==0.17.1",
     "nbsphinx==0.8.9",
