@@ -4,9 +4,9 @@ jupytext:
     extension: .mystnb
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.12.0
+    jupytext_version: 1.14.1
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
@@ -64,7 +64,6 @@ For building the curves of the time of flight, we first need to generate a span 
 
 ```{code-cell} ipython3
 # Import some of the uitilities installed by default with lamberthub
-import cmaps
 import matplotlib.pyplot as plt
 import numpy as np
 ```
@@ -92,8 +91,6 @@ from lamberthub.utils.misc import _get_sample_vectors_from_theta_and_rho
 fig, ax = plt.subplots(figsize=(10, 6))
 
 # Declare the color palette
-COLORS = cmaps.amwg(np.linspace(0,1,len(theta_array)))
-
 for i, theta in enumerate(theta_array):
     
     # Gauss is singular for the following angles
@@ -112,7 +109,7 @@ for i, theta in enumerate(theta_array):
     y_array = [_gauss_second_equation(x, s) for x in x_array]
     
     # Plot the lines for a particular transfer angle
-    ax.plot(x_array, y_array, color=COLORS[i], label=r"$\Delta \theta = $" + f"{theta * 180/ np.pi:.0f} deg") 
+    ax.plot(x_array, y_array, label=r"$\Delta \theta = $" + f"{theta * 180/ np.pi:.0f} deg") 
     
     
 # Beautify the figure by adding axes labels and legend
