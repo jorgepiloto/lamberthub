@@ -12,6 +12,8 @@ on:
 
 env:
   MAIN_PYTHON_VERSION : '3.10'
+  LIBRARY_NAME: 'lamberthub'
+  DOCUMENTATION_CNAME: 'lamberthub.docs.jorgemartinez.space'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -71,168 +73,99 @@ jobs:
       with:
         labels: bug
 
-  style:
-    name: Code Style
+  code-style:
+    name: "Code style"
     needs: [labeler]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: pyansys/actions/code-style@v2
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip tox
-      - name: Run style checks
-        run: tox -e style
 
-  docs-style:
+  doc-style:
     needs: [labeler]
-    name: Documentation Style Check
+    name: "Documentation style"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Running Vale
-        uses: errata-ai/vale-action@reviewdog
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - uses: pyansys/actions/doc-style@v2
         with:
-          files: doc
-          reporter: github-pr-check
-          level: error
-          filter_mode: nofilter
-          fail_on_error: true
-          vale_flags: "--config=doc/.vale.ini"
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
-  tests:
-    name: Tests
-    runs-on: ${{ matrix.os }}
-    needs: [style]
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        cfg:
-          - {python-version: "3.7", toxenv: "py37"}
-          - {python-version: "3.8", toxenv: "py38"}
-          - {python-version: "3.9", toxenv: "py39"}
-          - {python-version: "3.10", toxenv: "py310-cov"}
-      fail-fast: false
-
+  doc-build:
+    name: "Documentation build"
+    runs-on: ubuntu-latest
+    needs: doc-style
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python ${{ matrix.cfg.python-version }}
-        uses: actions/setup-python@v4
+      - name: "Run Ansys documentation building action"
+        uses: pyansys/actions/doc-build@v2
+
+  doc-deploy-development:
+    name: "Deploy development documentation"
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    needs: doc-build
+    steps:
+      - name: "Deploy developers documentation"
+        uses: pyansys/actions/doc-deploy-dev@v2
         with:
-          python-version: ${{ matrix.cfg.python-version }}
+            cname: ${{ env.DOCUMENTATION_CNAME }}
+            token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
-        run: python -m pip install --upgrade pip tox
-
-      - name: Run Tox
-        run: tox -e ${{ matrix.cfg.toxenv }}
-
-      - name: Upload coverage to Codecov
+  doc-deploy-stable:
+    name: "Deploy stable documentation"
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
+    runs-on: ubuntu-latest
+    needs: doc-deploy-development
+    steps:
+      - name: "Deploy stable documentation"
+        uses: pyansys/actions/doc-deploy-stable@v2
+        with:
+            cname: ${{ env.DOCUMENTATION_CNAME }}
+            token: ${{ secrets.GITHUB_TOKEN }} 
+  tests:
+    name: "Tests and coverage"
+    runs-on: ${{ matrix.os }}
+    strategy:
+       matrix:
+           os: [ubuntu-latest, windows-latest]
+           python-version: ['3.7', '3.8', '3.9', '3.10']
+       fail-fast: false
+    steps:
+      - name: "Run pytest"
+        uses: pyansys/actions/tests-pytest@v2
+        with:
+          pytest-extra-args: "--cov=${{ env.LIBRARY_NAME }} --cov-report=term --cov-report=html:.cov/html"
+  
+      - name: "Upload coverage to Codecov"
         uses: codecov/codecov-action@v2
         if: matrix.cfg.python-version == ${{ env.MAIN_PYTHON_VERSION }} && matrix.os == 'ubuntu-latest'
 
-  docs:
-    name: Docs
+  build-library:
+    name: "Build wheels and source artifacts"
     runs-on: ubuntu-latest
-    needs: [docs-style]
+    needs: [doc-deploy-stable, tests]
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v3
+      - name: "Build library source and wheel artifacts"
+        uses: pyansys/actions/build-library@v2
         with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get install pandoc texlive
-          python -m pip install --upgrade pip tox
-
-      - name: Generate the documentation with tox
-        run: tox -e doc
-
-      - name: Upload HTML Documentation
-        uses: actions/upload-artifact@v2
-        with:
-          name: HTML-Documentation
-          path: .tox/doc_out
-
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    needs: [tests, docs]
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -r requirements/requirements_build.txt
-
-      - name: Build wheel and sdist
-        run: |
-          python -m build && python -m twine check dist/*
-
-      - name: Upload wheel and sdist to artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: lamberthub
-          path: dist/
-          retention-days: 7
+          library-name: ${{ env.LIBRARY_NAME }}
 
   release:
-    name: Release
-    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
-    needs: [build]
+    name: "Release to public PyPI"
     runs-on: ubuntu-latest
-  
+    needs: [build-library]
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags')
     steps:
-      - name: Checkout repository
-        uses: actions/download-artifact@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - name: "Release to the public PyPI repository"
+        uses: pyansys/actions/release-pypi-public@v2
         with:
-          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          library-name: ${{ env.LIBRARY_NAME }}
+          twine-username: "__token__"
+          twine-token: ${{ secrets.PYPI_TOKEN }}
 
-      - name: Display structure of downloaded files
-        run: ls -R
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install -r requirements/requirements_build.txt
-
-      - name: Publish to PyPI
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
-        run: |
-          python -m twine upload --skip-existing ./**/*.whl
-          python -m twine upload --skip-existing ./**/*.tar.gz
-
-      - name: Publish to GitHub
-        uses: softprops/action-gh-release@v1
+      - name: "Release to GitHub"
+        uses: pyansys/actions/release-github@v2
         with:
-          files: |
-            ./**/*.whl
-            ./**/*.tar.gz
-
-      - name: Deploy stable documentation
-        run: |
-          curl -XPOST -u "${{ secrets.USERNAME }}:${{ secrets.PAT_TOKEN }}" \
-          -H "Accept: application/vnd.github.v3+json" \
-          -H "Content-Type: application/json" https://api.github.com/repos/jorgepiloto/jorgepiloto.github.io/actions/workflows/publish.yml/dispatches \
-          --data '{"ref": "main"}' \
-          --fail
+          library-name: ${{ env.LIBRARY_NAME }}
