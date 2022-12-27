@@ -39,6 +39,24 @@ classifiers = [
 dependencies = ["cmaps==1.0.4", "matplotlib", "numpy", "scipy"]
 dynamic = ["version", "description"]
 
+[project.optional-dependencies]
+tests = [
+    "pytest==7.1.3",
+    "pytest-cov==4.0.0",
+    "pytest-mpl==0.16.1",
+]
+doc = [
+    "furo==2022.9.29",
+    "jupytext==1.14.1",
+    "myst-nb==0.17.1",
+    "nbsphinx==0.8.9",
+    "notebook==6.4.12",
+    "sphinx==5.2.3",
+    "sphinx-autoapi==2.0.0",
+    "sphinx-gallery==0.11.1",
+]
+
+
 [project.urls]
 Source = "https://github.com/jorgepiloto/lamberthub"
 Tracker = "https://github.com/jorgepiloto/lamberthub/issues"
