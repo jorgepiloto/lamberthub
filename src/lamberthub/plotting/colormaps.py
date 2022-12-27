@@ -1,6 +1,6 @@
 """A module containing various colormaps definitions."""
 
-from matplotlib import LinearSegmentedColormap
+from matplotlib.colors import LinearSegmentedColormap
 
 
 def generate_cmap_from_colors_list(colors_list, cmap_name, n_levels):
