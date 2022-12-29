@@ -11,6 +11,9 @@
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
+from datetime import datetime
+
+from ansys_sphinx_theme import get_version_match
 
 import lamberthub
 
@@ -20,13 +23,41 @@ import lamberthub
 
 # -- Project information -----------------------------------------------------
 
-project = lamberthub.__name__
-copyright = "2022, Jorge Martínez Garrido"
+project = "lamberthub"
+copyright = f"{datetime.now().year} Jorge Martínez Garrido"
 author = "Jorge Martínez Garrido"
+release = version = lamberthub.__version__
+cname = os.getenv("DOCUMENTATION_CNAME", "lamberthub.docs.jorgemartinez.space")
 
-# The full version, including alpha/beta/rc tags
-release = lamberthub.__version__
+# -- Options for HTML output -------------------------------------------------
 
+html_logo = "_static/logo.png"
+html_theme = "ansys_sphinx_theme"
+html_static_path = ["_static"]
+html_css_files = ["custom.css"]
+
+html_context = {
+    "github_user": "jorgepiloto",
+    "github_repo": "lamberthub",
+    "github_version": "main",
+    "doc_path": "doc/source",
+}
+
+html_theme_options = {
+    "github_url": "https://github.com/jorgepiloto/lamberthub",
+    "use_edit_page_button": True,
+    "contact_mail": "contact@jorgemartinez.space",
+    "additional_breadcrumbs": [
+        ("Jorge Martínez website", "https://jorgemartinez.space"),
+    ],
+    "switcher": {
+        "json_url": f"https://{cname}/release/versions.json",
+        "version_match": get_version_match(version),
+    },
+    "navbar_end": ["version-switcher", "theme-switcher", "navbar-icon-links"],
+}
+
+html_short_title = html_title = "lamberthub"
 
 # -- General configuration ---------------------------------------------------
 
@@ -35,18 +66,23 @@ release = lamberthub.__version__
 # ones.
 extensions = [
     "autoapi.extension",
-    "myst_nb",
-    "nbsphinx",
     "sphinx.ext.autodoc",
-    "sphinx.ext.napoleon",
+    "sphinx.ext.autosummary",
+    "numpydoc",
+    "sphinx.ext.intersphinx",
+    "sphinx_copybutton",
+    "nbsphinx",
     "sphinx_gallery.load_style",
+    "myst_parser",
+    "jupyter_sphinx",
+    "sphinx_design",
 ]
 
 # Source files
 source_suffix = {
     ".rst": "restructuredtext",
-    ".ipynb": "myst-nb",
-    ".myst": "myst-nb",
+    ".mystnb": "jupyter_notebook",
+    ".md": "markdown",
 }
 
 # Index document
@@ -58,29 +94,10 @@ templates_path = ["_templates"]
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-if os.environ.get("LAMBERTHUB_SKIP_PERFORMANCE") == "True":
-    exclude_patterns = ["source/explanations/performance_comparison.md"]
+if os.getenv("LAMBERTHUB_SKIP_PERFORMANCE") == "true":
+    exclude_patterns = ["source/explanations/performance_comparison.mystnb"]
 else:
     exclude_patterns = []
-
-# -- Options for HTML output -------------------------------------------------
-
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
-html_theme = "furo"
-# html_theme_options = {
-#        "toc_title": "Sections in this page",
-#        "extra_navbar": "",
-# }
-html_title = "lamberthub"
-# html_logo = "_static/lamberts_problem_geometry.png"
-
-# Add any paths that contain custom static files (such as style sheets) here,
-# relative to this directory. They are copied after the builtin static files,
-# so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ["_static"]
-html_css_files = ["custom.css"]
 
 # -- Options for Sphinx autoapi ----------------------------------------------
 

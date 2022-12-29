@@ -1,15 +1,5 @@
----
-jupytext:
-  text_representation:
-    extension: .md
-    format_name: myst
-kernelspec:
-  display_name: Python 3
-  language: python
-  name: python3
----
-
-# How to use
+How to use
+==========
 
 Once that you have installed the library, its time for you to learn how to use
 it. The main goal of `lamberthub` is very simple: provide a collection of
@@ -19,7 +9,8 @@ All the routines are implemented in the form of Python functions, who's name is
 given by the combination of original author's name plus the year of publication,
 that is: `authorYYYY`.
 
-## Checking for available solvers
+Checking for available solvers
+------------------------------
 
 To answer this question, simply run the following code snippet or refer to the
 official package API reference:
@@ -64,27 +55,22 @@ parameters, that is because they all solve for the same astrodynamics problem.
 As said before, any Lambert's problem algorithm implemented in `lamberthub` is a
 Python function built with the following API architecture:
 
-**Parameters**
-* `mu`: the gravitational parameter, that is the mass of the attracting body
-  times the gravitational constant.
-* `r1`: initial position vector, needs to be a NumPy array instance.
-* `r2`: final position vector, needs to be a NumPy array instance.
-* `tof`: time of flight between initial and final vectors.
+| Parameters | Description                                                            |
+|------------|------------------------------------------------------------------------|
+| ``mu``     | The gravitational parameter of the attracting body.                    |
+| ``r1``     | The initial position vector in the form of a NumPy array.              |
+| ``r2``     | The final position vector in the form of a NumPy array.                |
+| ``tof``    | The time of flight between the initial and the final position vectors. |
 
-**Additional parameters**
-* `M`: the number of desired revolutions. If zero, direct transfer is assumed.
-* `prograde`: this parameter controls the inclination of the final orbit. If set
-  to `True`, the transfer has an inclination between 0 and 90 degrees
-  while if `False` inclinations between 90 and 180 are provided.
-* `low_path`: selects the type of path when more than two solutions are available.
-  There is no actual advantage on one or another solution, unless you have
-  particular constrains on your mission. If `True`, the maximum value for the
-  independent variable (when two solutions) is selected.
-* `maxiter`: maximum number of iterations allowed when computing the solution.
-* `atol`: absolute tolerance for the iterative method.
-* `rtol`: relative tolerance for the iterative method.
-* `full_output`: if `True`, it returns additional information such as the number
-  of iterations.
+
+| Additional parameters | Description                                                                                                                                            |
+|-----------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ``M``                 | The number of revolutions.                                                                                                                             |
+| ``prograde``          | If ``True``, the transfer is assumed to have an orbit inclination between 0 and 90 degrees. If ``False``, inclination lies between 90 and 180 degrees. |
+| ``low_path``          | If ``True``, selects the low path arc when more than two solutions exist. If ``False``, the high path arc is selected.                                 |
+| ``maxiter``           | The maximum allowed number of iterations.                                                                                                              |
+| ``atol``              | The absolute tolerance of the numerical method.                                                                                                        |
+| ``rtol``              | The relative tolerance of the numerical method.                                                                                                        |
 
 **Returns**
 * `v1`: initial velocity vector, it is a NumPy array instance.

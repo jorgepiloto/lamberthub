@@ -15,7 +15,7 @@ A collection of Lambert's problem solvers implemented using modern Python.
 **Install the latest stable release by running:**
 
 ```bash
-pip install lamberthub
+python -m pip install lamberthub
 ```
 
 Just in case you are interested on knowing what the problem is about, how to
@@ -55,34 +55,50 @@ where `author` is the name of the author which developed the solver and `YYYY`
 the year of publication. Any of the solvers hosted by the `ALL_SOLVERS` macro
 can be used.
 
-**Parameters**
-* `mu`: the gravitational parameter, that is the mass of the attracting body
-  times the gravitational constant.
-* `r1`: initial position vector.
-* `r2`: final position vector.
-* `tof`: time of flight between initial and final vectors.
+## Input and output parameters
 
-**Additional parameters**
-* `M`: the number of desired revolutions. If zero, direct transfer is assumed.
-* `prograde`: this parameter controls the inclination of the final orbit. If set
-  to `True`, the transfer will have an inclination between 0 and 90 degrees
-  while if `False` inclinations between 90 and 180 are provided.
-* `low_path`: selects the type of path when more than two solutions are available.
-  There is no actual advantage on one or another solution, unless you have
-  particular constrains on your mission.
-* `maxiter`: maximum number of iterations allowed when computing the solution.
-* `atol`: absolute tolerance for the iterative method.
-* `rtol`: relative tolerance for the iterative method.
-* `full_output`: if `True`, it returns additional information such us the number
-  of iterations. 
+All solvers accept and return the same amount of parameters. The tables below
+explain which input and output parameters are required and which others are
+optional.
 
-**Returns**
-* `v1`: initial velocity vector.
-* `v2`: final velocity vector.
+**Input parameters**
+These parameters are always required to be passed to the desired solver.
 
-**Additional returns**
-* `numiter`: number of iterations. Only if `full_output` has been set to `True`.
-* `tpi`: time per iteration. Only if `full_output` has been set to `True`.
+| Input parameters | Description                                                                                            |
+|:----------------:|:------------------------------------------------------------------------------------------------------:|
+| ``mu``           | The gravitational parameter, that is the mass of the attracting body times the gravitational constant. |
+| ``r1``           | The initial position vector.                                                                           |
+| ``r2``           | The final position vector.                                                                             |
+| ``tof``          | The time of flight between initial and final vectors.                                                  |
+
+**Optional parameters**
+These parameters are optional. If no value is provided for them, a default one is used, see their description.
+
+| Optional input parameters |                                                                            Description                                                                            |
+|:-------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|           ``M``           |                                                          The number of revolutions. Default value is 0.                                                           |
+|       ``prograde``        | Default to ``True``, which assumes the transfer to have an orbit inclination between 0 and 90 degrees. If ``False``, inclination lies between 90 and 180 degrees. |
+|       ``low_path``        |               Default to ``True``, which selects the low path arc when more than two solutions exist. If ``False``, the high path arc is selected.                |
+|        ``maxiter``        |                                                  The maximum allowed number of iterations. Default value is 35.                                                   |
+|         ``atol``          |                                              The absolute tolerance of the numerical method. Default value is 1e-7.                                               |
+|         ``rtol``          |                                              The relative tolerance of the numerical method. Default value is 1e-5.                                               |
+|      ``full_output``      |                                         If ``True``, it returns additional information such us the number of iterations.                                          |
+
+**Output parameters**
+These paremeters are always returned by any solver.
+
+| Output parameters | Description                  |
+|:-----------------:|:----------------------------:|
+| ``v1``            | The initial velocity vector. |
+| ``v2``            | The final velocity vector.   |
+
+**Optional output parameters**
+These parameters are only returned if the ``full_output`` input parameter has been set to ``True``.
+
+| Optional output parameters |        Description        |
+|:--------------------------:|:-------------------------:|
+|        ``numiter``         | The number of iterations. |
+|          ``tpi``           |  The time per iteration.  |
 
 ## Documentation and performance comparison tools
 

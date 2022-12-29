@@ -1,24 +1,24 @@
-# How to contribute
-
+How to contribute
+=================
 Main way of contributing to the library is through its usage and maintenance.
 When doing so, it is possible for new issues or even bugs to appear. Those are
-listed in the [official issues
-board](https://github.com/jorgepiloto/lamberthub/issues).
+listed in the `official issues board
+<https://github.com/jorgepiloto/lamberthub/issues>`_.
 
 
-## Developer installation
-
-Previous situation requires for user to have `lamberthub` installed in developer
+Developer installation
+----------------------
+Previous situation requires for user to have ``lamberthub`` installed in developer
 mode, so modifications can be applied to original source code. To install as
 *developer*, please follow these steps:
 
-Start by making a fork of the [official
-repository](https://github.com/jorgepiloto/lamberthub) into your local machine
-by running:
+Start by making a fork of the `official repository
+<https://github.com/jorgepiloto/lamberthub>`_ into your local machine by
+running:
 
-```bash
-git clone https://github.com/your_github_username/lamberthub && cd lamberthub
-```
+.. code-block:: text
+
+    git clone https://github.com/your_github_username/lamberthub && cd lamberthub
 
 Next, you must create a Python virtual environment, so the library dependencies
 do not interfere with your system environment:
