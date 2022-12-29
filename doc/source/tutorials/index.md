@@ -1,8 +1,9 @@
-# Tutorials
+Tutorials
+=========
 
-```{toctree}
----
-maxdepth: 2
----
-gallery.md
+```{eval-rst}
+.. nbgallery::
+
+   gauss1809_solver.mystnb
+   
 ```

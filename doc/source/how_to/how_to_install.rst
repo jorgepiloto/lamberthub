@@ -1,6 +1,5 @@
 How to install
 ==============
-
 This page contains the guide for installing the ``lamberthub`` package. If you
 experience any kind of problem during one of the steps shown in the following
 lines, please open an new issue (or select similar ones) in the `issues board
@@ -8,7 +7,6 @@ lines, please open an new issue (or select similar ones) in the `issues board
 
 Install from PyPI using pip
 ---------------------------
-
 The installation process is similar to other python packages, meaning that you
 only need to run:
 

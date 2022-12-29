@@ -67,6 +67,7 @@ html_short_title = html_title = "lamberthub"
 extensions = [
     "autoapi.extension",
     "sphinx.ext.autodoc",
+    "sphinx.ext.mathjax",
     "sphinx.ext.autosummary",
     "numpydoc",
     "sphinx.ext.intersphinx",
@@ -102,7 +103,7 @@ else:
 # -- Options for Sphinx autoapi ----------------------------------------------
 
 autoapi_type = "python"
-autoapi_dirs = ["../../src"]
+autoapi_dirs = ["../../src/lamberthub"]
 autodoc_typehints = "none"
 autoapi_template_dir = "_autoapi_templates"
 exclude_patterns.append("_autoapi_templates/index.rst")
@@ -121,5 +122,6 @@ nbsphinx_thumbnails = {
 # assume something has failed due to long time computations
 nb_execution_timeout = 900
 
-# Custom mathjax configuration
-myst_update_mathjax = False
+# MathJax config
+# See https://github.com/spatialaudio/nbsphinx/issues/572#issuecomment-853389268
+mathjax_path = "https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"

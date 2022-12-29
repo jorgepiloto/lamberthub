@@ -10,16 +10,20 @@ the `8th International Conference on Astrodynamics Tools and Techniques
 <https://atpi.eventsair.com/QuickEventWebsitePortal/20a05-gnc-2020/website>`_.
 
 .. button-link:: https://github.com/jorgepiloto/lamberthub/tree/main/art/icatt_report.pdf
-   :expand:
+    :expand:
+    :shadow:
+    :color: dark
 
-    :octicon:`file` A critical review on the state-of-the-art of Lambert's problem solvers
+    A critical review on the state-of-the-art of Lambert's problem solvers
 
 The performance comparison work was completed and published by October 2021 as
 part of the author's final thesis in aerospace engineering. You can download
 this document using the following link:
 
 .. button-link:: https://raw.githubusercontent.com/jorgepiloto/lamberthub/main/art/thesis_jorge.pdf
-   :expand:
+    :expand:
+    :shadow:
+    :color: dark
 
     Lambert's problem algorithms: a critical review
 
