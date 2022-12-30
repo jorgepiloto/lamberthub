@@ -46,16 +46,20 @@ tests = [
     "pytest-mpl==0.16.1",
 ]
 doc = [
-    "furo==2022.12.7",
-    "jupytext==1.14.1",
-    "myst-nb==0.17.1",
+    "ansys-sphinx-theme==0.8.0",
+    "jupyter_sphinx==0.4.0",
+    "jupytext==1.14.4",
+    "myst-parser==0.18.1",
+    "nbconvert==7.2.7",
     "nbsphinx==0.8.10",
     "notebook==6.5.2",
-    "sphinx==5.3.0",
+    "numpydoc==1.5.0",
+    "Sphinx==5.3.0",
     "sphinx-autoapi==2.0.0",
-    "sphinx-gallery==0.11.1",
+    "sphinx-copybutton==0.5.1",
+    "sphinx_design==0.3.0",
+    "sphinx-gallery==0.7.0",
 ]
-
 
 [project.urls]
 Source = "https://github.com/jorgepiloto/lamberthub"
@@ -63,7 +67,7 @@ Tracker = "https://github.com/jorgepiloto/lamberthub/issues"
 
 [tool.flit.sdist]
 exclude = [
-    "docs/",
+    "doc/",
     "tests",
     "art/",
 ]

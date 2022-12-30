@@ -1,4 +1,5 @@
-# Gallery of examples
+Tutorials
+=========
 
 ```{eval-rst}
 .. nbgallery::

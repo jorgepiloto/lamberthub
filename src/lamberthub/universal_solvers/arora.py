@@ -396,7 +396,7 @@ def _get_W(k, M, epsilon=2e-2):
     Parameters
     ----------
     k: float
-        Indepentent variable.
+        Independent variable.
     M: int
         Number of revolutions
     epsilon: float
