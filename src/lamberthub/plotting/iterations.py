@@ -73,30 +73,31 @@ class IterationsPlotter(TauThetaPlotter):
         # Solve for the number of iterations
         NN_ITER = self._get_iterations(solver, theta_span, tau_span)
         MEAN_NN_ITER = np.mean(NN_ITER[NN_ITER > 0])
+        print(THETA, TAU, NN_ITER)
 
         # Prepare the levels for the contour
         levels = MaxNLocator(nbins=11).tick_values(0, maxiter)
         bd_norm = BoundaryNorm(levels, ncolors=cmap.N)
 
         # Generate meshgrid
-        self.collection = self.ax.pcolor(
+        CS = self.ax.contour(
+            THETA, TAU, NN_ITER, levels=list(range(0, maxiter)),
+            colors=('k',),linestyles=('-',),linewidths=(2,)
+        )
+        self.collection = self.ax.contourf(
             THETA,
             TAU,
-            NN_ITER[:-1, :-1],  # For pcolor, the last rows need to be removed
-            cmap=cmap,
-            edgecolors="k",
-            linewidths=1,
-            norm=bd_norm,
+            NN_ITER,  # For pcolor, the last rows need to be removed
         )
-        self.collection.cmap.set_under("black")
+        # self.collection.cmap.set_under("black")
 
-        # Draw the colorbar with proper diemensions and label
-        label = f"Number of iterations\nAverage {MEAN_NN_ITER:.2f} iter"
-        self._draw_colorbar(maxiter, step, label, cmap, "white")
+        # # Draw the colorbar with proper diemensions and label
+        # label = f"Number of iterations\nAverage {MEAN_NN_ITER:.2f} iter"
+        # self._draw_colorbar(maxiter, step, label, cmap, "white")
 
-        # Finally, draw the ticks, labels and title
-        self._draw_ticks()
-        self._draw_labels()
-        self.ax.set_title(get_solver_name(solver))
+        # # Finally, draw the ticks, labels and title
+        # self._draw_ticks()
+        # self._draw_labels()
+        # self.ax.set_title(get_solver_name(solver))
 
         return self.ax

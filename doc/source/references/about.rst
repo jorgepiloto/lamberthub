@@ -29,20 +29,15 @@ this document using the following link:
 
 Objectives and goals
 --------------------
+The following objectives and goals apply for this library:
 
-* To **collect all proposed solutions to the Lambert's problem and implement** those
-  under a common programming language, so no undesired performance is introduced
-  because of software.
+* Review Lambert's problem bibliography.
 
-* To **provide open source scientific software**, so all the **results can be
-  reproduced by third parties and individuals**.
+* Collect all proposed solutions to the Lambert's problem.
 
-* To act as a **Lambert's problem algorithms vault**, preserving the knowledge behind
-  this great problem and in particular, the very first proposed numerical
-  solvers, playing the role of software archaeology.
+* Provide open source scientific software to guarantee reproducible science.
 
-* To **review Lambert's problem bibliography** to establish which
-  authors have addressed the problem and when they did so.
+* Act as a Lambert's problem algorithms vault.
 
 
 License

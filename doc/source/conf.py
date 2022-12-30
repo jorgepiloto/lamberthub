@@ -67,7 +67,7 @@ html_short_title = html_title = "lamberthub"
 extensions = [
     "autoapi.extension",
     "sphinx.ext.autodoc",
-    "sphinx.ext.mathjax",
+    #"sphinx.ext.mathjax",
     "sphinx.ext.autosummary",
     "numpydoc",
     "sphinx.ext.intersphinx",
@@ -124,4 +124,6 @@ nb_execution_timeout = 900
 
 # MathJax config
 # See https://github.com/spatialaudio/nbsphinx/issues/572#issuecomment-853389268
-mathjax_path = "https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+#mathjax_path = "https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+mathjax_path="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+
