@@ -76,7 +76,7 @@ coverage.xml
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+doc/_build/
 
 # PyBuilder
 target/
