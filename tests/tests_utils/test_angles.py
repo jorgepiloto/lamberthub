@@ -12,7 +12,6 @@ from lamberthub.utils.angles import (
 
 @pytest.mark.parametrize("sense", [True, False])
 def test_get_transfer_angle_collinear_vectors_same_sense(sense):
-
     # Build two vectors with the same direction and sense using scalar
     # proportion
     r1 = np.array([1, 0, 0])

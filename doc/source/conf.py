@@ -7,10 +7,11 @@ from ansys_sphinx_theme import get_version_match
 
 import lamberthub
 
-
 # Project information
 project = lamberthub.__name__
-copyright = f"(c) {datetime.now().year} Jorge Martinez Garrido. All rights reserved"
+copyright = (
+    f"(c) {datetime.now().year} Jorge Martinez Garrido. All rights reserved"
+)
 author = lamberthub.__author__
 release = version = lamberthub.__version__
 cname = os.getenv("DOCUMENTATION_CNAME", "lamberthub.docs.jorgemartinez.space")

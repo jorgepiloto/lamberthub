@@ -29,7 +29,6 @@ TABLE_OF_SOLUTIONS = {
 
 @pytest.mark.parametrize("orbit_type", TABLE_OF_SOLUTIONS)
 def test_kepler_from_nu(orbit_type):
-
     # Unpack expected data and initial one
     M_expected, _, nu, ecc = TABLE_OF_SOLUTIONS[orbit_type]
 
