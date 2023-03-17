@@ -76,14 +76,14 @@ jobs:
         labels: bug
 
   code-style:
-    name: "Running code style checks"
+    name: "Code style"
     runs-on: ubuntu-latest
     needs: labeler
     steps:
       - uses: pyansys/actions/code-style@v4
 
   doc-style:
-    name: "Running documentation style checks"
+    name: "Doc style"
     runs-on: ubuntu-latest
     needs: labeler
     steps:
@@ -114,14 +114,14 @@ jobs:
         if: matrix.cfg.python-version == env.MAIN_PYTHON_VERSION && matrix.os == 'ubuntu-latest'
 
   doc-build:
-    name: "Building library documentation"
+    name: "Doc build"
     runs-on: ubuntu-latest
     needs: doc-style
     steps:
       - uses: pyansys/actions/doc-build@v4
 
   build-library:
-    name: "Build library basic example"
+    name: "Build library"
     runs-on: ubuntu-latest
     needs: [doc-build, tests]
     steps:
@@ -132,7 +132,7 @@ jobs:
   doc-deploy-dev:
     name: "Deploy development documentation"
     runs-on: ubuntu-latest
-    needs: doc-build
+    needs: build-library
     if: github.event_name == 'push' && !contains(github.ref, 'refs/tags')
     steps:
       - uses: pyansys/actions/doc-deploy-dev@v4
