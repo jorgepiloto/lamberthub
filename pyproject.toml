@@ -5,7 +5,7 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "lamberthub"
 readme = "README.md"
-license = {file = "LICENSE" }
+license = {file = "COPYING" }
 requires-python = ">=3.7"
 authors = [
     {name = "Jorge Martínez Garrido", email = "contact@jorgemartinez.space" }
@@ -41,18 +41,15 @@ dynamic = ["version", "description"]
 
 [project.optional-dependencies]
 tests = [
-    "pytest==7.2.0",
+    "pytest==7.2.2",
     "pytest-cov==4.0.0",
 ]
 doc = [
-    "ansys-sphinx-theme>=0.9",
-    "jupytext==1.14.1",
-    "myst-nb==0.17.1",
-    "nbsphinx==0.8.10",
-    "notebook==6.5.2",
+    "ansys-sphinx-theme==0.9.5",
     "sphinx==5.3.0",
     "sphinx-autoapi==2.0.0",
-    "sphinx-gallery==0.11.1",
+    "sphinx-gallery==0.12.2",
+    "sphinx-copybutton==0.5.1",
 ]
 
 
