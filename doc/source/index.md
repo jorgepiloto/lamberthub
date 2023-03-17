@@ -39,14 +39,6 @@ explanations/the_lamberts_problem.md
 ```{toctree}
 ---
 maxdepth: 2
-caption: Tutorials
----
-tutorials/gallery.md
-```
-
-```{toctree}
----
-maxdepth: 2
 caption: References
 ---
 references/about
