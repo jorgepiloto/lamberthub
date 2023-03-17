@@ -112,7 +112,6 @@ def gauss1809(
     # The iterative procedure can start now
     tic = time.perf_counter()
     for numiter in range(1, maxiter + 1):
-
         # Compute the value of the free-parameter
         x = _gauss_first_equation(y0, s, w)
 

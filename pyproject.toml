@@ -8,10 +8,10 @@ readme = "README.md"
 license = {file = "LICENSE" }
 requires-python = ">=3.7"
 authors = [
-    {name = "Jorge Martínez Garrido", email = "jorge@astrodevelopers.com" }
+    {name = "Jorge Martínez Garrido", email = "contact@jorgemartinez.space" }
 ]
 maintainers = [
-    {name = "Jorge Martínez Garrido", email = "jorge@astrodevelopers.com" }
+    {name = "Jorge Martínez Garrido", email = "contact@jorgemartinez.space" }
 ]
 keywords = [
     "aerospace",
@@ -36,17 +36,16 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Physics",
     "Topic :: Scientific/Engineering :: Astronomy",
 ]
-dependencies = ["matplotlib", "numpy", "scipy"]
+dependencies = ["numpy", "scipy"]
 dynamic = ["version", "description"]
 
 [project.optional-dependencies]
 tests = [
     "pytest==7.2.0",
     "pytest-cov==4.0.0",
-    "pytest-mpl==0.16.1",
 ]
 doc = [
-    "furo==2022.12.7",
+    "ansys-sphinx-theme>=0.9",
     "jupytext==1.14.1",
     "myst-nb==0.17.1",
     "nbsphinx==0.8.10",
@@ -58,12 +57,12 @@ doc = [
 
 
 [project.urls]
-Source = "https://github.com/jorgepiloto/lamberthub"
-Tracker = "https://github.com/jorgepiloto/lamberthub/issues"
+Source = "https://github.com/lamberthub/lamberthub"
+Tracker = "https://github.com/lamberthub/lamberthub/issues"
 
 [tool.flit.sdist]
 exclude = [
-    "docs/",
+    "doc/",
     "tests",
     "art/",
 ]

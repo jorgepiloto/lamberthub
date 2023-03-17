@@ -4,7 +4,7 @@ SPHINXBUILD   = sphinx-build
 PAPER         =
 SRCDIR        = source
 EXAMPLESDIR   = tutorials
-BUILDDIR      = build
+BUILDDIR      = _build
 
 # User-friendly check for sphinx-build
 ifeq ($(shell which $(SPHINXBUILD) >/dev/null 2>&1; echo $$?), 1)
@@ -180,3 +180,7 @@ pseudoxml:
 	$(SPHINXBUILD) -b pseudoxml $(ALLSPHINXOPTS) $(BUILDDIR)/pseudoxml
 	@echo
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
+
+pdf:
+	mkdir -p $(BUILDDIR)/latex
+	touch $(BUILDDIR)/latex/documentation.pdf

@@ -127,7 +127,6 @@ def arora2013(
 
     # Compare actual and parabolic TOF to generate the initial guess
     if tof <= tof_p:
-
         # The final orbit is expected to be hyperbolic. The initial guess is
         # determined by the formulae given by (TABLE 2) from official report.
         # Three regions, depending on the transfer angle are possible: one where
@@ -268,7 +267,6 @@ def arora2013(
                 ) ** (1 / alpha)
 
         else:
-
             # Multirevolutions apply. For this last case, Arora also divided the
             # solution space into four regions named M1, M2, M3 and M4, being th
             # letter M associated with Multi-revolutions. The procedure, as
@@ -282,7 +280,6 @@ def arora2013(
     # iterative process. Initialize the timer also.
     tic = time.perf_counter()
     for numiter in range(1, maxiter + 1):
-
         # Evaluate the auxiliary function, its first and second derivative
         # w.r.t. to the independent variable
         W = _get_W(k, M)
@@ -396,7 +393,7 @@ def _get_W(k, M, epsilon=2e-2):
     Parameters
     ----------
     k: float
-        Indepentent variable.
+        Independent variable.
     M: int
         Number of revolutions
     epsilon: float

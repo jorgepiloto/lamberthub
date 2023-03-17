@@ -125,7 +125,6 @@ def battin1984(
     # The iterative procedure starts
     tic = time.perf_counter()
     for numiter in range(1, maxiter + 1):
-
         # Evaluate the h coefficients given by equations (47) and (48) from the
         # report [1] or the relations (7.111) and (7.112) from the book [2]. The
         # denominator is common for both h1 and h2 coefficients, so it is
@@ -424,7 +423,12 @@ def _xi_at_x(x, levels=125):
     eta = x / (np.sqrt(1 + x) + 1) ** 2
 
     # Initial values
-    delta, u, sigma, m1, = (
+    (
+        delta,
+        u,
+        sigma,
+        m1,
+    ) = (
         0,
         1,
         1,
@@ -464,7 +468,12 @@ def _K_at_u(u, levels=1000):
     """
 
     # Initial values
-    delta, u0, sigma, n1, = (
+    (
+        delta,
+        u0,
+        sigma,
+        n1,
+    ) = (
         1,
         1,
         1,

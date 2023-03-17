@@ -34,7 +34,6 @@ def test_singular_for_180_degrees_transfer():
 
 @pytest.mark.parametrize("x", np.round(np.linspace(0, 1, 10 + 1), 1))
 def test_X_at_x(x):
-
     # Use series expansion from lamberthub
     X = _X_at_x(x, order=5)
 

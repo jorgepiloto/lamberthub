@@ -33,7 +33,6 @@ Astrodynamics), by Gim J. Der, see https://amostech.com/TechnicalPapers/2011/Pos
 @pytest.mark.parametrize("solver", MULTI_REV_SOLVERS)
 @pytest.mark.parametrize("case", TABLE_OF_TRANSFERS)
 def test_multirev_case(solver, case):
-
     # Initial conditions
     mu_earth = 3.986004418e5  # [km ** 3 / s ** 2]
     r1 = np.array([22592.145603, -1599.915239, -19783.950506])  # [km]

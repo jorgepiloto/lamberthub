@@ -105,7 +105,6 @@ def vallado2013(
 
     tic = time.perf_counter()
     for numiter in range(1, maxiter + 1):
-
         # Evaluate the value of y at a given psi
         y = _y_at_psi(psi, r1_norm, r2_norm, A)
 

@@ -209,7 +209,6 @@ def tlamb(m, q, qsqfm1, x, n):
         if lm1:
             t, dt, d2t, d3t = 0, b, bb, aa
         else:
-
             if qx * u >= 0.0:
                 g = x * z + q * u
             else:
@@ -315,7 +314,6 @@ def tlamb(m, q, qsqfm1, x, n):
 
         # The loop starts below this line in its second iteration.
         while i < n or t != told:
-
             i = i + 1
             p = i
             u0i = u0i * u
@@ -409,7 +407,6 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
     # Start computing the initial guess. The process is different depending
     # on the number of revolutions.
     if m == 0:
-
         # Single-rev starter from T (at x = 0) and bilinear usually.
         n = 1
 
@@ -433,7 +430,6 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
             x = x * (1.0 + x * (c1 * w - c2 * x * np.sqrt(w)))
 
     else:
-
         # With multi-revolutions first get T(min) as basis for starter.
         xm = 1.0 / (1.5 * (m + 0.5) * np.pi)
 
@@ -447,7 +443,6 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
         # be part of numerical routine as they belong to the initial guess.
         # Here, we impose it not to exceeded the number of iterations
         for numiter in range(1, maxiter + 1):
-
             # Call TLAMB routine
             tmin, dt, d2t, d3t = tlamb(m, q, qsqfm1, xm, 3)
 
@@ -480,7 +475,6 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
             return n, x, None, numiter
 
         else:
-
             n = 3
 
             if d2t == 0.0:
@@ -512,15 +506,12 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
     # TODO: THIS IS THE HALLEY METHOD
 
     while True:
-
         # 5: LINE OF STATEMENT
         if goto3 is False:
-
             # Start the timer
             tic = time.perf_counter()
             # Enable desired number of iterations
             for numiter in range(1, maxiter + 1):
-
                 t, dt, d2t, d3t = tlamb(m, q, qsqfm1, x, 2)
                 t = tin - t
 
