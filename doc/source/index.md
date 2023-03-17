@@ -34,7 +34,6 @@ maxdepth: 2
 caption: Explanations
 ---
 explanations/the_lamberts_problem.md
-explanations/performance_comparison.md
 ```
 
 ```{toctree}
