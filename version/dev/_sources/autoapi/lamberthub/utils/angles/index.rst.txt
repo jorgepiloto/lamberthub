@@ -1,0 +1,181 @@
+:mod:`lamberthub.utils.angles`
+==============================
+
+.. py:module:: lamberthub.utils.angles
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   Utilities related to angles computations
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+
+   lamberthub.utils.angles.get_transfer_angle
+
+
+   lamberthub.utils.angles.get_orbit_normal_vector
+
+
+   lamberthub.utils.angles.get_orbit_inc_and_raan_from_position_vectors
+
+
+   lamberthub.utils.angles.nu_to_E
+
+
+   lamberthub.utils.angles.E_to_nu
+
+
+   lamberthub.utils.angles.nu_to_B
+
+
+   lamberthub.utils.angles.B_to_nu
+
+
+   lamberthub.utils.angles.nu_to_H
+
+
+   lamberthub.utils.angles.H_to_nu
+
+
+
+.. py:function:: get_transfer_angle(r1, r2, prograde)
+
+   Solves for the transfer angle being known the sense of rotation.
+
+   :param r1: Initial position vector.
+   :type r1: np.array
+   :param r2: Final position vector.
+   :type r2: np.array
+   :param prograde: If True, it assumes prograde motion, otherwise assumes retrograde.
+   :type prograde: bool
+
+   :returns: **dtheta** -- Transfer angle in radians.
+   :rtype: float
+
+
+.. py:function:: get_orbit_normal_vector(r1, r2, prograde)
+
+   Computes a unitary normal vector aligned with the specific angular momentum
+   one of the orbit.
+
+   :param r1: Initial position vector.
+   :type r1: np.array
+   :param r2: Final position vector.
+   :type r2: np.array
+   :param prograde: If True, it assumes prograde motion, otherwise assumes retrograde.
+   :type prograde: bool
+
+   :returns: **i_h** -- Unitary vector aligned with orbit specific angular momentum.
+   :rtype: np.array
+
+
+.. py:function:: get_orbit_inc_and_raan_from_position_vectors(r1, r2, prograde)
+
+   Computes the inclination of the orbit being known an initial and a final
+   position vectors together with the sense of motion.
+
+   :param r1: Initial position vector.
+   :type r1: np.array
+   :param r2: Final position vector.
+   :type r2: np.array
+   :param prograde: If True, it assumes prograde motion, otherwise assumes retrograde.
+   :type prograde: bool
+
+   :returns: * **inc** (*float*) -- Inclination of the orbit.
+             * **raan** (*float*) -- Right ascension of the ascending node.
+
+
+.. py:function:: nu_to_E(nu, ecc)
+
+   Retrieves eccentric anomaly from true one.
+
+   :param nu: True anomaly.
+   :type nu: float
+   :param ecc: Eccentricity of the orbit.
+   :type ecc: float
+
+   :returns: **E** -- Eccentric anomaly.
+   :rtype: float
+
+
+.. py:function:: E_to_nu(E, ecc)
+
+   Retrieves true anomaly from eccentric one.
+
+   :param E: Eccentric anomaly.
+   :type E: float
+   :param ecc: Eccentricity of the orbit.
+   :type ecc: float
+
+   :returns: **nu** -- True anomaly.
+   :rtype: float
+
+
+.. py:function:: nu_to_B(nu)
+
+   Retrieves parabolic anomaly from true one.
+
+   :param nu: True anomaly
+   :type nu: float
+
+   :returns: **B** -- Parabolic anomaly
+   :rtype: float
+
+   .. rubric:: Notes
+
+   As explained in Vallado's [1], :math:`B` is used instead of :math:`P` just
+   to not confuse with the orbital parameter.
+
+
+.. py:function:: B_to_nu(B)
+
+   Retrieves the true anomaly from parabolic one.
+
+   :param B: Parabolic anomaly
+   :type B: float
+
+   :returns: **nu** -- True anomaly
+   :rtype: float
+
+   .. rubric:: Notes
+
+   As explained in Vallado's [1], :math:`B` is used instead of :math:`P` just
+   to not confuse with the orbital parameter.
+
+
+.. py:function:: nu_to_H(nu, ecc)
+
+   Retrieves hyperbolic anomaly from true one.
+
+   :param nu: True anomaly
+   :type nu: float
+   :param ecc: Eccentricity of the orbit
+   :type ecc: float
+
+   :returns: **H** -- Hyperbolic anomaly
+   :rtype: float
+
+
+.. py:function:: H_to_nu(H, ecc)
+
+   Retrieves hyperbolic anomaly from true one.
+
+   :param H: Hyperbolic anomaly
+   :type H: float
+   :param ecc: Eccentricity of the orbit
+   :type ecc: float
+
+   :returns: **nu** -- True anomaly
+   :rtype: float
+
+

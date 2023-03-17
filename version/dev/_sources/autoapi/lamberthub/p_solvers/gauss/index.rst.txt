@@ -1,0 +1,188 @@
+:mod:`lamberthub.p_solvers.gauss`
+=================================
+
+.. py:module:: lamberthub.p_solvers.gauss
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   This module holds all methods devised by Carl Fredrich Gauss.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+
+   lamberthub.p_solvers.gauss.gauss1809
+
+
+   lamberthub.p_solvers.gauss._get_s
+
+
+   lamberthub.p_solvers.gauss._get_w
+
+
+   lamberthub.p_solvers.gauss._gauss_first_equation
+
+
+   lamberthub.p_solvers.gauss._gauss_second_equation
+
+
+   lamberthub.p_solvers.gauss._X_at_x
+
+
+
+.. py:function:: gauss1809(mu, r1, r2, tof, M=0, prograde=True, low_path=True, maxiter=250, atol=1e-05, rtol=1e-07, full_output=False)
+
+   Lambert's problem solver devised by Carl Friedrich Gauss in 1809. The method
+   has been implemented according to Bate's book (see [2]) and extended to the
+   hyperbolic case. This method shows poor accuracy, being only suitable for
+   low transfer angles.
+
+   :param mu: Gravitational parameter, equivalent to :math:`GM` of attractor body.
+   :type mu: float
+   :param r1: Initial position vector.
+   :type r1: numpy.array
+   :param r2: Final position vector.
+   :type r2: numpy.array
+   :param M: Number of revolutions. Must be equal or greater than 0 value.
+   :type M: int
+   :param prograde: If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
+   :type prograde: bool
+   :param low_path: If two solutions are available, it selects between high or low path.
+   :type low_path: bool
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Absolute tolerance.
+   :type atol: float
+   :param rtol: Relative tolerance.
+   :type rtol: float
+   :param full_output: If True, the number of iterations and time per iteration are also returned.
+   :type full_output: bool
+
+   :returns: * **v1** (*numpy.array*) -- Initial velocity vector.
+             * **v2** (*numpy.array*) -- Final velocity vector.
+             * **numiter** (*int*) -- Number of iterations.
+             * **tpi** (*float*) -- Time per iteration in seconds.
+
+   .. rubric:: Notes
+
+   The algorithm originally devised by Gauss exploits the so-called ratio of
+   sector to triangle area, which is a numerical value related with the orbital
+   parameter. This Algorithm was used to the discovery of the orbit of Ceres by
+   the genius and adopted by many other authors of his time due to its
+   simplicity. However, the Algorithm is found to be singular for transfer
+   angles of 180 degrees and shows a low performance for really small angles.
+
+   .. rubric:: References
+
+   [1] Gauss, C. F. (1809). Theoria motus corporum coelestium in sectionibus
+   conicis solem ambientium auctore Carolo Friderico Gauss. sumtibus Frid.
+   Perthes et IH Besser.
+
+   [2] Bate, R. R., Mueller, D. D., White, J. E., & Saylor, W. W. (2020).
+   Fundamentals of astrodynamics. Courier Dover Publications.
+
+
+.. py:function:: _get_s(r1_norm, r2_norm, dtheta)
+
+   Returns the s auxiliary constant.
+
+   :param r1_norm: The norm of the initial position vector.
+   :type r1_norm: float
+   :param r2_norm: The norm of the final position vector.
+   :type r2_norm: float
+   :param dtheta: The transfer angle.
+   :type dtheta: float
+
+   :returns: **s** -- An auxiliary constant.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation number (5.6-2) from Bate's book [2].
+
+
+.. py:function:: _get_w(mu, tof, r1_norm, r2_norm, dtheta)
+
+   Returns the w auxiliary constant.
+
+   :param mu: The gravitational constant.
+   :type mu: float
+   :param tof: The time of flight.
+   :type tof: float
+   :param r1_norm: The norm of the initial position vector.
+   :type r1_norm: float
+   :param r2_norm: The norm of the final position vector.
+   :type r2_norm: float
+   :param dtheta: The transfer angle.
+   :type dtheta: float
+
+   :returns: **w** -- An auxiliary constant.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation number (5.6-3) from Bate's book [2].
+
+
+.. py:function:: _gauss_first_equation(y, s, w)
+
+   Evaluates Gauss' first equation.
+
+   :param y: The dependent variable.
+   :type y: float
+   :param s: First auxiliary variable.
+   :type s: float
+   :param w: Second auxiliary variable.
+   :type w: float
+
+   :returns: **x** -- The independent variable or free-parameter.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation (5.6-13) from Bate's book [2].
+
+
+.. py:function:: _gauss_second_equation(x, s)
+
+   Evaluates Gauss' second equation.
+
+   :param x: The independent variable.
+   :type x: float
+   :param s: First auxiliary variable
+   :type s: float
+
+   :returns: **y** -- Dependent variable.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation (5.6-14) from Bate's book, reference [2].
+
+
+.. py:function:: _X_at_x(x, order=50)
+
+   Computes capital X as function of lower x.
+
+   :param x: The independent variable.
+   :type x: float
+   :param n_items: The number of terms to be considered in the series.
+   :type n_items: int
+
+   :returns: **X** -- The series summation.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation (5.6-15) from Bate's book, in reference [2].
+
+

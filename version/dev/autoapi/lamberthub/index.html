@@ -1,0 +1,1267 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>lamberthub &#8212; lamberthub</title>
+    
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/ansys_sphinx_theme.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    
+        <link href="../../_static/css/breadcrumbs.css" rel="stylesheet">
+    
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/table.js"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/lamberthub/index';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://lamberthub.docs.jorgemartinez.space/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        </script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="lamberthub.ecc_solvers" href="ecc_solvers/index.html" />
+    <link rel="prev" title="Package API" href="../index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      <!-- Debugging: html_theme_options =  -->
+
+  <!-- If there is no MiliSearch enabled, use the PyData search -->
+<form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+    
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+    <p class="title logo__title">lamberthub</p>
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../how_to_guides/how_to_install.html">
+                        How to install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../how_to_guides/how_to_use.html">
+                        How to use
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../how_to_guides/how_to_contribute.html">
+                        How to contribute
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../explanations/the_lamberts_problem.html">
+                        The Lambert’s problem
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references/about.html">
+                        About lamberthub
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Package API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references/references.html">
+                        Articles and similar software
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <div class="version-switcher__container dropdown">
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-toggle="dropdown">
+        dev  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+      </div>
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/lamberthub/lamberthub" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+    
+    <div id="announcement_msg"></div>
+<script>
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(text => document.getElementById("announcement_msg").innerHTML = text)
+    .catch((error) => console.error(`Fetch problem: ${error.message}`));
+</script>
+    
+
+    
+    <div class="container-xl">
+    <div class="row">
+        <div class="col-12 col-md-3" id="breadcrumbs-spacer"></div>
+        <div class="col-12 col-md-11 col-xl-9" id="breadcrumbs">
+          
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="ecc_solvers/index.html" title="lamberthub.ecc_solvers"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../index.html" title="Package API"
+             accesskey="P">previous</a> |</li>
+    
+        <li class="nav-item nav-item-additional-breadcrumb"><a href="https://jorgemartinez.space">Jorge's Website</a> » </li>
+    
+    
+        <li class="nav-item nav-item-0"><a href="../../index.html">lamberthub</a> » </li>
+    
+
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Package API</a> » </li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub</span></code></a></li> 
+      </ul>
+    </div>
+        </div>
+  </div>
+</div>
+    
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../how_to_guides/how_to_install.html">
+                        How to install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../how_to_guides/how_to_use.html">
+                        How to use
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../how_to_guides/how_to_contribute.html">
+                        How to contribute
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../explanations/the_lamberts_problem.html">
+                        The Lambert’s problem
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references/about.html">
+                        About lamberthub
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../index.html">
+                        Package API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../references/references.html">
+                        Articles and similar software
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <div class="version-switcher__container dropdown">
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-toggle="dropdown">
+        dev  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+      </div>
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/lamberthub/lamberthub" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="ecc_solvers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.ecc_solvers</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="p_solvers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.p_solvers</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="universal_solvers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.universal_solvers</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="lamberthub">
+<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub</span></code><a class="headerlink" href="#lamberthub" title="Permalink to this heading">#</a></h1>
+<p>A collection of Lambert’s problem solvers</p>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="ecc_solvers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.ecc_solvers</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ecc_solvers/avanzini/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.ecc_solvers.avanzini</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="ecc_solvers/utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.ecc_solvers.utils</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="p_solvers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.p_solvers</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="p_solvers/battin/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.p_solvers.battin</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="p_solvers/gauss/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.p_solvers.gauss</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="universal_solvers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.universal_solvers</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="universal_solvers/arora/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.universal_solvers.arora</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="universal_solvers/gooding/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.universal_solvers.gooding</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="universal_solvers/izzo/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.universal_solvers.izzo</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="universal_solvers/vallado/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.universal_solvers.vallado</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="utils/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="utils/angles/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.angles</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/assertions/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.assertions</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/elements/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.elements</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/kepler/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.kepler</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/misc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.misc</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils/stumpff/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.stumpff</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="package-contents">
+<h2>Package Contents<a class="headerlink" href="#package-contents" title="Permalink to this heading">#</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h3>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lamberthub.avanzini2008" title="lamberthub.avanzini2008"><code class="xref py py-obj docutils literal notranslate"><span class="pre">avanzini2008</span></code></a>(mu, r1, r2, tof[, M, prograde, low_path, ...])</p></td>
+<td><p>Solves Lambert problem using Gooding's devised algorithm.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lamberthub.battin1984" title="lamberthub.battin1984"><code class="xref py py-obj docutils literal notranslate"><span class="pre">battin1984</span></code></a>(mu, r1, r2, tof[, M, prograde, low_path, ...])</p></td>
+<td><p>Battin's elegant algorithm for solving the Lambert's problem. This algorithm</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lamberthub.gauss1809" title="lamberthub.gauss1809"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gauss1809</span></code></a>(mu, r1, r2, tof[, M, prograde, low_path, ...])</p></td>
+<td><p>Lambert's problem solver devised by Carl Friedrich Gauss in 1809. The method</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lamberthub.arora2013" title="lamberthub.arora2013"><code class="xref py py-obj docutils literal notranslate"><span class="pre">arora2013</span></code></a>(mu, r1, r2, tof[, M, prograde, low_path, ...])</p></td>
+<td><p>Solves Lambert problem using Arora's devised algorithm</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lamberthub.gooding1990" title="lamberthub.gooding1990"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gooding1990</span></code></a>(mu, r1, r2, tof[, M, prograde, low_path, ...])</p></td>
+<td><p>Lambert's problem solver using the method proposed by R. H. Gooding in 1990.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lamberthub.izzo2015" title="lamberthub.izzo2015"><code class="xref py py-obj docutils literal notranslate"><span class="pre">izzo2015</span></code></a>(mu, r1, r2, tof[, M, prograde, low_path, ...])</p></td>
+<td><p>Solves Lambert problem using Izzo's devised algorithm.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lamberthub.vallado2013" title="lamberthub.vallado2013"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vallado2013</span></code></a>(mu, r1, r2, tof[, M, prograde, low_path, ...])</p></td>
+<td><p>Vallado's algorithm makes use of the universal formulation to solve for the</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="lamberthub.avanzini2008">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.</span></span><span class="sig-name descname"><span class="pre">avanzini2008</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tof</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prograde</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">35</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lamberthub.avanzini2008" title="Permalink to this definition">#</a></dt>
+<dd><p>Solves Lambert problem using Gooding’s devised algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mu</strong> (<em>float</em>) – Gravitational parameter, equivalent to <span class="math notranslate nohighlight">\(GM\)</span> of attractor body.</p></li>
+<li><p><strong>r1</strong> (<em>numpy.array</em>) – Initial position vector.</p></li>
+<li><p><strong>r2</strong> (<em>numpy.array</em>) – Final position vector.</p></li>
+<li><p><strong>M</strong> (<em>int</em>) – Number of revolutions. Must be equal or greater than 0 value.</p></li>
+<li><p><strong>prograde</strong> (<em>bool</em>) – If <cite>True</cite>, specifies prograde motion. Otherwise, retrograde motion is imposed.</p></li>
+<li><p><strong>low_path</strong> (<em>bool</em>) – If two solutions are available, it selects between high or low path.</p></li>
+<li><p><strong>maxiter</strong> (<em>int</em>) – Maximum number of iterations.</p></li>
+<li><p><strong>atol</strong> (<em>float</em>) – Absolute tolerance.</p></li>
+<li><p><strong>rtol</strong> (<em>float</em>) – Relative tolerance.</p></li>
+<li><p><strong>full_output</strong> (<em>bool</em>) – If True, the number of iterations and time per iteration are also returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>v1</strong> (<em>numpy.array</em>) – Initial velocity vector.</p></li>
+<li><p><strong>v2</strong> (<em>numpy.array</em>) – Final velocity vector.</p></li>
+<li><p><strong>numiter</strong> (<em>int</em>) – Number of iterations.</p></li>
+<li><p><strong>tpi</strong> (<em>float</em>) – Time per iteration in seconds.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The following routine might be simplified making use of private functions.
+However, we decided to expose all the auxiliary routines to properly
+reproduce original report figures.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lamberthub.battin1984">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.</span></span><span class="sig-name descname"><span class="pre">battin1984</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tof</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prograde</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">35</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lamberthub.battin1984" title="Permalink to this definition">#</a></dt>
+<dd><p>Battin’s elegant algorithm for solving the Lambert’s problem. This algorithm
+is known to improve Gauss original one by removing the singularity for 180
+transfer angles and increasing its performance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mu</strong> (<em>float</em>) – Gravitational parameter, equivalent to <span class="math notranslate nohighlight">\(GM\)</span> of attractor body.</p></li>
+<li><p><strong>r1</strong> (<em>numpy.array</em>) – Initial position vector.</p></li>
+<li><p><strong>r2</strong> (<em>numpy.array</em>) – Final position vector.</p></li>
+<li><p><strong>M</strong> (<em>int</em>) – Number of revolutions. Must be equal or greater than 0 value.</p></li>
+<li><p><strong>prograde</strong> (<em>bool</em>) – If <cite>True</cite>, specifies prograde motion. Otherwise, retrograde motion is imposed.</p></li>
+<li><p><strong>low_path</strong> (<em>bool</em>) – If two solutions are available, it selects between high or low path.</p></li>
+<li><p><strong>maxiter</strong> (<em>int</em>) – Maximum number of iterations.</p></li>
+<li><p><strong>atol</strong> (<em>float</em>) – Absolute tolerance.</p></li>
+<li><p><strong>rtol</strong> (<em>float</em>) – Relative tolerance.</p></li>
+<li><p><strong>full_output</strong> (<em>bool</em>) – If True, the number of iterations and time per iteration are also returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>v1</strong> (<em>numpy.array</em>) – Initial velocity vector.</p></li>
+<li><p><strong>v2</strong> (<em>numpy.array</em>) – Final velocity vector.</p></li>
+<li><p><strong>numiter</strong> (<em>int</em>) – Number of iterations.</p></li>
+<li><p><strong>tpi</strong> (<em>float</em>) – Time per iteration in seconds.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The algorithm originally devised by Gauss exploits the so-called ratio of
+sector to triangle area, which is a numerical value related with the orbital
+parameter. This Algorithm was used to the discovery of the orbit of Ceres by
+the genius and adopted by many other authors of his time due to its
+simplicity. However, the Algorithm is found to be singular for transfer
+angles of 180 degrees and shows a low performance for really small angles.</p>
+<p class="rubric">References</p>
+<p>[1] Battin, R. H., &amp; Vaughan, R. M. (1984). An elegant Lambert algorithm.
+Journal of Guidance, Control, and Dynamics, 7(6), 662-670.</p>
+<p>[2] Battin, R. H. (1999). An introduction to the mathematics and methods of
+astrodynamics. Aiaa.</p>
+<p>[3] Vaughan, R. M. (1983). An improvement of Gauss’ method for solving
+Lambert’s problem (Doctoral dissertation, Massachusetts Institute of
+Technology).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lamberthub.gauss1809">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.</span></span><span class="sig-name descname"><span class="pre">gauss1809</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tof</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prograde</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">250</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lamberthub.gauss1809" title="Permalink to this definition">#</a></dt>
+<dd><p>Lambert’s problem solver devised by Carl Friedrich Gauss in 1809. The method
+has been implemented according to Bate’s book (see [2]) and extended to the
+hyperbolic case. This method shows poor accuracy, being only suitable for
+low transfer angles.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mu</strong> (<em>float</em>) – Gravitational parameter, equivalent to <span class="math notranslate nohighlight">\(GM\)</span> of attractor body.</p></li>
+<li><p><strong>r1</strong> (<em>numpy.array</em>) – Initial position vector.</p></li>
+<li><p><strong>r2</strong> (<em>numpy.array</em>) – Final position vector.</p></li>
+<li><p><strong>M</strong> (<em>int</em>) – Number of revolutions. Must be equal or greater than 0 value.</p></li>
+<li><p><strong>prograde</strong> (<em>bool</em>) – If <cite>True</cite>, specifies prograde motion. Otherwise, retrograde motion is imposed.</p></li>
+<li><p><strong>low_path</strong> (<em>bool</em>) – If two solutions are available, it selects between high or low path.</p></li>
+<li><p><strong>maxiter</strong> (<em>int</em>) – Maximum number of iterations.</p></li>
+<li><p><strong>atol</strong> (<em>float</em>) – Absolute tolerance.</p></li>
+<li><p><strong>rtol</strong> (<em>float</em>) – Relative tolerance.</p></li>
+<li><p><strong>full_output</strong> (<em>bool</em>) – If True, the number of iterations and time per iteration are also returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>v1</strong> (<em>numpy.array</em>) – Initial velocity vector.</p></li>
+<li><p><strong>v2</strong> (<em>numpy.array</em>) – Final velocity vector.</p></li>
+<li><p><strong>numiter</strong> (<em>int</em>) – Number of iterations.</p></li>
+<li><p><strong>tpi</strong> (<em>float</em>) – Time per iteration in seconds.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The algorithm originally devised by Gauss exploits the so-called ratio of
+sector to triangle area, which is a numerical value related with the orbital
+parameter. This Algorithm was used to the discovery of the orbit of Ceres by
+the genius and adopted by many other authors of his time due to its
+simplicity. However, the Algorithm is found to be singular for transfer
+angles of 180 degrees and shows a low performance for really small angles.</p>
+<p class="rubric">References</p>
+<p>[1] Gauss, C. F. (1809). Theoria motus corporum coelestium in sectionibus
+conicis solem ambientium auctore Carolo Friderico Gauss. sumtibus Frid.
+Perthes et IH Besser.</p>
+<p>[2] Bate, R. R., Mueller, D. D., White, J. E., &amp; Saylor, W. W. (2020).
+Fundamentals of astrodynamics. Courier Dover Publications.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lamberthub.arora2013">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.</span></span><span class="sig-name descname"><span class="pre">arora2013</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tof</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prograde</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">35</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lamberthub.arora2013" title="Permalink to this definition">#</a></dt>
+<dd><p>Solves Lambert problem using Arora’s devised algorithm</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mu</strong> (<em>float</em>) – Gravitational parameter, equivalent to <span class="math notranslate nohighlight">\(GM\)</span> of attractor body.</p></li>
+<li><p><strong>r1</strong> (<em>numpy.array</em>) – Initial position vector.</p></li>
+<li><p><strong>r2</strong> (<em>numpy.array</em>) – Final position vector.</p></li>
+<li><p><strong>M</strong> (<em>int</em>) – Number of revolutions. Must be equal or greater than 0 value.</p></li>
+<li><p><strong>prograde</strong> (<em>bool</em>) – If <cite>True</cite>, specifies prograde motion. Otherwise, retrograde motion is imposed.</p></li>
+<li><p><strong>low_path</strong> (<em>bool</em>) – If two solutions are available, it selects between high or low path.</p></li>
+<li><p><strong>maxiter</strong> (<em>int</em>) – Maximum number of iterations.</p></li>
+<li><p><strong>atol</strong> (<em>float</em>) – Absolute tolerance <span class="math notranslate nohighlight">\(abs(x_{i+1} - x_{i})\)</span></p></li>
+<li><p><strong>rtol</strong> (<em>float</em>) – Relative tolerance <span class="math notranslate nohighlight">\(abs(\frac{x_{i+1}}{x_{i}} - 1)\)</span></p></li>
+<li><p><strong>full_output</strong> (<em>bool</em>) – If True, the number of iterations and time per iteration are also returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>v1</strong> (<em>numpy.array</em>) – Initial velocity vector</p></li>
+<li><p><strong>v2</strong> (<em>numpy.array</em>) – Final velocity vector</p></li>
+<li><p><strong>numiter</strong> (<em>int</em>) – Number of iterations.</p></li>
+<li><p><strong>tpi</strong> (<em>float</em>) – Time per iteration in seconds.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>Lambert’s problem solver using the method proposed by Nitin Arora and Ryan
+P. Rusell in 2013, see [1]. This algorithm exploits the universal formulae
+by defining a new cosine-based transformation and developing a robust
+initial guess. Although based on arbitrary conditions, the algorithm shows a
+high performance.</p>
+<p class="rubric">References</p>
+<p>[1] Arora, N., &amp; Russell, R. P. (2013). A fast and robust multiple
+revolution Lambert algorithm using a cosine transformation. Paper AAS, 13,
+728.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lamberthub.gooding1990">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.</span></span><span class="sig-name descname"><span class="pre">gooding1990</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tof</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prograde</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">35</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lamberthub.gooding1990" title="Permalink to this definition">#</a></dt>
+<dd><p>Lambert’s problem solver using the method proposed by R. H. Gooding in 1990.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mu</strong> (<em>float</em>) – Gravitational parameter, equivalent to <span class="math notranslate nohighlight">\(GM\)</span> of attractor body.</p></li>
+<li><p><strong>r1</strong> (<em>numpy.array</em>) – Initial position vector.</p></li>
+<li><p><strong>r2</strong> (<em>numpy.array</em>) – Final position vector.</p></li>
+<li><p><strong>M</strong> (<em>int</em>) – Number of revolutions. Must be equal or greater than 0 value.</p></li>
+<li><p><strong>prograde</strong> (<em>bool</em>) – If <cite>True</cite>, specifies prograde motion. Otherwise, retrograde motion is imposed.</p></li>
+<li><p><strong>low_path</strong> (<em>bool</em>) – If two solutions are available, it selects between high or low path.</p></li>
+<li><p><strong>maxiter</strong> (<em>int</em>) – Maximum number of iterations.</p></li>
+<li><p><strong>atol</strong> (<em>float</em>) – Absolute tolerance.</p></li>
+<li><p><strong>rtol</strong> (<em>float</em>) – Relative tolerance.</p></li>
+<li><p><strong>full_output</strong> (<em>bool</em>) – If True, the number of iterations and time per iteration are also returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>v1</strong> (<em>numpy.array</em>) – Initial velocity vector.</p></li>
+<li><p><strong>v2</strong> (<em>numpy.array</em>) – Final velocity vector.</p></li>
+<li><p><strong>numiter</strong> (<em>int</em>) – Number of iterations.</p></li>
+<li><p><strong>tpi</strong> (<em>float</em>) – Time per iteration in seconds.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This module holds the Lambert’s problem solver devised by R. H. Gooding in
+his technical report <a class="footnote-reference brackets" href="#id4" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> originally published in 1988. However, the
+implementation corresponds to the one proposed by the author a couple of
+years later in his article <a class="footnote-reference brackets" href="#id5" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> from 1990. Some improvements to the
+originally algorithm were also made by Klumpp in his performance comparison
+<a class="footnote-reference brackets" href="#id6" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> between Lamberts problem solvers.  Those have been added to this code
+to prevent failures for particular inputs.  The result is a fully working
+algorithm for both single and multi-revolution orbits.</p>
+<p>The code has been kept as close as possible to the original FORTRAN-77  one.
+However, some statements (like “goto line” ones) have been deprecated as
+they introduce “spaghetti code”. Since the original implementation imposed a
+relative tolerance together with the number of iterations, these parameters
+have been modified so the user can freely choose their values.</p>
+<p class="rubric">References</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="id4" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p>Gooding, R. H. (1988). On the solution of Lambert’s orbital
+boundary-value problem. ROYAL AEROSPACE ESTABLISHMENT FARNBOROUGH (UNITED
+KINGDOM).</p>
+</aside>
+<aside class="footnote brackets" id="id5" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>Gooding, R. H. (1990). A procedure for the solution of Lambert’s orbital
+boundary-value problem. Celestial Mechanics and Dynamical Astronomy, 48(2),
+145-165.</p>
+</aside>
+<aside class="footnote brackets" id="id6" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<p>Klumpp,  A. (1999). Performance  Comparison  of  Lambert  and  Kepler
+Algorithms,  Interoffice  Memorandum, JPL.</p>
+</aside>
+</aside>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lamberthub.izzo2015">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.</span></span><span class="sig-name descname"><span class="pre">izzo2015</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tof</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prograde</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">35</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lamberthub.izzo2015" title="Permalink to this definition">#</a></dt>
+<dd><p>Solves Lambert problem using Izzo’s devised algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mu</strong> (<em>float</em>) – Gravitational parameter, equivalent to <span class="math notranslate nohighlight">\(GM\)</span> of attractor body.</p></li>
+<li><p><strong>r1</strong> (<em>numpy.array</em>) – Initial position vector.</p></li>
+<li><p><strong>r2</strong> (<em>numpy.array</em>) – Final position vector.</p></li>
+<li><p><strong>M</strong> (<em>int</em>) – Number of revolutions. Must be equal or greater than 0 value.</p></li>
+<li><p><strong>prograde</strong> (<em>bool</em>) – If <cite>True</cite>, specifies prograde motion. Otherwise, retrograde motion is imposed.</p></li>
+<li><p><strong>low_path</strong> (<em>bool</em>) – If two solutions are available, it selects between high or low path.</p></li>
+<li><p><strong>maxiter</strong> (<em>int</em>) – Maximum number of iterations.</p></li>
+<li><p><strong>atol</strong> (<em>float</em>) – Absolute tolerance.</p></li>
+<li><p><strong>rtol</strong> (<em>float</em>) – Relative tolerance.</p></li>
+<li><p><strong>full_output</strong> (<em>bool</em>) – If True, the number of iterations is also returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>v1</strong> (<em>numpy.array</em>) – Initial velocity vector.</p></li>
+<li><p><strong>v2</strong> (<em>numpy.array</em>) – Final velocity vector.</p></li>
+<li><p><strong>numiter</strong> (<em>list</em>) – Number of iterations.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This is the algorithm devised by Dario Izzo[1] in 2015. It inherits from
+the one developed by Lancaster[2] during the 60s, following the universal
+formulae approach. It is one of the most modern solvers, being a complete
+Lambert’s problem solver (zero and Multiple-revolution solutions). It shows
+high performance and robustness while requiring no more than four iterations
+to reach a solution.</p>
+<p>All credits of the implementation go to Juan Luis Cano Rodríguez and the
+poliastro development team, from which this routine inherits. Some changes
+were made to adapt it to <cite>lamberthub</cite> API. In addition, the hypergeometric
+function is the one from SciPy.</p>
+<p>Copyright (c) 2012-2021 Juan Luis Cano Rodríguez and the poliastro development team</p>
+<p class="rubric">References</p>
+<dl class="simple">
+<dt>[1] Izzo, D. (2015). Revisiting Lambert’s problem. Celestial Mechanics</dt><dd><p>and Dynamical Astronomy, 121(1), 1-15.</p>
+</dd>
+<dt>[2] Lancaster, E. R., &amp; Blanchard, R. C. (1969). A unified form of</dt><dd><p>Lambert’s theorem (Vol. 5368). National Aeronautics and Space
+Administration.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lamberthub.vallado2013">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.</span></span><span class="sig-name descname"><span class="pre">vallado2013</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mu</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tof</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">M</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prograde</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">low_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxiter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">atol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rtol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-07</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_output</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lamberthub.vallado2013" title="Permalink to this definition">#</a></dt>
+<dd><p>Vallado’s algorithm makes use of the universal formulation to solve for the
+Lambert’s problem. By making use of a bisection method, it guarantees the
+convergence to the solution but the amount of iterations require
+dramatically increases.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mu</strong> (<em>float</em>) – Gravitational parameter, equivalent to <span class="math notranslate nohighlight">\(GM\)</span> of attractor body.</p></li>
+<li><p><strong>r1</strong> (<em>numpy.array</em>) – Initial position vector.</p></li>
+<li><p><strong>r2</strong> (<em>numpy.array</em>) – Final position vector.</p></li>
+<li><p><strong>M</strong> (<em>int</em>) – Number of revolutions. Must be equal or greater than 0 value.</p></li>
+<li><p><strong>prograde</strong> (<em>bool</em>) – If <cite>True</cite>, specifies prograde motion. Otherwise, retrograde motion is imposed.</p></li>
+<li><p><strong>low_path</strong> (<em>bool</em>) – If two solutions are available, it selects between high or low path.</p></li>
+<li><p><strong>maxiter</strong> (<em>int</em>) – Maximum number of iterations.</p></li>
+<li><p><strong>atol</strong> (<em>float</em>) – Absolute tolerance.</p></li>
+<li><p><strong>rtol</strong> (<em>float</em>) – Relative tolerance.</p></li>
+<li><p><strong>full_output</strong> (<em>bool</em>) – If True, the number of iterations and time per iteration are also returned.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>v1</strong> (<em>numpy.array</em>) – Initial velocity vector.</p></li>
+<li><p><strong>v2</strong> (<em>numpy.array</em>) – Final velocity vector.</p></li>
+<li><p><strong>numiter</strong> (<em>int</em>) – Number of iterations.</p></li>
+<li><p><strong>tpi</strong> (<em>float</em>) – Time per iteration in seconds.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This algorithm is presented as an alternative to the one developed by Bate
+in 1971. Bate did not impose a particular numerical solver for his algorithm
+but cited both bisection and Newton’s one. However, for some values of the
+boundary problem, the initial guess might diverge if Newton’s solver is
+used. That’s why Vallado decided to employ a bisection method instead.
+Although detrimental from the point of view of performance, this algorithm
+properly reaches solution in the majority of the cases.</p>
+<p>All credits of the implementation go to Juan Luis Cano Rodríguez and the
+poliastro development team, from which this routine inherits. Some changes
+were made to adapt it to <cite>lamberthub</cite> API.</p>
+<p>Copyright (c) 2012-2021 Juan Luis Cano Rodríguez and the poliastro
+development team.</p>
+<p class="rubric">References</p>
+<p>[1] Vallado, D. A. (2001). Fundamentals of astrodynamics and applications
+(Vol. 12). Springer Science &amp; Business Media.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lamberthub.__author__">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.</span></span><span class="sig-name descname"><span class="pre">__author__</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">Jorge</span> <span class="pre">Martinez</span> <span class="pre">Garrido</span></em><a class="headerlink" href="#lamberthub.__author__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lamberthub.__version__">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.</span></span><span class="sig-name descname"><span class="pre">__version__</span></span><em class="property"><span class="w"> </span><span class="pre">=</span> <span class="pre">0.2.dev0</span></em><a class="headerlink" href="#lamberthub.__version__" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lamberthub.ALL_SOLVERS">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.</span></span><span class="sig-name descname"><span class="pre">ALL_SOLVERS</span></span><a class="headerlink" href="#lamberthub.ALL_SOLVERS" title="Permalink to this definition">#</a></dt>
+<dd><p>A list holding all lamberthub available solvers</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lamberthub.ZERO_REV_SOLVERS">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.</span></span><span class="sig-name descname"><span class="pre">ZERO_REV_SOLVERS</span></span><a class="headerlink" href="#lamberthub.ZERO_REV_SOLVERS" title="Permalink to this definition">#</a></dt>
+<dd><p>A list holding all direct-revolution lamberthub solvers</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lamberthub.MULTI_REV_SOLVERS">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.</span></span><span class="sig-name descname"><span class="pre">MULTI_REV_SOLVERS</span></span><a class="headerlink" href="#lamberthub.MULTI_REV_SOLVERS" title="Permalink to this definition">#</a></dt>
+<dd><p>A list holding all multi-revolution lamberthub solvers</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lamberthub.NON_ROBUST_SOLVERS">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.</span></span><span class="sig-name descname"><span class="pre">NON_ROBUST_SOLVERS</span></span><a class="headerlink" href="#lamberthub.NON_ROBUST_SOLVERS" title="Permalink to this definition">#</a></dt>
+<dd><p>A list holding non-robust lamberthub solvers</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="lamberthub.ROBUST_SOLVERS">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.</span></span><span class="sig-name descname"><span class="pre">ROBUST_SOLVERS</span></span><a class="headerlink" href="#lamberthub.ROBUST_SOLVERS" title="Permalink to this definition">#</a></dt>
+<dd><p>A list holding all robust lamberthub solvers</p>
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="../index.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title">Package API</p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="ecc_solvers/index.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.ecc_solvers</span></code></p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#subpackages">
+   Subpackages
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#package-contents">
+   Package Contents
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#functions">
+     Functions
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.avanzini2008">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         avanzini2008()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.battin1984">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         battin1984()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.gauss1809">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         gauss1809()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.arora2013">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         arora2013()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.gooding1990">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         gooding1990()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.izzo2015">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         izzo2015()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.vallado2013">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         vallado2013()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.__author__">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         __author__
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.__version__">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         __version__
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.ALL_SOLVERS">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ALL_SOLVERS
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.ZERO_REV_SOLVERS">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ZERO_REV_SOLVERS
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.MULTI_REV_SOLVERS">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         MULTI_REV_SOLVERS
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.NON_ROBUST_SOLVERS">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         NON_ROBUST_SOLVERS
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.ROBUST_SOLVERS">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         ROBUST_SOLVERS
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.avanzini2008">
+       avanzini2008
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.battin1984">
+       battin1984
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.gauss1809">
+       gauss1809
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.arora2013">
+       arora2013
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.gooding1990">
+       gooding1990
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.izzo2015">
+       izzo2015
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.vallado2013">
+       vallado2013
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.__author__">
+       __author__
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.__version__">
+       __version__
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.ALL_SOLVERS">
+       ALL_SOLVERS
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.ZERO_REV_SOLVERS">
+       ZERO_REV_SOLVERS
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.MULTI_REV_SOLVERS">
+       MULTI_REV_SOLVERS
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.NON_ROBUST_SOLVERS">
+       NON_ROBUST_SOLVERS
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.ROBUST_SOLVERS">
+       ROBUST_SOLVERS
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../../_sources/autoapi/lamberthub/index.rst.txt">
+        <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright (c) 2023 Jorge Martinez Garrido. All rights reserved.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="theme-version">
+    Built with the
+    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
+        PyData Sphinx Theme
+    </a>
+    0.12.0.
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>

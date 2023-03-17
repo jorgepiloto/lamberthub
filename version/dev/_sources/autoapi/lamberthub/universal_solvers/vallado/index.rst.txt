@@ -1,0 +1,162 @@
+:mod:`lamberthub.universal_solvers.vallado`
+===========================================
+
+.. py:module:: lamberthub.universal_solvers.vallado
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   This module holds all methods devised by David A. Vallado.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+
+   lamberthub.universal_solvers.vallado.vallado2013
+
+
+   lamberthub.universal_solvers.vallado._tof_vallado
+
+
+   lamberthub.universal_solvers.vallado._X_at_psi
+
+
+   lamberthub.universal_solvers.vallado._get_A
+
+
+   lamberthub.universal_solvers.vallado._y_at_psi
+
+
+
+.. py:function:: vallado2013(mu, r1, r2, tof, M=0, prograde=True, low_path=True, maxiter=100, atol=1e-05, rtol=1e-07, full_output=False)
+
+   Vallado's algorithm makes use of the universal formulation to solve for the
+   Lambert's problem. By making use of a bisection method, it guarantees the
+   convergence to the solution but the amount of iterations require
+   dramatically increases.
+
+   :param mu: Gravitational parameter, equivalent to :math:`GM` of attractor body.
+   :type mu: float
+   :param r1: Initial position vector.
+   :type r1: numpy.array
+   :param r2: Final position vector.
+   :type r2: numpy.array
+   :param M: Number of revolutions. Must be equal or greater than 0 value.
+   :type M: int
+   :param prograde: If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
+   :type prograde: bool
+   :param low_path: If two solutions are available, it selects between high or low path.
+   :type low_path: bool
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Absolute tolerance.
+   :type atol: float
+   :param rtol: Relative tolerance.
+   :type rtol: float
+   :param full_output: If True, the number of iterations and time per iteration are also returned.
+   :type full_output: bool
+
+   :returns: * **v1** (*numpy.array*) -- Initial velocity vector.
+             * **v2** (*numpy.array*) -- Final velocity vector.
+             * **numiter** (*int*) -- Number of iterations.
+             * **tpi** (*float*) -- Time per iteration in seconds.
+
+   .. rubric:: Notes
+
+   This algorithm is presented as an alternative to the one developed by Bate
+   in 1971. Bate did not impose a particular numerical solver for his algorithm
+   but cited both bisection and Newton's one. However, for some values of the
+   boundary problem, the initial guess might diverge if Newton's solver is
+   used. That's why Vallado decided to employ a bisection method instead.
+   Although detrimental from the point of view of performance, this algorithm
+   properly reaches solution in the majority of the cases.
+
+   All credits of the implementation go to Juan Luis Cano Rodríguez and the
+   poliastro development team, from which this routine inherits. Some changes
+   were made to adapt it to `lamberthub` API.
+
+   Copyright (c) 2012-2021 Juan Luis Cano Rodríguez and the poliastro
+   development team.
+
+   .. rubric:: References
+
+   [1] Vallado, D. A. (2001). Fundamentals of astrodynamics and applications
+   (Vol. 12). Springer Science & Business Media.
+
+
+.. py:function:: _tof_vallado(mu, psi, X, A, y)
+
+   Evaluates universal Kepler's equation.
+
+   :param mu: The gravitational parameter.
+   :type mu: float
+   :param psi: The free-parameter or independent variable.
+   :type psi: float
+   :param X: Auxiliary variable.
+   :type X: float
+   :param A: The transfer angle parameter.
+   :type A: float
+   :param y: Auxiliary variable.
+   :type y: float
+
+   :returns: **tof** -- The computed time of flight.
+   :rtype: float
+
+
+.. py:function:: _X_at_psi(psi, y)
+
+   Computes the value of X at given psi.
+
+   :param psi: The free-parameter or independent variable.
+   :type psi: float
+   :param y: Auxiliary variable.
+   :type y: float
+
+   :returns: **X** -- Auxiliary variable.
+   :rtype: float
+
+
+.. py:function:: _get_A(r1_norm, r2_norm, dtheta)
+
+   Computes the value of the A constant.
+
+   :param r1_norm: Initial position vector norm.
+   :type r1_norm: float
+   :param r2_norm: Final position vector norm.
+   :type r2_norm: float
+   :param dtheta: The transfer angle in radians.
+   :type dtheta: float
+
+   :returns: **A** -- The transfer angle parameter.
+   :rtype: float
+
+
+.. py:function:: _y_at_psi(psi, r1_norm, r2_norm, A)
+
+   Evaluates the value of y at given psi.
+
+   :param psi: The free-parameter or independent variable.
+   :type psi: float
+   :param r1_norm: Initial position vector norm.
+   :type r1_norm: float
+   :param r2_norm: Final position vector norm.
+   :type r2_norm: float
+   :param A: The transfer angle parameter.
+   :type A: float
+
+   :returns: **y** -- Auxiliary variable.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation (7-59) simplified, similarly as made in [1].
+
+

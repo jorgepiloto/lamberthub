@@ -1,0 +1,27 @@
+:mod:`lamberthub.ecc_solvers`
+=============================
+
+.. py:module:: lamberthub.ecc_solvers
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   A sub-package holding all eccentricity based solvers
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+
+   avanzini/index.rst
+
+
+   utils/index.rst
+
+
+

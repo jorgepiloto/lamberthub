@@ -1,0 +1,96 @@
+:mod:`lamberthub.utils.kepler`
+==============================
+
+.. py:module:: lamberthub.utils.kepler
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   This module holds the so-called Kepler equations for each one of the particular
+   orbit shapes, that is elliptical, parabolic and hyperbolic.
+
+   The required formulas are found to be within Vallado's[1] manual.
+
+   .. rubric:: References
+
+   [1] Vallado, D. A. (2001). Fundamentals of astrodynamics and applications
+       (Vol. 12). Springer Science & Business Media.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+
+   lamberthub.utils.kepler.kepler_elliptic
+
+
+   lamberthub.utils.kepler.kepler_parabolic
+
+
+   lamberthub.utils.kepler.kepler_hyperbolic
+
+
+   lamberthub.utils.kepler.kepler_from_nu
+
+
+
+.. py:function:: kepler_elliptic(E, ecc)
+
+   Computes the time of flight since perigee passage at particular eccentric
+   anomaly for elliptical orbit.
+
+   :param E: Eccentric anomaly.
+   :type E: float
+   :param ecc: Eccentricity of the orbit. Must be between (0,1).
+   :type ecc: float
+
+   :returns: **M** -- Time since perigee passage.
+   :rtype: float
+
+
+.. py:function:: kepler_parabolic(B)
+
+   Computes the time of flight since perigee passage at particular eccentric
+   anomaly for paraboliparabolic orbit.
+
+   :param B: Parabolic anomaly.
+   :type B: float
+
+   :returns: **Mp** -- Parabolic mean motion
+   :rtype: float
+
+
+.. py:function:: kepler_hyperbolic(H, ecc)
+
+   Computes the time of flight since perigee passage at particular eccentric
+   anomaly for hyperbolic orbit.
+
+   :param H: Hyperbolic anomaly.
+   :type H: float
+   :param ecc: Eccentricity of the orbit.
+
+   :returns: **Mh** -- Hyperbolic mean motion
+   :rtype: float
+
+
+.. py:function:: kepler_from_nu(nu, ecc)
+
+   Compute the mean anomaly depending on the particular orbit shape, that is
+   elliptical, parabolic or hyperbolic.
+
+   :param nu: True anomaly.
+   :type nu: float
+   :param ecc: Orbit's eccentricity.
+   :type ecc: float
+
+   :returns: **M** -- Mean anomaly.
+   :rtype: float
+
+

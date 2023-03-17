@@ -1,0 +1,232 @@
+:mod:`lamberthub.universal_solvers.arora`
+=========================================
+
+.. py:module:: lamberthub.universal_solvers.arora
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   A module hosting all algorithms devised by Arora
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+
+   lamberthub.universal_solvers.arora.arora2013
+
+
+   lamberthub.universal_solvers.arora._get_gammas
+
+
+   lamberthub.universal_solvers.arora._get_x
+
+
+   lamberthub.universal_solvers.arora._get_W
+
+
+   lamberthub.universal_solvers.arora._get_Wsprime
+
+
+   lamberthub.universal_solvers.arora._get_Ws2prime
+
+
+   lamberthub.universal_solvers.arora._get_Wprime
+
+
+   lamberthub.universal_solvers.arora._get_W2prime
+
+
+   lamberthub.universal_solvers.arora._get_TOF
+
+
+
+.. py:function:: arora2013(mu, r1, r2, tof, M=0, prograde=True, low_path=True, maxiter=35, atol=1e-05, rtol=1e-07, full_output=False)
+
+   Solves Lambert problem using Arora's devised algorithm
+
+   :param mu: Gravitational parameter, equivalent to :math:`GM` of attractor body.
+   :type mu: float
+   :param r1: Initial position vector.
+   :type r1: numpy.array
+   :param r2: Final position vector.
+   :type r2: numpy.array
+   :param M: Number of revolutions. Must be equal or greater than 0 value.
+   :type M: int
+   :param prograde: If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
+   :type prograde: bool
+   :param low_path: If two solutions are available, it selects between high or low path.
+   :type low_path: bool
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Absolute tolerance :math:`abs(x_{i+1} - x_{i})`
+   :type atol: float
+   :param rtol: Relative tolerance :math:`abs(\frac{x_{i+1}}{x_{i}} - 1)`
+   :type rtol: float
+   :param full_output: If True, the number of iterations and time per iteration are also returned.
+   :type full_output: bool
+
+   :returns: * **v1** (*numpy.array*) -- Initial velocity vector
+             * **v2** (*numpy.array*) -- Final velocity vector
+             * **numiter** (*int*) -- Number of iterations.
+             * **tpi** (*float*) -- Time per iteration in seconds.
+
+   .. rubric:: Notes
+
+   Lambert's problem solver using the method proposed by Nitin Arora and Ryan
+   P. Rusell in 2013, see [1]. This algorithm exploits the universal formulae
+   by defining a new cosine-based transformation and developing a robust
+   initial guess. Although based on arbitrary conditions, the algorithm shows a
+   high performance.
+
+   .. rubric:: References
+
+   [1] Arora, N., & Russell, R. P. (2013). A fast and robust multiple
+   revolution Lambert algorithm using a cosine transformation. Paper AAS, 13,
+   728.
+
+
+.. py:function:: _get_gammas(F_i, F_n, F_star)
+
+   Compute different gamma values
+
+
+.. py:function:: _get_x(F_0, F_1, F_i, F_star, Z, alpha)
+
+   Computes Sundman transformation variable.
+
+   :param F_0: First boundary coefficient.
+   :type F_0: float
+   :param F_1: Second boundary coefficient.
+   :type F_1: float
+   :param F_i: Third boundary coefficient.
+   :type F_i: float
+   :param F_star: Last boundary coefficient.
+   :type F_star: float
+   :param Z: Auxiliary constant.
+   :type Z: float
+   :param alpha: Auxiliary constant.
+   :type alpha: float
+
+   :returns: **x** -- Sundman transformation value.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation (44) from original report.
+
+
+.. py:function:: _get_W(k, M, epsilon=0.02)
+
+   Evaluates the auxiliary function at particular value of the independent
+   variable.
+
+   :param k: Independent variable.
+   :type k: float
+   :param M: Number of revolutions
+   :type M: int
+   :param epsilon: Tolerance parameter. Default value as in the original report.
+   :type epsilon: float
+
+   :returns: **W** -- Value of the auxiliary function.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation (27) from official report.
+
+
+.. py:function:: _get_Wsprime(k)
+
+   Evaluate the first derivative of Ws w.r.t. independent variable k.
+
+   :param k: The independent variable.
+   :type k: float
+
+   :returns: **Ws_prime** -- Value of the first derivative w.r.t. to k.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This equation was not provided in the original report, probably because
+   author assumed it was trivial.
+
+
+.. py:function:: _get_Ws2prime(k)
+
+   Evaluate the second derivative of Ws w.r.t. independent variable k.
+
+   :param k: The independent variable.
+   :type k: float
+
+   :returns: **Ws_2prime** -- Value of the second derivative w.r.t. to k.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This equation was not provided in the original report, probably because
+   author assumed it was trivial.
+
+
+.. py:function:: _get_Wprime(k, W, epsilon=0.02)
+
+   Evaluates the first derivative of the auxiliary function w.r.t. the
+   independent variable k.
+
+   :param k: The independent variable.
+   :type k: float
+   :param W: The auxiliary function value.
+   :type W: float
+
+   :returns: **W_prime** -- The value of the first derivative of the auxiliary function.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation set (38) from official report.
+
+
+.. py:function:: _get_W2prime(k, W, W_prime, epsilon=0.02)
+
+   Evaluates the second derivative of the auxiliary function w.r.t. the
+   independent variable k.
+
+   :param k: The independent variable.
+   :type k: float
+   :param W: The auxiliary function value.
+   :type W: float
+
+   :returns: **W_2prime** -- The value of the second derivative of the auxiliary function.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation set (39) from official report.
+
+
+.. py:function:: _get_TOF(k, tau, S, W)
+
+   Evaluates the time of flight at a particular value of the independent variable.
+
+   :param k: The independent variable.
+   :type k: float
+   :param tau: Lambert's geometry parameter.
+   :type tau: float
+   :param S: Auxiliary variable.
+   :type S: float
+
+   :returns: **TOF** -- Computed time of flight.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation (26) form official report.
+
+

@@ -1,0 +1,7 @@
+@import "highlight.css";
+
+div.navbar-brand-box a.navbar-brand img { 
+  width: 250px; height: 200px; max-height: 300px !important;
+}
+
+p.caption { font-weight: bold; }

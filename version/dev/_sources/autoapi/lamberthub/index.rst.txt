@@ -1,0 +1,460 @@
+:mod:`lamberthub`
+=================
+
+.. py:module:: lamberthub
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   A collection of Lambert's problem solvers
+
+
+
+Subpackages
+-----------
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 3
+
+
+   ecc_solvers/index.rst
+
+
+   p_solvers/index.rst
+
+
+   universal_solvers/index.rst
+
+
+   utils/index.rst
+
+
+
+Package Contents
+----------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+
+   lamberthub.avanzini2008
+
+
+   lamberthub.battin1984
+
+
+   lamberthub.gauss1809
+
+
+   lamberthub.arora2013
+
+
+   lamberthub.gooding1990
+
+
+   lamberthub.izzo2015
+
+
+   lamberthub.vallado2013
+
+
+
+.. py:function:: avanzini2008(mu, r1, r2, tof, M=0, prograde=True, low_path=True, maxiter=35, atol=1e-05, rtol=1e-07, full_output=False)
+
+   Solves Lambert problem using Gooding's devised algorithm.
+
+   :param mu: Gravitational parameter, equivalent to :math:`GM` of attractor body.
+   :type mu: float
+   :param r1: Initial position vector.
+   :type r1: numpy.array
+   :param r2: Final position vector.
+   :type r2: numpy.array
+   :param M: Number of revolutions. Must be equal or greater than 0 value.
+   :type M: int
+   :param prograde: If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
+   :type prograde: bool
+   :param low_path: If two solutions are available, it selects between high or low path.
+   :type low_path: bool
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Absolute tolerance.
+   :type atol: float
+   :param rtol: Relative tolerance.
+   :type rtol: float
+   :param full_output: If True, the number of iterations and time per iteration are also returned.
+   :type full_output: bool
+
+   :returns: * **v1** (*numpy.array*) -- Initial velocity vector.
+             * **v2** (*numpy.array*) -- Final velocity vector.
+             * **numiter** (*int*) -- Number of iterations.
+             * **tpi** (*float*) -- Time per iteration in seconds.
+
+   .. rubric:: Notes
+
+   The following routine might be simplified making use of private functions.
+   However, we decided to expose all the auxiliary routines to properly
+   reproduce original report figures.
+
+
+.. py:function:: battin1984(mu, r1, r2, tof, M=0, prograde=True, low_path=True, maxiter=35, atol=1e-05, rtol=1e-07, full_output=False)
+
+   Battin's elegant algorithm for solving the Lambert's problem. This algorithm
+   is known to improve Gauss original one by removing the singularity for 180
+   transfer angles and increasing its performance.
+
+   :param mu: Gravitational parameter, equivalent to :math:`GM` of attractor body.
+   :type mu: float
+   :param r1: Initial position vector.
+   :type r1: numpy.array
+   :param r2: Final position vector.
+   :type r2: numpy.array
+   :param M: Number of revolutions. Must be equal or greater than 0 value.
+   :type M: int
+   :param prograde: If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
+   :type prograde: bool
+   :param low_path: If two solutions are available, it selects between high or low path.
+   :type low_path: bool
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Absolute tolerance.
+   :type atol: float
+   :param rtol: Relative tolerance.
+   :type rtol: float
+   :param full_output: If True, the number of iterations and time per iteration are also returned.
+   :type full_output: bool
+
+   :returns: * **v1** (*numpy.array*) -- Initial velocity vector.
+             * **v2** (*numpy.array*) -- Final velocity vector.
+             * **numiter** (*int*) -- Number of iterations.
+             * **tpi** (*float*) -- Time per iteration in seconds.
+
+   .. rubric:: Notes
+
+   The algorithm originally devised by Gauss exploits the so-called ratio of
+   sector to triangle area, which is a numerical value related with the orbital
+   parameter. This Algorithm was used to the discovery of the orbit of Ceres by
+   the genius and adopted by many other authors of his time due to its
+   simplicity. However, the Algorithm is found to be singular for transfer
+   angles of 180 degrees and shows a low performance for really small angles.
+
+   .. rubric:: References
+
+   [1] Battin, R. H., & Vaughan, R. M. (1984). An elegant Lambert algorithm.
+   Journal of Guidance, Control, and Dynamics, 7(6), 662-670.
+
+   [2] Battin, R. H. (1999). An introduction to the mathematics and methods of
+   astrodynamics. Aiaa.
+
+   [3] Vaughan, R. M. (1983). An improvement of Gauss' method for solving
+   Lambert's problem (Doctoral dissertation, Massachusetts Institute of
+   Technology).
+
+
+.. py:function:: gauss1809(mu, r1, r2, tof, M=0, prograde=True, low_path=True, maxiter=250, atol=1e-05, rtol=1e-07, full_output=False)
+
+   Lambert's problem solver devised by Carl Friedrich Gauss in 1809. The method
+   has been implemented according to Bate's book (see [2]) and extended to the
+   hyperbolic case. This method shows poor accuracy, being only suitable for
+   low transfer angles.
+
+   :param mu: Gravitational parameter, equivalent to :math:`GM` of attractor body.
+   :type mu: float
+   :param r1: Initial position vector.
+   :type r1: numpy.array
+   :param r2: Final position vector.
+   :type r2: numpy.array
+   :param M: Number of revolutions. Must be equal or greater than 0 value.
+   :type M: int
+   :param prograde: If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
+   :type prograde: bool
+   :param low_path: If two solutions are available, it selects between high or low path.
+   :type low_path: bool
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Absolute tolerance.
+   :type atol: float
+   :param rtol: Relative tolerance.
+   :type rtol: float
+   :param full_output: If True, the number of iterations and time per iteration are also returned.
+   :type full_output: bool
+
+   :returns: * **v1** (*numpy.array*) -- Initial velocity vector.
+             * **v2** (*numpy.array*) -- Final velocity vector.
+             * **numiter** (*int*) -- Number of iterations.
+             * **tpi** (*float*) -- Time per iteration in seconds.
+
+   .. rubric:: Notes
+
+   The algorithm originally devised by Gauss exploits the so-called ratio of
+   sector to triangle area, which is a numerical value related with the orbital
+   parameter. This Algorithm was used to the discovery of the orbit of Ceres by
+   the genius and adopted by many other authors of his time due to its
+   simplicity. However, the Algorithm is found to be singular for transfer
+   angles of 180 degrees and shows a low performance for really small angles.
+
+   .. rubric:: References
+
+   [1] Gauss, C. F. (1809). Theoria motus corporum coelestium in sectionibus
+   conicis solem ambientium auctore Carolo Friderico Gauss. sumtibus Frid.
+   Perthes et IH Besser.
+
+   [2] Bate, R. R., Mueller, D. D., White, J. E., & Saylor, W. W. (2020).
+   Fundamentals of astrodynamics. Courier Dover Publications.
+
+
+.. py:function:: arora2013(mu, r1, r2, tof, M=0, prograde=True, low_path=True, maxiter=35, atol=1e-05, rtol=1e-07, full_output=False)
+
+   Solves Lambert problem using Arora's devised algorithm
+
+   :param mu: Gravitational parameter, equivalent to :math:`GM` of attractor body.
+   :type mu: float
+   :param r1: Initial position vector.
+   :type r1: numpy.array
+   :param r2: Final position vector.
+   :type r2: numpy.array
+   :param M: Number of revolutions. Must be equal or greater than 0 value.
+   :type M: int
+   :param prograde: If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
+   :type prograde: bool
+   :param low_path: If two solutions are available, it selects between high or low path.
+   :type low_path: bool
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Absolute tolerance :math:`abs(x_{i+1} - x_{i})`
+   :type atol: float
+   :param rtol: Relative tolerance :math:`abs(\frac{x_{i+1}}{x_{i}} - 1)`
+   :type rtol: float
+   :param full_output: If True, the number of iterations and time per iteration are also returned.
+   :type full_output: bool
+
+   :returns: * **v1** (*numpy.array*) -- Initial velocity vector
+             * **v2** (*numpy.array*) -- Final velocity vector
+             * **numiter** (*int*) -- Number of iterations.
+             * **tpi** (*float*) -- Time per iteration in seconds.
+
+   .. rubric:: Notes
+
+   Lambert's problem solver using the method proposed by Nitin Arora and Ryan
+   P. Rusell in 2013, see [1]. This algorithm exploits the universal formulae
+   by defining a new cosine-based transformation and developing a robust
+   initial guess. Although based on arbitrary conditions, the algorithm shows a
+   high performance.
+
+   .. rubric:: References
+
+   [1] Arora, N., & Russell, R. P. (2013). A fast and robust multiple
+   revolution Lambert algorithm using a cosine transformation. Paper AAS, 13,
+   728.
+
+
+.. py:function:: gooding1990(mu, r1, r2, tof, M=0, prograde=True, low_path=True, maxiter=35, atol=1e-05, rtol=1e-07, full_output=False)
+
+   Lambert's problem solver using the method proposed by R. H. Gooding in 1990.
+
+   :param mu: Gravitational parameter, equivalent to :math:`GM` of attractor body.
+   :type mu: float
+   :param r1: Initial position vector.
+   :type r1: numpy.array
+   :param r2: Final position vector.
+   :type r2: numpy.array
+   :param M: Number of revolutions. Must be equal or greater than 0 value.
+   :type M: int
+   :param prograde: If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
+   :type prograde: bool
+   :param low_path: If two solutions are available, it selects between high or low path.
+   :type low_path: bool
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Absolute tolerance.
+   :type atol: float
+   :param rtol: Relative tolerance.
+   :type rtol: float
+   :param full_output: If True, the number of iterations and time per iteration are also returned.
+   :type full_output: bool
+
+   :returns: * **v1** (*numpy.array*) -- Initial velocity vector.
+             * **v2** (*numpy.array*) -- Final velocity vector.
+             * **numiter** (*int*) -- Number of iterations.
+             * **tpi** (*float*) -- Time per iteration in seconds.
+
+   .. rubric:: Notes
+
+   This module holds the Lambert's problem solver devised by R. H. Gooding in
+   his technical report [1]_ originally published in 1988. However, the
+   implementation corresponds to the one proposed by the author a couple of
+   years later in his article [2]_ from 1990. Some improvements to the
+   originally algorithm were also made by Klumpp in his performance comparison
+   [3]_ between Lamberts problem solvers.  Those have been added to this code
+   to prevent failures for particular inputs.  The result is a fully working
+   algorithm for both single and multi-revolution orbits.
+
+   The code has been kept as close as possible to the original FORTRAN-77  one.
+   However, some statements (like "goto line" ones) have been deprecated as
+   they introduce "spaghetti code". Since the original implementation imposed a
+   relative tolerance together with the number of iterations, these parameters
+   have been modified so the user can freely choose their values.
+
+   .. rubric:: References
+
+   .. [1] Gooding, R. H. (1988). On the solution of Lambert's orbital
+          boundary-value problem. ROYAL AEROSPACE ESTABLISHMENT FARNBOROUGH (UNITED
+          KINGDOM).
+
+   .. [2] Gooding, R. H. (1990). A procedure for the solution of Lambert's orbital
+          boundary-value problem. Celestial Mechanics and Dynamical Astronomy, 48(2),
+          145-165.
+
+   .. [3] Klumpp,  A. (1999). Performance  Comparison  of  Lambert  and  Kepler
+          Algorithms,  Interoffice  Memorandum, JPL.
+
+
+.. py:function:: izzo2015(mu, r1, r2, tof, M=0, prograde=True, low_path=True, maxiter=35, atol=1e-05, rtol=1e-07, full_output=False)
+
+   Solves Lambert problem using Izzo's devised algorithm.
+
+   :param mu: Gravitational parameter, equivalent to :math:`GM` of attractor body.
+   :type mu: float
+   :param r1: Initial position vector.
+   :type r1: numpy.array
+   :param r2: Final position vector.
+   :type r2: numpy.array
+   :param M: Number of revolutions. Must be equal or greater than 0 value.
+   :type M: int
+   :param prograde: If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
+   :type prograde: bool
+   :param low_path: If two solutions are available, it selects between high or low path.
+   :type low_path: bool
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Absolute tolerance.
+   :type atol: float
+   :param rtol: Relative tolerance.
+   :type rtol: float
+   :param full_output: If True, the number of iterations is also returned.
+   :type full_output: bool
+
+   :returns: * **v1** (*numpy.array*) -- Initial velocity vector.
+             * **v2** (*numpy.array*) -- Final velocity vector.
+             * **numiter** (*list*) -- Number of iterations.
+
+   .. rubric:: Notes
+
+   This is the algorithm devised by Dario Izzo[1] in 2015. It inherits from
+   the one developed by Lancaster[2] during the 60s, following the universal
+   formulae approach. It is one of the most modern solvers, being a complete
+   Lambert's problem solver (zero and Multiple-revolution solutions). It shows
+   high performance and robustness while requiring no more than four iterations
+   to reach a solution.
+
+   All credits of the implementation go to Juan Luis Cano Rodríguez and the
+   poliastro development team, from which this routine inherits. Some changes
+   were made to adapt it to `lamberthub` API. In addition, the hypergeometric
+   function is the one from SciPy.
+
+   Copyright (c) 2012-2021 Juan Luis Cano Rodríguez and the poliastro development team
+
+   .. rubric:: References
+
+   [1] Izzo, D. (2015). Revisiting Lambert’s problem. Celestial Mechanics
+          and Dynamical Astronomy, 121(1), 1-15.
+
+   [2] Lancaster, E. R., & Blanchard, R. C. (1969). A unified form of
+          Lambert's theorem (Vol. 5368). National Aeronautics and Space
+          Administration.
+
+
+.. py:function:: vallado2013(mu, r1, r2, tof, M=0, prograde=True, low_path=True, maxiter=100, atol=1e-05, rtol=1e-07, full_output=False)
+
+   Vallado's algorithm makes use of the universal formulation to solve for the
+   Lambert's problem. By making use of a bisection method, it guarantees the
+   convergence to the solution but the amount of iterations require
+   dramatically increases.
+
+   :param mu: Gravitational parameter, equivalent to :math:`GM` of attractor body.
+   :type mu: float
+   :param r1: Initial position vector.
+   :type r1: numpy.array
+   :param r2: Final position vector.
+   :type r2: numpy.array
+   :param M: Number of revolutions. Must be equal or greater than 0 value.
+   :type M: int
+   :param prograde: If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
+   :type prograde: bool
+   :param low_path: If two solutions are available, it selects between high or low path.
+   :type low_path: bool
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Absolute tolerance.
+   :type atol: float
+   :param rtol: Relative tolerance.
+   :type rtol: float
+   :param full_output: If True, the number of iterations and time per iteration are also returned.
+   :type full_output: bool
+
+   :returns: * **v1** (*numpy.array*) -- Initial velocity vector.
+             * **v2** (*numpy.array*) -- Final velocity vector.
+             * **numiter** (*int*) -- Number of iterations.
+             * **tpi** (*float*) -- Time per iteration in seconds.
+
+   .. rubric:: Notes
+
+   This algorithm is presented as an alternative to the one developed by Bate
+   in 1971. Bate did not impose a particular numerical solver for his algorithm
+   but cited both bisection and Newton's one. However, for some values of the
+   boundary problem, the initial guess might diverge if Newton's solver is
+   used. That's why Vallado decided to employ a bisection method instead.
+   Although detrimental from the point of view of performance, this algorithm
+   properly reaches solution in the majority of the cases.
+
+   All credits of the implementation go to Juan Luis Cano Rodríguez and the
+   poliastro development team, from which this routine inherits. Some changes
+   were made to adapt it to `lamberthub` API.
+
+   Copyright (c) 2012-2021 Juan Luis Cano Rodríguez and the poliastro
+   development team.
+
+   .. rubric:: References
+
+   [1] Vallado, D. A. (2001). Fundamentals of astrodynamics and applications
+   (Vol. 12). Springer Science & Business Media.
+
+
+.. py:data:: __author__
+   :annotation: = Jorge Martinez Garrido
+
+   
+
+.. py:data:: __version__
+   :annotation: = 0.2.dev0
+
+   
+
+.. py:data:: ALL_SOLVERS
+   
+
+   A list holding all lamberthub available solvers
+
+.. py:data:: ZERO_REV_SOLVERS
+   
+
+   A list holding all direct-revolution lamberthub solvers
+
+.. py:data:: MULTI_REV_SOLVERS
+   
+
+   A list holding all multi-revolution lamberthub solvers
+
+.. py:data:: NON_ROBUST_SOLVERS
+   
+
+   A list holding non-robust lamberthub solvers
+
+.. py:data:: ROBUST_SOLVERS
+   
+
+   A list holding all robust lamberthub solvers
+

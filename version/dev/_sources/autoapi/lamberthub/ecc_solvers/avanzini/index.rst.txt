@@ -1,0 +1,121 @@
+:mod:`lamberthub.ecc_solvers.avanzini`
+======================================
+
+.. py:module:: lamberthub.ecc_solvers.avanzini
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   Lambert's problem solver using the method proposed by Giulio Avanzini in 2008.
+
+   This module holds the implementation of the algorithm devised by Avanzini, which
+   appeared for the first time in his article [1]. The solver takes advantage of
+   the conservation of the eccentricity projection along the chord direction, so it
+   iterates over this orbital element till the time of transfer from Kepler's
+   equation matches the desired transfer one.
+
+   However, the original routines was not developed to work under multi-revolutions
+   conditions. In addition, Avanzini did not provide the derivative of Kepler's
+   equation with respect to the transverse eccentricity component, forcing a
+   bounded numerical method (bisection or regulafalsi). This was solved by Quan He,
+   which proposed new changes to Avanzini's original algorithm in an article [2]
+   proposed in 2010.
+
+   Finally, a new method [3] was proposed by Changxuan Wen in 2014, simplifying all
+   previous routines.
+
+   [1] Avanzini, G. (2008). A simple Lambert algorithm. Journal of guidance,
+       control, and dynamics, 31(6), 1587-1594.
+
+   [2] He, Q., Li, J., & Han, C. (2010). Multiple-revolution solutions of the
+       transverse-eccentricity-based lambert problem. Journal of guidance,
+       control, and dynamics, 33(1), 265-269.
+
+   [3] Wen, C., Zhao, Y., & Shi, P. (2014). Derivative analysis and algorithm
+       modification of transverse-eccentricity-based Lambert problem. Journal of
+       Guidance, Control, and Dynamics, 37(4), 1195-1201.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+
+   lamberthub.ecc_solvers.avanzini.avanzini2008
+
+
+   lamberthub.ecc_solvers.avanzini._get_eccT_limits
+
+
+   lamberthub.ecc_solvers.avanzini._get_eccT_at_x
+
+
+
+.. py:function:: avanzini2008(mu, r1, r2, tof, M=0, prograde=True, low_path=True, maxiter=35, atol=1e-05, rtol=1e-07, full_output=False)
+
+   Solves Lambert problem using Gooding's devised algorithm.
+
+   :param mu: Gravitational parameter, equivalent to :math:`GM` of attractor body.
+   :type mu: float
+   :param r1: Initial position vector.
+   :type r1: numpy.array
+   :param r2: Final position vector.
+   :type r2: numpy.array
+   :param M: Number of revolutions. Must be equal or greater than 0 value.
+   :type M: int
+   :param prograde: If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
+   :type prograde: bool
+   :param low_path: If two solutions are available, it selects between high or low path.
+   :type low_path: bool
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Absolute tolerance.
+   :type atol: float
+   :param rtol: Relative tolerance.
+   :type rtol: float
+   :param full_output: If True, the number of iterations and time per iteration are also returned.
+   :type full_output: bool
+
+   :returns: * **v1** (*numpy.array*) -- Initial velocity vector.
+             * **v2** (*numpy.array*) -- Final velocity vector.
+             * **numiter** (*int*) -- Number of iterations.
+             * **tpi** (*float*) -- Time per iteration in seconds.
+
+   .. rubric:: Notes
+
+   The following routine might be simplified making use of private functions.
+   However, we decided to expose all the auxiliary routines to properly
+   reproduce original report figures.
+
+
+.. py:function:: _get_eccT_limits(geometry)
+
+   Computes transverse eccentricity value limits as of problem geometry.
+
+
+.. py:function:: _get_eccT_at_x(geometry)
+
+   Returns proper transverse eccentricity function depending on the value
+   of the transfer angle.
+
+   :param ecc_H: Lower value limit.
+   :type ecc_H: float
+   :param ecc_P: Upper value limit.
+   :type ecc_P: float
+   :param dtheta: Transfer angle.
+   :type dtheta: float
+
+   :returns: **eccT_at_x** -- A function to be evaluated at independent variable values.
+   :rtype: function
+
+   .. rubric:: Notes
+
+   These are equations (16) and (18) from the official report [1].
+
+

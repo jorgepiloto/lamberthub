@@ -1,0 +1,912 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>lamberthub.utils.elements &#8212; lamberthub</title>
+    
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../_static/styles/bootstrap.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+
+  
+  <link href="../../../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=796348d33e8b1d947c94" rel="stylesheet">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2">
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/css/ansys_sphinx_theme.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94">
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94">
+
+    
+        <link href="../../../../_static/css/breadcrumbs.css" rel="stylesheet">
+    
+    <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+    <script src="../../../../_static/jquery.js"></script>
+    <script src="../../../../_static/underscore.js"></script>
+    <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../../_static/js/table.js"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'autoapi/lamberthub/utils/elements/index';</script>
+    <script>
+        DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://lamberthub.docs.jorgemartinez.space/versions.json';
+        DOCUMENTATION_OPTIONS.theme_switcher_version_match = 'dev';
+        </script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="lamberthub.utils.kepler" href="../kepler/index.html" />
+    <link rel="prev" title="lamberthub.utils.assertions" href="../assertions/index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="docsearch:language" content="en">
+  </head>
+  
+  
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="180" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__primary" id="__primary">
+  <label class="overlay overlay-primary" for="__primary"></label>
+
+  
+  <input type="checkbox" class="sidebar-toggle" name="__secondary" id="__secondary">
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+      <!-- Debugging: html_theme_options =  -->
+
+  <!-- If there is no MiliSearch enabled, use the PyData search -->
+<form class="bd-search d-flex align-items-center" action="../../../../search.html" method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+    </div>
+  </div>
+
+  
+    
+  <nav class="bd-header navbar navbar-expand-lg bd-navbar" id="navbar-main"><div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+      <span class="fa-solid fa-bars"></span>
+  </label>
+  <div id="navbar-start">
+    
+    
+  
+
+
+<a class="navbar-brand logo" href="../../../../index.html">
+
+  
+  
+  
+  
+  
+  
+  
+
+  
+  
+    <p class="title logo__title">lamberthub</p>
+  
+</a>
+    
+  </div>
+
+  
+  <div class="col-lg-9 navbar-header-items">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../how_to_guides/how_to_install.html">
+                        How to install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../how_to_guides/how_to_use.html">
+                        How to use
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../how_to_guides/how_to_contribute.html">
+                        How to contribute
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../explanations/the_lamberts_problem.html">
+                        The Lambert’s problem
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../references/about.html">
+                        About lamberthub
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../../index.html">
+                        Package API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../references/references.html">
+                        Articles and similar software
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+        <div class="navbar-end-item navbar-persistent--container">
+          
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+        </div>
+      
+      
+      <div class="navbar-end-item">
+        <div class="version-switcher__container dropdown">
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-toggle="dropdown">
+        dev  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+      </div>
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/lamberthub/lamberthub" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+
+
+  
+  
+    <div class="navbar-persistent--mobile">
+<button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-toggle="tooltip">
+  <i class="fa-solid fa-magnifying-glass"></i>
+</button>
+    </div>
+  
+
+  
+  <label class="sidebar-toggle secondary-toggle" for="__secondary">
+      <span class="fa-solid fa-outdent"></span>
+  </label>
+  
+
+</div>
+  </nav>
+  
+
+    
+    <div id="announcement_msg"></div>
+<script>
+  fetch("announcement.html")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error: ${response.status}`);
+      }
+      return response.text();
+    })
+    .then(text => document.getElementById("announcement_msg").innerHTML = text)
+    .catch((error) => console.error(`Fetch problem: ${error.message}`));
+</script>
+    
+
+    
+    <div class="container-xl">
+    <div class="row">
+        <div class="col-12 col-md-3" id="breadcrumbs-spacer"></div>
+        <div class="col-12 col-md-11 col-xl-9" id="breadcrumbs">
+          
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../kepler/index.html" title="lamberthub.utils.kepler"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../assertions/index.html" title="lamberthub.utils.assertions"
+             accesskey="P">previous</a> |</li>
+    
+        <li class="nav-item nav-item-additional-breadcrumb"><a href="https://jorgemartinez.space">Jorge's Website</a> » </li>
+    
+    
+        <li class="nav-item nav-item-0"><a href="../../../../index.html">lamberthub</a> » </li>
+    
+
+          <li class="nav-item nav-item-1"><a href="../../../index.html" >Package API</a> » </li>
+          <li class="nav-item nav-item-2"><a href="../../index.html" ><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub</span></code></a> » </li>
+          <li class="nav-item nav-item-3"><a href="../index.html" accesskey="U"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils</span></code></a> » </li>
+        <li class="nav-item nav-item-this"><a href=""><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.elements</span></code></a></li> 
+      </ul>
+    </div>
+        </div>
+  </div>
+</div>
+    
+
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+      
+      <div class="navbar-center-item">
+        <nav class="navbar-nav">
+    <p class="sidebar-header-items__title" role="heading" aria-level="1" aria-label="Site Navigation">
+        Site Navigation
+    </p>
+    <ul id="navbar-main-elements" class="navbar-nav">
+        
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../how_to_guides/how_to_install.html">
+                        How to install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../how_to_guides/how_to_use.html">
+                        How to use
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../how_to_guides/how_to_contribute.html">
+                        How to contribute
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../explanations/the_lamberts_problem.html">
+                        The Lambert’s problem
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../references/about.html">
+                        About lamberthub
+                      </a>
+                    </li>
+                
+            <div class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    More
+                </button>
+                <div class="dropdown-menu">
+                    
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="../../../index.html">
+                        Package API
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../../../references/references.html">
+                        Articles and similar software
+                      </a>
+                    </li>
+                
+                </div>
+            </div>
+            
+    </ul>
+</nav>
+      </div>
+      
+      </div>
+    
+
+    
+    
+    <div class="sidebar-header-items__end">
+      
+      <div class="navbar-end-item">
+        <div class="version-switcher__container dropdown">
+    <button type="button" class="version-switcher__button btn btn-sm navbar-btn dropdown-toggle" data-toggle="dropdown">
+        dev  <!-- this text may get changed later by javascript -->
+        <span class="caret"></span>
+    </button>
+    <div class="version-switcher__menu dropdown-menu list-group-flush py-0">
+    <!-- dropdown will be populated by javascript on page load -->
+    </div>
+</div>
+      </div>
+      
+      <div class="navbar-end-item">
+        <button class="theme-switch-button btn btn-sm btn-outline-primary navbar-btn rounded-circle" title="light/dark" aria-label="light/dark" data-toggle="tooltip">
+    <span class="theme-switch" data-mode="light"><i class="fa-solid fa-sun"></i></span>
+    <span class="theme-switch" data-mode="dark"><i class="fa-solid fa-moon"></i></span>
+    <span class="theme-switch" data-mode="auto"><i class="fa-solid fa-circle-half-stroke"></i></span>
+</button>
+      </div>
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/lamberthub/lamberthub" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-toggle="tooltip"><span><i class="fa-brands fa-square-github"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  
+  <div class="sidebar-start-items sidebar-primary__section">
+    <div class="sidebar-start-items__item"><nav class="bd-links" id="bd-docs-nav" aria-label="Section navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">
+    Section Navigation
+  </p>
+  <div class="bd-toc-item navbar-nav">
+    <ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../ecc_solvers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.ecc_solvers</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../p_solvers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.p_solvers</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../universal_solvers/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.universal_solvers</span></code></a></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="../index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils</span></code></a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../angles/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.angles</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../assertions/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.assertions</span></code></a></li>
+<li class="toctree-l3 current active"><a class="current reference internal" href="#"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.elements</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../kepler/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.kepler</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../misc/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.misc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../stumpff/index.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.stumpff</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  </div>
+</nav>
+    </div>
+  </div>
+  
+
+  
+  <div class="sidebar-end-items sidebar-primary__section">
+    <div class="sidebar-end-items__item">
+    </div>
+  </div>
+
+  
+  <div id="rtd-footer-container"></div>
+
+      </div>
+      <main id="main-content" class="bd-main">
+        
+        
+        <div class="bd-content">
+          <div class="bd-article-container">
+            
+            <div class="bd-header-article">
+                
+            </div>
+            
+            
+            <article class="bd-article" role="main">
+              
+  <section id="lamberthub-utils-elements">
+<h1><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.elements</span></code><a class="headerlink" href="#lamberthub-utils-elements" title="Permalink to this heading">#</a></h1>
+<p>Holds routines for converting between different orbital elements sets.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Some of these functions were directly taken from the poliastro[1] library,
+see the references section for more information about this powerful
+software.</p>
+<p>Copyright (c) 2012-2021 Juan Luis Cano Rodríguez and the poliastro
+development team.</p>
+</div>
+<p class="rubric">References</p>
+<p>[1] poliastro: <a class="github reference external" href="https://github.com/poliastro/poliastro/">poliastro/poliastro</a></p>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this heading">#</a></h2>
+<section id="functions">
+<h3>Functions<a class="headerlink" href="#functions" title="Permalink to this heading">#</a></h3>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lamberthub.utils.elements.rv_pqw" title="lamberthub.utils.elements.rv_pqw"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rv_pqw</span></code></a>(k, p, ecc, nu)</p></td>
+<td><p>Returns r and v vectors in perifocal frame.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lamberthub.utils.elements.coe_rotation_matrix" title="lamberthub.utils.elements.coe_rotation_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coe_rotation_matrix</span></code></a>(inc, raan, argp)</p></td>
+<td><p>Create a rotation matrix for coe transformation</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lamberthub.utils.elements.coe2rv" title="lamberthub.utils.elements.coe2rv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">coe2rv</span></code></a>(k, p, ecc, inc, raan, argp, nu)</p></td>
+<td><p>Converts from classical orbital to state vectors.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#lamberthub.utils.elements.rv2coe" title="lamberthub.utils.elements.rv2coe"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rv2coe</span></code></a>(k, r, v[, tol])</p></td>
+<td><p>Converts from vectors to classical orbital elements.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#lamberthub.utils.elements.rotation_matrix" title="lamberthub.utils.elements.rotation_matrix"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rotation_matrix</span></code></a>(angle, axis)</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="lamberthub.utils.elements.rv_pqw">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.utils.elements.</span></span><span class="sig-name descname"><span class="pre">rv_pqw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lamberthub.utils.elements.rv_pqw" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns r and v vectors in perifocal frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>float</em>) – Standard gravitational parameter (km^3 / s^2).</p></li>
+<li><p><strong>p</strong> (<em>float</em>) – Semi-latus rectum or parameter (km).</p></li>
+<li><p><strong>ecc</strong> (<em>float</em>) – Eccentricity.</p></li>
+<li><p><strong>nu</strong> (<em>float</em>) – True anomaly (rad).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>r</strong> (<em>ndarray</em>) – Position. Dimension 3 vector</p></li>
+<li><p><strong>v</strong> (<em>ndarray</em>) – Velocity. Dimension 3 vector</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>These formulas can be checked at Curtis 3rd. Edition, page 110. Also the
+example proposed is 2.11 of Curtis 3rd Edition book.</p>
+<div class="math notranslate nohighlight">
+\[ \begin{align}\begin{aligned}\begin{split}\vec{r} = \frac{h^2}{\mu}\frac{1}{1 + e\cos(\theta)}\begin{bmatrix}
+\cos(\theta)\\
+\sin(\theta)\\
+0
+\end{bmatrix} \\\\\\\end{split}\\\begin{split}\vec{v} = \frac{h^2}{\mu}\begin{bmatrix}
+-\sin(\theta)\\
+e+\cos(\theta)\\
+0
+\end{bmatrix}\end{split}\end{aligned}\end{align} \]</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lamberthub.utils.elements.coe_rotation_matrix">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.utils.elements.</span></span><span class="sig-name descname"><span class="pre">coe_rotation_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">inc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lamberthub.utils.elements.coe_rotation_matrix" title="Permalink to this definition">#</a></dt>
+<dd><p>Create a rotation matrix for coe transformation</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lamberthub.utils.elements.coe2rv">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.utils.elements.</span></span><span class="sig-name descname"><span class="pre">coe2rv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ecc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">raan</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">argp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nu</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lamberthub.utils.elements.coe2rv" title="Permalink to this definition">#</a></dt>
+<dd><p>Converts from classical orbital to state vectors.</p>
+<p>Classical orbital elements are converted into position and velocity
+vectors by <cite>rv_pqw</cite> algorithm. A rotation matrix is applied to position
+and velocity vectors to get them expressed in terms of an IJK basis.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>float</em>) – Standard gravitational parameter (km^3 / s^2).</p></li>
+<li><p><strong>p</strong> (<em>float</em>) – Semi-latus rectum or parameter (km).</p></li>
+<li><p><strong>ecc</strong> (<em>float</em>) – Eccentricity.</p></li>
+<li><p><strong>inc</strong> (<em>float</em>) – Inclination (rad).</p></li>
+<li><p><strong>omega</strong> (<em>float</em>) – Longitude of ascending node (rad).</p></li>
+<li><p><strong>argp</strong> (<em>float</em>) – Argument of perigee (rad).</p></li>
+<li><p><strong>nu</strong> (<em>float</em>) – True anomaly (rad).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>r_ijk</strong> (<em>np.array</em>) – Position vector in basis ijk.</p></li>
+<li><p><strong>v_ijk</strong> (<em>np.array</em>) – Velocity vector in basis ijk.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+    \vec{r}_{IJK} &amp;= [ROT3(-\Omega)][ROT1(-i)][ROT3(-\omega)]\vec{r}_{PQW}
+                       = \left [ \frac{IJK}{PQW} \right ]\vec{r}_{PQW}\\
+    \vec{v}_{IJK} &amp;= [ROT3(-\Omega)][ROT1(-i)][ROT3(-\omega)]\vec{v}_{PQW}
+                       = \left [ \frac{IJK}{PQW} \right ]\vec{v}_{PQW}\\
+\end{align}\end{split}\]</div>
+<p>Previous rotations (3-1-3) can be expressed in terms of a single rotation matrix:</p>
+<div class="math notranslate nohighlight">
+\[\left [ \frac{IJK}{PQW} \right ]\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{bmatrix}
+\cos(\Omega)\cos(\omega) - \sin(\Omega)\sin(\omega)\cos(i) &amp; -\cos(\Omega)\sin(\omega) - \sin(\Omega)\cos(\omega)\cos(i) &amp; \sin(\Omega)\sin(i)\\
+\sin(\Omega)\cos(\omega) + \cos(\Omega)\sin(\omega)\cos(i) &amp; -\sin(\Omega)\sin(\omega) + \cos(\Omega)\cos(\omega)\cos(i) &amp; -\cos(\Omega)\sin(i)\\
+\sin(\omega)\sin(i) &amp; \cos(\omega)\sin(i) &amp; \cos(i)
+\end{bmatrix}\end{split}\]</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lamberthub.utils.elements.rv2coe">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.utils.elements.</span></span><span class="sig-name descname"><span class="pre">rv2coe</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">k</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tol</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1e-08</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lamberthub.utils.elements.rv2coe" title="Permalink to this definition">#</a></dt>
+<dd><p>Converts from vectors to classical orbital elements.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>k</strong> (<em>float</em>) – Standard gravitational parameter (km^3 / s^2)</p></li>
+<li><p><strong>r</strong> (<em>array</em>) – Position vector (km)</p></li>
+<li><p><strong>v</strong> (<em>array</em>) – Velocity vector (km / s)</p></li>
+<li><p><strong>tol</strong> (<em>float</em><em>, </em><em>optional</em>) – Tolerance for eccentricity and inclination checks, default to 1e-8</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>p</strong> (<em>float</em>) – Semi-latus rectum of parameter (km)</p></li>
+<li><p><strong>ecc</strong> (<em>float</em>) – Eccentricity</p></li>
+<li><p><strong>inc</strong> (<em>float</em>) – Inclination (rad)</p></li>
+<li><p><strong>raan</strong> (<em>float</em>) – Right ascension of the ascending nod (rad)</p></li>
+<li><p><strong>argp</strong> (<em>float</em>) – Argument of Perigee (rad)</p></li>
+<li><p><strong>nu</strong> (<em>float</em>) – True Anomaly (rad)</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This example is a real exercise from Orbital Mechanics for Engineering
+students by Howard D.Curtis. This exercise is 4.3 of 3rd. Edition, page 200.</p>
+<ol class="arabic simple">
+<li><p>First the angular momentum is computed:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\vec{h} = \vec{r} \times \vec{v}\]</div>
+<ol class="arabic simple" start="2">
+<li><p>With it the eccentricity can be solved:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\vec{e} &amp;= \frac{1}{\mu}\left [ \left ( v^{2} - \frac{\mu}{r}\right ) \vec{r}  - (\vec{r} \cdot \vec{v})\vec{v} \right ] \\
+e &amp;= \sqrt{\vec{e}\cdot\vec{e}} \\
+\end{align}\end{split}\]</div>
+<ol class="arabic simple" start="3">
+<li><p>The node vector line is solved:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+\vec{N} &amp;= \vec{k} \times \vec{h} \\
+N &amp;= \sqrt{\vec{N}\cdot\vec{N}}
+\end{align}\end{split}\]</div>
+<ol class="arabic simple" start="4">
+<li><p>The right ascension node is computed:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}\Omega = \left\{ \begin{array}{lcc}
+ cos^{-1}{\left ( \frac{N_{x}}{N} \right )} &amp;   if  &amp; N_{y} \geq  0 \\
+ \\ 360^{o} -cos^{-1}{\left ( \frac{N_{x}}{N} \right )} &amp;  if &amp; N_{y} &lt; 0 \\
+ \end{array}
+\right.\end{split}\]</div>
+<ol class="arabic simple" start="5">
+<li><p>The argument of perigee:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}\omega  = \left\{ \begin{array}{lcc}
+ cos^{-1}{\left ( \frac{\vec{N}\vec{e}}{Ne} \right )} &amp;   if  &amp; e_{z} \geq  0 \\
+ \\ 360^{o} -cos^{-1}{\left ( \frac{\vec{N}\vec{e}}{Ne} \right )} &amp;  if &amp; e_{z} &lt; 0 \\
+ \end{array}
+\right.\end{split}\]</div>
+<ol class="arabic simple" start="6">
+<li><p>And finally the true anomaly:</p></li>
+</ol>
+<div class="math notranslate nohighlight">
+\[\begin{split}\nu  = \left\{ \begin{array}{lcc}
+ cos^{-1}{\left ( \frac{\vec{e}\vec{r}}{er} \right )} &amp;   if  &amp; v_{r} \geq  0 \\
+ \\ 360^{o} -cos^{-1}{\left ( \frac{\vec{e}\vec{r}}{er} \right )} &amp;  if &amp; v_{r} &lt; 0 \\
+ \end{array}
+\right.\end{split}\]</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="lamberthub.utils.elements.rotation_matrix">
+<span class="sig-prename descclassname"><span class="pre">lamberthub.utils.elements.</span></span><span class="sig-name descname"><span class="pre">rotation_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axis</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#lamberthub.utils.elements.rotation_matrix" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+            </article>
+            
+            
+            
+            <footer class="bd-footer-article">
+                <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+  <a class='left-prev' id="prev-link" href="../assertions/index.html" title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+          <p class="prev-next-subtitle">previous</p>
+          <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.assertions</span></code></p>
+      </div>
+  </a>
+  <a class='right-next' id="next-link" href="../kepler/index.html" title="next page">
+  <div class="prev-next-info">
+      <p class="prev-next-subtitle">next</p>
+      <p class="prev-next-title"><code class="xref py py-mod docutils literal notranslate"><span class="pre">lamberthub.utils.kepler</span></code></p>
+  </div>
+  <i class="fa-solid fa-angle-right"></i>
+  </a>
+</div>
+            </footer>
+            
+          </div>
+          
+          
+          
+            <div class="bd-sidebar-secondary bd-toc">
+              
+<div class="toc-item">
+  
+<div class="tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+</div>
+<nav id="bd-toc-nav" class="page-toc">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#module-contents">
+   Module Contents
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#functions">
+     Functions
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.utils.elements.rv_pqw">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         rv_pqw()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.utils.elements.coe_rotation_matrix">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         coe_rotation_matrix()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.utils.elements.coe2rv">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         coe2rv()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.utils.elements.rv2coe">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         rv2coe()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.utils.elements.rotation_matrix">
+       <code class="docutils literal notranslate">
+        <span class="pre">
+         rotation_matrix()
+        </span>
+       </code>
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.utils.elements.rv_pqw">
+       rv_pqw
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.utils.elements.coe_rotation_matrix">
+       coe_rotation_matrix
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.utils.elements.coe2rv">
+       coe2rv
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.utils.elements.rv2coe">
+       rv2coe
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#lamberthub.utils.elements.rotation_matrix">
+       rotation_matrix
+      </a>
+     </li>
+    </ul>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+</nav>
+</div>
+
+<div class="toc-item">
+  
+<div id="searchbox"></div>
+</div>
+
+<div class="toc-item">
+  
+</div>
+
+<div class="toc-item">
+  
+<div class="tocsection sourcelink">
+    <a href="../../../../_sources/autoapi/lamberthub/utils/elements/index.rst.txt">
+        <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+</div>
+
+</div>
+
+            </div>
+          
+          
+        </div>
+        <footer class="bd-footer-content">
+          <div class="bd-footer-content__inner">
+            
+          </div>
+        </footer>
+        
+      </main>
+    </div>
+  </div>
+
+  
+    
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../../_static/scripts/bootstrap.js?digest=796348d33e8b1d947c94"></script>
+<script src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=796348d33e8b1d947c94"></script>
+
+  <footer class="bd-footer"><div class="bd-footer__inner container">
+  
+  <div class="footer-item">
+    
+<p class="copyright">
+
+    &copy; Copyright (c) 2023 Jorge Martinez Garrido. All rights reserved.<br>
+
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    <p class="theme-version">
+    Built with the
+    <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">
+        PyData Sphinx Theme
+    </a>
+    0.12.0.
+</p>
+  </div>
+  
+  <div class="footer-item">
+    
+<p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.3.0.<br>
+</p>
+
+  </div>
+  
+</div>
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+:mod:`lamberthub.utils.misc`
+============================
+
+.. py:module:: lamberthub.utils.misc
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   Miscellany utilities
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+
+   lamberthub.utils.misc.get_solver_name
+
+
+   lamberthub.utils.misc._get_sample_vectors_from_theta_and_rho
+
+
+
+.. py:function:: get_solver_name(solver)
+
+   Returns solver's name.
+
+   :param solver: Solver function.
+   :type solver: function
+
+   :returns: **name** -- String representation for the solver.
+   :rtype: str
+
+
+.. py:function:: _get_sample_vectors_from_theta_and_rho(theta, rho)
+
+   Returns the initial and final position vectors contained in the reference
+   XY plane being given the transfer angle and the norm ration between them.
+
+   :param theta: The transfer angle.
+   :type theta: float
+   :param rho: The ratio between the norms of the final and initial vectors.
+   :type rho: float
+
+   :returns: * **r1_vec** (*~np.array*) -- The initial position vector.
+             * **r2_vec** (*~np.array*) -- The final position vector.
+
+   .. rubric:: Notes
+
+   The purpose of this function is to easily generate initial data for the
+   Lambert's problem in the sense of position vectors. The function is used by
+   the performance plotters and to generate various time of flight curves for
+   the different available algorithms.
+
+

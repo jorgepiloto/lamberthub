@@ -1,0 +1,33 @@
+:mod:`lamberthub.universal_solvers`
+===================================
+
+.. py:module:: lamberthub.universal_solvers
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   A sub-package holding all universal formulae based solvers
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+
+   arora/index.rst
+
+
+   gooding/index.rst
+
+
+   izzo/index.rst
+
+
+   vallado/index.rst
+
+
+

@@ -1,0 +1,27 @@
+:mod:`lamberthub.p_solvers`
+===========================
+
+.. py:module:: lamberthub.p_solvers
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   A sub-package holding all orbital parameter based solvers
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+
+   battin/index.rst
+
+
+   gauss/index.rst
+
+
+

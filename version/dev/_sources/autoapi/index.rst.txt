@@ -1,0 +1,14 @@
+:noindex:
+:orphan:
+
+Package API
+===========
+
+This section holds `lamberthub's` source code documentation. You can navigate
+through each of of the sub-packages and modules they contain to check the
+different auxiliary routines and parameters they accept.
+
+.. toctree::
+   :maxdepth: 2
+
+   /autoapi/lamberthub/index

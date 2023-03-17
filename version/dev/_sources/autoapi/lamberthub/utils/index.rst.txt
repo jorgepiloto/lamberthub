@@ -1,0 +1,39 @@
+:mod:`lamberthub.utils`
+=======================
+
+.. py:module:: lamberthub.utils
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   A sub-package holding different utilities and auxiliary functions
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+
+   angles/index.rst
+
+
+   assertions/index.rst
+
+
+   elements/index.rst
+
+
+   kepler/index.rst
+
+
+   misc/index.rst
+
+
+   stumpff/index.rst
+
+
+

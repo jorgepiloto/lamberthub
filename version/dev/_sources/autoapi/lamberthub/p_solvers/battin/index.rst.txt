@@ -1,0 +1,306 @@
+:mod:`lamberthub.p_solvers.battin`
+==================================
+
+.. py:module:: lamberthub.p_solvers.battin
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   This module holds all methods devised by R. H. Battin.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+
+   lamberthub.p_solvers.battin.battin1984
+
+
+   lamberthub.p_solvers.battin._battin_first_equation
+
+
+   lamberthub.p_solvers.battin._battin_second_equation
+
+
+   lamberthub.p_solvers.battin._get_lambda
+
+
+   lamberthub.p_solvers.battin._get_ll
+
+
+   lamberthub.p_solvers.battin._get_m
+
+
+   lamberthub.p_solvers.battin._get_h_coefficients
+
+
+   lamberthub.p_solvers.battin._u_at_h
+
+
+   lamberthub.p_solvers.battin._u_at_B
+
+
+   lamberthub.p_solvers.battin._B_at_h
+
+
+   lamberthub.p_solvers.battin._xi_at_x
+
+
+   lamberthub.p_solvers.battin._K_at_u
+
+
+
+.. py:function:: battin1984(mu, r1, r2, tof, M=0, prograde=True, low_path=True, maxiter=35, atol=1e-05, rtol=1e-07, full_output=False)
+
+   Battin's elegant algorithm for solving the Lambert's problem. This algorithm
+   is known to improve Gauss original one by removing the singularity for 180
+   transfer angles and increasing its performance.
+
+   :param mu: Gravitational parameter, equivalent to :math:`GM` of attractor body.
+   :type mu: float
+   :param r1: Initial position vector.
+   :type r1: numpy.array
+   :param r2: Final position vector.
+   :type r2: numpy.array
+   :param M: Number of revolutions. Must be equal or greater than 0 value.
+   :type M: int
+   :param prograde: If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
+   :type prograde: bool
+   :param low_path: If two solutions are available, it selects between high or low path.
+   :type low_path: bool
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Absolute tolerance.
+   :type atol: float
+   :param rtol: Relative tolerance.
+   :type rtol: float
+   :param full_output: If True, the number of iterations and time per iteration are also returned.
+   :type full_output: bool
+
+   :returns: * **v1** (*numpy.array*) -- Initial velocity vector.
+             * **v2** (*numpy.array*) -- Final velocity vector.
+             * **numiter** (*int*) -- Number of iterations.
+             * **tpi** (*float*) -- Time per iteration in seconds.
+
+   .. rubric:: Notes
+
+   The algorithm originally devised by Gauss exploits the so-called ratio of
+   sector to triangle area, which is a numerical value related with the orbital
+   parameter. This Algorithm was used to the discovery of the orbit of Ceres by
+   the genius and adopted by many other authors of his time due to its
+   simplicity. However, the Algorithm is found to be singular for transfer
+   angles of 180 degrees and shows a low performance for really small angles.
+
+   .. rubric:: References
+
+   [1] Battin, R. H., & Vaughan, R. M. (1984). An elegant Lambert algorithm.
+   Journal of Guidance, Control, and Dynamics, 7(6), 662-670.
+
+   [2] Battin, R. H. (1999). An introduction to the mathematics and methods of
+   astrodynamics. Aiaa.
+
+   [3] Vaughan, R. M. (1983). An improvement of Gauss' method for solving
+   Lambert's problem (Doctoral dissertation, Massachusetts Institute of
+   Technology).
+
+
+.. py:function:: _battin_first_equation(y, ll, m)
+
+   Battin's first equation.
+
+   :param y: The dependent variable.
+   :type y: float
+   :param ll: First auxiliary variable.
+   :type ll: float
+   :param m: Second auxiliary variable.
+   :type m: float
+
+   :returns: **x** -- The independent variable.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equaiton (49) from original report [1], which is alternative from
+   the book [2] is expression (7.113)
+
+
+.. py:function:: _battin_second_equation(u, h1, h2)
+
+   Battin's second equation.
+
+   :param u: The dependent variable.
+   :type u: float
+   :param h1: The first of the h coefficients.
+   :type h1: float
+   :param h2: The second of the h coefficients.
+   :type h2: float
+
+   :returns: **y** -- The dependent variable.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   Computes the desired positive root via an explicit equation defined in
+   [1] under number (57).
+
+
+.. py:function:: _get_lambda(c, s, dtheta)
+
+   Comptues the transfer angle parameter.
+
+   :param c: The norm of the chord vector.
+   :type c: float
+   :param s: The semiperimeter.
+   :type s: float
+   :param dtheta: The transfer angle in radians.
+   :type dtheta: float
+
+   :returns: **_lambda** -- The transfer angle parameter.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is inline equation in the very first page of report [1].
+
+
+.. py:function:: _get_ll(_lambda)
+
+   Computes the l variable.
+
+   :param _lambda: The transfer angle parameter.
+   :type _lambda: float
+
+   :returns: **ll** -- Auxiliary variable.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation (30) from original report.
+
+
+.. py:function:: _get_m(mu, tof, s, _lambda)
+
+   Computes the m auxiliary variable.
+
+   :param mu: The gravitational parameter.
+   :type mu: float
+   :param tof: The time of flight.
+   :type tof: float
+   :param s: The semiperimeter of the orbit.
+   :type s: float
+   :param _lambda: The transfer angle parameter.
+   :type _lambda: float
+
+   :returns: **m** -- Auxiliary variable.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation (31) from official report [1].
+
+
+.. py:function:: _get_h_coefficients(x, ll, m)
+
+   Evaluates the h1 and h2 coefficients.
+
+   :param x: The free-parameter.
+   :type x: float
+   :param ll: The first auxiliary variable.
+   :type ll: float
+   :param m: The second auxiliary variable.
+   :type m: float
+
+   :returns: * **h1** (*float*) -- The first of the h coefficients.
+             * **h2** (*float*) -- The second of the h coefficients.
+
+   .. rubric:: Notes
+
+   These are equations (47) and (48) from report [1].
+
+
+.. py:function:: _u_at_h(h1, h2)
+
+   Evaluates u at h coefficients.
+
+   :param h1: The first of the h coefficients.
+   :type h1: float
+   :param h2: The second of the h coefficients.
+   :type h2: float
+
+   :returns: **u** -- Auxiliary variable.
+   :rtype: float
+
+
+.. py:function:: _u_at_B(B)
+
+   Evaluates u auxiliary variable at given B.
+
+   :param B: Auxiliary variable.
+   :type B: float
+
+   :returns: **u** -- Auxiliary variable.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation (55) from the original report [1].
+
+
+.. py:function:: _B_at_h(h1, h2)
+
+   Evaluates B auxiliary variable at given h coefficients.
+
+   :param h1: The first of the h coefficients.
+   :type h1: float
+   :param h2: The second of the h coefficients.
+   :type h2: float
+
+   :returns: **B** -- Auxiliary variable.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation (56) from the original report.
+
+
+.. py:function:: _xi_at_x(x, levels=125)
+
+   Evaluates the xi function at a particular value of x.
+
+   :param x: The independent variable.
+   :type x: float
+
+   :returns: **xi** -- The value of the xi function.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation (53) from original report [1]. However, the method
+   presented in [3] which makes use of a series is the one used here as it is
+   much simpler to implement.
+
+
+.. py:function:: _K_at_u(u, levels=1000)
+
+   Evaluates the K function at a particular value of u.
+
+   :param u: Battin's auxiliary variable.
+   :type u: float
+
+   :returns: **K** -- The value of the K function.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   This is equation (58) from original report [1]. However, the method
+   presented in [3] which makes use of a series is the one used here as it is
+   much simpler to implement.
+
+

@@ -1,0 +1,333 @@
+:mod:`lamberthub.ecc_solvers.utils`
+===================================
+
+.. py:module:: lamberthub.ecc_solvers.utils
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   Holds auxiliary functions used by eccentricity based Lambert's problem
+   solvers. The majority of the routines hosted within this module were directly
+   taken from the following publications [1] [2] [3].
+
+   [1] Avanzini, G. (2008). A simple Lambert algorithm. Journal of guidance,
+       control, and dynamics, 31(6), 1587-1594.
+
+   [2] He, Q., Li, J., & Han, C. (2010). Multiple-revolution solutions of the
+       transverse-eccentricity-based Lambert problem. Journal of guidance,
+       control, and dynamics, 33(1), 265-269.
+
+   [3] Wen, Changxuan, Yushan Zhao, and Peng Shi. "Derivative analysis and
+       algorithm modification of transverse-eccentricity-based Lambert problem."
+       Journal of Guidance, Control, and Dynamics 37.4 (2014): 1195-1201.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+
+   lamberthub.ecc_solvers.utils.get_geometry
+
+
+   lamberthub.ecc_solvers.utils.get_eccF
+
+
+   lamberthub.ecc_solvers.utils.get_aF
+
+
+   lamberthub.ecc_solvers.utils.get_pF
+
+
+   lamberthub.ecc_solvers.utils.get_fundamental_ellipse_properties
+
+
+   lamberthub.ecc_solvers.utils.ecc_at_eccT
+
+
+   lamberthub.ecc_solvers.utils.p_at_eccT
+
+
+   lamberthub.ecc_solvers.utils.a_at_eccT
+
+
+   lamberthub.ecc_solvers.utils.eap_from_eccT
+
+
+   lamberthub.ecc_solvers.utils.w_at_eccT
+
+
+   lamberthub.ecc_solvers.utils.get_true_anomalies
+
+
+   lamberthub.ecc_solvers.utils.kepler_tof_at_eccT
+
+
+   lamberthub.ecc_solvers.utils._f
+
+
+   lamberthub.ecc_solvers.utils.coe_at_eccT
+
+
+
+.. py:function:: get_geometry(r1, r2, prograde)
+
+   Computes associated problem geometry.
+
+   :param r1: Initial position vector.
+   :type r1: np.array
+   :param r2: Final position vector.
+   :type r2: np.array
+   :param prograde: If True, assumes prograde motion, otherwise retrograde is applied.
+   :type prograde: bool
+
+   :returns: * **r1_norm** (*float*) -- Norm of the initial position vector.
+             * **r1_norm** (*float*) -- Norm of the final position vector.
+             * **c_norm** (*float*) -- Norm of the chord vector.
+             * **dtheta** (*float*) -- Transfer angle.
+             * **w_c** (*float*) -- Angle between initial position and chord vectors.
+
+
+.. py:function:: get_eccF(r1_norm, r2_norm, c_norm)
+
+   Computes the eccentricity component along the chord. This value is kept
+   constant for all the problem as long as the boundary conditions are not
+   changed.
+
+   :param r1_norm: Norm of the initial vector position.
+   :type r1_norm: float
+   :param r2_norm: Norm of the final vector position.
+   :type r2_norm: float
+   :param c_norm: Norm of the chord vector.
+   :type c_norm: float
+
+   :returns: **ecc_F** -- Eccentricity component along the chord direction.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   Equation (3) from Avanzini's report [1].
+
+
+.. py:function:: get_aF(r1_norm, r2_norm)
+
+   Computes the semi-major axis of the fundamental ellipse. This value is
+   kept constant for all the problem as long as the boundary conditions are not
+   changed.
+
+   :param r1_norm: Norm of the initial vector position.
+   :type r1_norm: float
+   :param r2_norm: Norm of the final vector position.
+   :type r2_norm: float
+
+   :returns: **a_F** -- Semi-major axis of the fundamental ellipse.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   No labeled equation (appears between [3] and [4]) from Avanzini's report
+   [1].
+
+
+.. py:function:: get_pF(a_F, ecc_F)
+
+   Computes the orbital parameter (semi-latus) rectum of the fundamental
+   ellipse. This value is kept constant for all the problem as long as the
+   boundary conditions are not changed.
+
+   :param a_F: Semi-major axis of the fundamental ellipse.
+   :type a_F: float
+   :param ecc_F: Eccentricity of the fundamental ellipse.
+   :type ecc_F: float
+
+   :returns: **p_F** -- Orbital parameter / semi-latus rectum of the fundamental ellipse.
+   :rtype: float
+
+   .. rubric:: Notes
+
+   No labeled equation (appears between [3] and [4]) from Avanzini's report
+
+
+.. py:function:: get_fundamental_ellipse_properties(r1_norm, r2_norm, c_norm)
+
+   Computes the fundamental ellipse properties. Those are the eccentricity,
+   semi-major axis and the orbital parameter.
+
+   :param r1_norm: Norm of the initial vector position.
+   :type r1_norm: float
+   :param r2_norm: Norm of the final vector position.
+   :type r2_norm: float
+   :param c_norm: Norm of the chord vector.
+   :type c_norm: float
+
+   :returns: * **ecc_F** (*float*) -- Eccentricity component along the chord direction.
+             * **a_F** (*float*) -- Semi-major axis of the fundamental ellipse.
+             * **p_F** (*float*) -- Orbital parameter / semi-latus rectum of the fundamental ellipse.
+
+
+.. py:function:: ecc_at_eccT(ecc_T, ecc_F)
+
+   Computes transfer orbit eccentricity from transverse and fundamental
+   components.
+
+   :param ecc_T: Eccentricity transverse component.
+   :type ecc_T: float
+   :param ecc_F: Eccentricity of the fundamental ellipse.
+   :type ecc_F: float
+
+   :returns: **ecc** -- Eccentricity of the transfer orbit.
+   :rtype: float
+
+
+.. py:function:: p_at_eccT(ecc_T, r1_norm, r2_norm, c_norm, dtheta, p_F)
+
+   Computes the orbital parameter or semi-latus rectum of the transfer orbit.
+
+   :param ecc_T: Eccentricity transverse component.
+   :type ecc_T: float
+   :param r1_norm: Norm of the initial vector position.
+   :type r1_norm: float
+   :param r2_norm: Norm of the final vector position.
+   :type r2_norm: float
+   :param c_norm: Norm of the chord vector.
+   :type c_norm: float
+   :param dtheta: Transfer angle.
+   :type dtheta: float
+   :param p_F: Orbital parameter or semi-latus rectum of the fundamental ellipse.
+   :type p_F: float
+
+   :returns: **p** -- Orbital parameter or semi-lactus rectum.
+   :rtype: float
+
+
+.. py:function:: a_at_eccT(ecc_T, ecc_F, p)
+
+   Computes the semi-major axis of the transfer orbit.
+
+   :param ecc_T: Eccentricity transverse component.
+   :type ecc_T: float
+   :param ecc_F: Eccentricity of the fundamental ellipse.
+   :type ecc_F: float
+   :param p: Transfer orbit parameter or semi-latus rectum.
+   :type p: float
+
+   :returns: **a** -- Semi-major axis of the transfer orbit.
+   :rtype: float
+
+
+.. py:function:: eap_from_eccT(ecc_T, geometry)
+
+   Solves for transfer orbit eccentricity, semi-major axis and orbital
+   parameter.
+
+   :param ecc_T: Eccentricity component along transverse direction.
+   :type ecc_T: float
+   :param geometry: A tuple hosting r1_norm, r2_norm, c_norm, dtheta and w_c geometry values.
+   :type geometry: tuple
+
+   :returns: * **ecc** (*float*) -- Absolute eccentricity of the transfer orbit.
+             * **a** (*float*) -- Semi-major axis of the transfer orbit.
+             * **p** (*float*) -- Semi-latus rectum of the transfer orbit.
+
+
+.. py:function:: w_at_eccT(ecc_T, ecc_F, w_c)
+
+   Compute the true anomalies for the initial and final position vectors
+   with respect to the transfer orbit.
+
+   :param ecc_T: Eccentricity transverse component.
+   :type ecc_T: float
+   :param ecc_F: Eccentricity of the fundamental ellipse.
+   :type ecc_F: float
+   :param dtheta: Transfer angle.
+   :type dtheta: float
+   :param w_c: Angle between the initial and chord vector.
+   :type w_c: float
+
+   :returns: * **nu_1** (*float*) -- True anomaly of the initial position vector w.r.t. transfer orbit.
+             * **nu_2** (*float*) -- True anomaly of the final position vector w.r.t. transfer orbit.
+
+   .. rubric:: Notes
+
+   This is equation (6) from Quan He's report [2].
+
+
+.. py:function:: get_true_anomalies(w, dtheta)
+
+   Compute the initial and final true anomalies.
+
+   :param w: Argument of periapsis.
+   :type w: float
+   :param dtheta: Transfer angle.
+   :type dtheta: float
+
+   :returns: * **nu_1** (*float*) -- Initial true anomaly.
+             * **nu_2** (*float*) -- Final true anomaly.
+
+
+.. py:function:: kepler_tof_at_eccT(ecc_T, mu, geometry)
+
+   Computes the time of flight at particular value of transverse eccentricity
+   and problem boundary conditions.
+
+   :param ecc_T: Eccentricity component along transverse direction.
+   :type ecc_T: float
+   :param mu: The gravitational parameter.
+   :type mu: float
+   :param geometry: A tuple hosting r1_norm, r2_norm, c_norm, dtheta and w_c geometry values.
+   :type geometry: tuple
+
+   :returns: **tof** -- Dimensional time of flight from Kepler's equation.
+   :rtype: float
+
+
+.. py:function:: _f(x, ecc_T_at_x, mu, geometry, tof12_s)
+
+   Returns a zero once the value of x makes the numerically compute time of
+   flight to be exactly the desired one.
+
+   :param x: The independent variable to be solved.
+   :type x: float
+   :param ecc_T_at_x: Function to solve the eccentricity component along transverse direction.
+   :type ecc_T_at_x: function
+   :param mu: The gravitational parameter.
+   :type mu: float
+   :param geometry: A tuple hosting r1_norm, r2_norm, c_norm, dtheta and w_c geometry values.
+   :type geometry: tuple
+   :param tof12_s: Desired time of flight to be achieved.
+   :type tof12_s: float
+
+   .. rubric:: Notes
+
+   This is equation (14) from Avanzini's report [1].
+
+
+.. py:function:: coe_at_eccT(ecc_T, r1, r2, sense)
+
+   Computes the classical orbita elements at particular value of transverse
+   eccentricity.
+
+   :param ecc_T: Transverse eccentricity.
+   :type ecc_T: float
+   :param r1: Initial position vecor.
+   :type r1: np.array
+   :param r1: Final position vector.
+   :type r1: np.array
+   :param sense: If True assumes prograde motion, otherwise retrograde is applied.
+   :type sense: bool
+
+   :returns: * **p** (*float*) -- Orbital parameter or semi-lactus rectum.
+             * **ecc** (*float*) -- Absolute orbit eccentricity.
+             * **inc** (*float*) -- Inclination of the orbit.
+             * **raan** (*float*) -- Right ascension of the ascending node.
+             * **argp** (*float*) -- Argument of periapsis.
+             * **nu_1** (*float*) -- True anomaly at the first initial position vector.
+             * **nu_2** (*float*) -- True anomaly at the first final position vector.
+
+

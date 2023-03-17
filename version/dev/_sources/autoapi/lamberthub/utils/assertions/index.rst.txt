@@ -1,0 +1,113 @@
+:mod:`lamberthub.utils.assertions`
+==================================
+
+.. py:module:: lamberthub.utils.assertions
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   A collection of checkers for raising custom exceptions if required
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+
+   lamberthub.utils.assertions.assert_parameters_are_valid
+
+
+   lamberthub.utils.assertions.assert_gravitational_parameter_is_positive
+
+
+   lamberthub.utils.assertions.assert_position_vector_is_valid
+
+
+   lamberthub.utils.assertions.assert_position_vectors_are_valid
+
+
+   lamberthub.utils.assertions.assert_time_of_flight_is_positive
+
+
+   lamberthub.utils.assertions.assert_number_of_revolutions_not_negative
+
+
+   lamberthub.utils.assertions.assert_transfer_angle_not_zero
+
+
+   lamberthub.utils.assertions.assert_transfer_angle_not_pi
+
+
+
+.. py:function:: assert_parameters_are_valid(mu, r1, r2, tof, M)
+
+   Checks if solver input parameters are safe.
+
+
+
+.. py:function:: assert_gravitational_parameter_is_positive(mu)
+
+   Checks if the gravitational parameter is positive.
+
+   :param mu: Gravitational parameter
+   :type mu: float
+
+
+.. py:function:: assert_position_vector_is_valid(r)
+
+   Checks if position vector has proper dimensions and is not the null one.
+
+   :param r: Initial position vector.
+   :type r: np.array
+
+
+.. py:function:: assert_position_vectors_are_valid(r1, r2)
+
+   Checks if position vectors are safe in dimension and values.
+
+   :param r1: Initial position vector.
+   :type r1: np.array
+   :param r2: Final position vector.
+   :type r2: np.array
+
+
+.. py:function:: assert_time_of_flight_is_positive(tof)
+
+   Checks if time of flight is positive.
+
+   :param tof: Time of flight.
+   :type tof: float
+
+
+.. py:function:: assert_number_of_revolutions_not_negative(M)
+
+   Checks if the number of revolutions is zero or positive, that is, it does
+   not have a negative value.
+
+   :param M: Number of revolutions
+   :type M: int
+
+
+.. py:function:: assert_transfer_angle_not_zero(dtheta)
+
+   Checks if the transfer angle is the null value. If so, raises an exception.
+
+   :param dtheta: Transfer angle value.
+   :type dtheta: float
+
+
+.. py:function:: assert_transfer_angle_not_pi(dtheta)
+
+   Checks if the transfer angle is pi radians or 180 degrees. If so, raises an
+   exception.
+
+   :param dtheta: Transfer angle value.
+   :type dtheta: float
+
+

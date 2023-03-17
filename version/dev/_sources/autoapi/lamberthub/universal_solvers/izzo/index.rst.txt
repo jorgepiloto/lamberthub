@@ -1,0 +1,193 @@
+:mod:`lamberthub.universal_solvers.izzo`
+========================================
+
+.. py:module:: lamberthub.universal_solvers.izzo
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   A module hosting all algorithms devised by Izzo
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+
+   lamberthub.universal_solvers.izzo.izzo2015
+
+
+   lamberthub.universal_solvers.izzo._reconstruct
+
+
+   lamberthub.universal_solvers.izzo._find_xy
+
+
+   lamberthub.universal_solvers.izzo._compute_y
+
+
+   lamberthub.universal_solvers.izzo._compute_psi
+
+
+   lamberthub.universal_solvers.izzo._tof_equation
+
+
+   lamberthub.universal_solvers.izzo._tof_equation_y
+
+
+   lamberthub.universal_solvers.izzo._tof_equation_p
+
+
+   lamberthub.universal_solvers.izzo._tof_equation_p2
+
+
+   lamberthub.universal_solvers.izzo._tof_equation_p3
+
+
+   lamberthub.universal_solvers.izzo._compute_T_min
+
+
+   lamberthub.universal_solvers.izzo._initial_guess
+
+
+   lamberthub.universal_solvers.izzo._halley
+
+
+   lamberthub.universal_solvers.izzo._householder
+
+
+
+.. py:function:: izzo2015(mu, r1, r2, tof, M=0, prograde=True, low_path=True, maxiter=35, atol=1e-05, rtol=1e-07, full_output=False)
+
+   Solves Lambert problem using Izzo's devised algorithm.
+
+   :param mu: Gravitational parameter, equivalent to :math:`GM` of attractor body.
+   :type mu: float
+   :param r1: Initial position vector.
+   :type r1: numpy.array
+   :param r2: Final position vector.
+   :type r2: numpy.array
+   :param M: Number of revolutions. Must be equal or greater than 0 value.
+   :type M: int
+   :param prograde: If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
+   :type prograde: bool
+   :param low_path: If two solutions are available, it selects between high or low path.
+   :type low_path: bool
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Absolute tolerance.
+   :type atol: float
+   :param rtol: Relative tolerance.
+   :type rtol: float
+   :param full_output: If True, the number of iterations is also returned.
+   :type full_output: bool
+
+   :returns: * **v1** (*numpy.array*) -- Initial velocity vector.
+             * **v2** (*numpy.array*) -- Final velocity vector.
+             * **numiter** (*list*) -- Number of iterations.
+
+   .. rubric:: Notes
+
+   This is the algorithm devised by Dario Izzo[1] in 2015. It inherits from
+   the one developed by Lancaster[2] during the 60s, following the universal
+   formulae approach. It is one of the most modern solvers, being a complete
+   Lambert's problem solver (zero and Multiple-revolution solutions). It shows
+   high performance and robustness while requiring no more than four iterations
+   to reach a solution.
+
+   All credits of the implementation go to Juan Luis Cano Rodríguez and the
+   poliastro development team, from which this routine inherits. Some changes
+   were made to adapt it to `lamberthub` API. In addition, the hypergeometric
+   function is the one from SciPy.
+
+   Copyright (c) 2012-2021 Juan Luis Cano Rodríguez and the poliastro development team
+
+   .. rubric:: References
+
+   [1] Izzo, D. (2015). Revisiting Lambert’s problem. Celestial Mechanics
+          and Dynamical Astronomy, 121(1), 1-15.
+
+   [2] Lancaster, E. R., & Blanchard, R. C. (1969). A unified form of
+          Lambert's theorem (Vol. 5368). National Aeronautics and Space
+          Administration.
+
+
+.. py:function:: _reconstruct(x, y, r1, r2, ll, gamma, rho, sigma)
+
+   Reconstruct solution velocity vectors.
+
+
+.. py:function:: _find_xy(ll, T, M, maxiter, atol, rtol, low_path)
+
+   Computes all x, y for given number of revolutions.
+
+
+.. py:function:: _compute_y(x, ll)
+
+   Computes y.
+
+
+.. py:function:: _compute_psi(x, y, ll)
+
+   Computes psi.
+
+   "The auxiliary angle psi is computed using Eq.(17) by the appropriate
+   inverse function"
+
+
+
+.. py:function:: _tof_equation(x, T0, ll, M)
+
+   Time of flight equation.
+
+
+.. py:function:: _tof_equation_y(x, y, T0, ll, M)
+
+   Time of flight equation with externally computated y.
+
+
+.. py:function:: _tof_equation_p(x, y, T, ll)
+
+
+.. py:function:: _tof_equation_p2(x, y, T, dT, ll)
+
+
+.. py:function:: _tof_equation_p3(x, y, _, dT, ddT, ll)
+
+
+.. py:function:: _compute_T_min(ll, M, maxiter, atol, rtol)
+
+   Compute minimum T.
+
+
+.. py:function:: _initial_guess(T, ll, M, low_path)
+
+   Initial guess.
+
+
+.. py:function:: _halley(p0, T0, ll, atol, rtol, maxiter)
+
+   Find a minimum of time of flight equation using the Halley method.
+
+   .. note::
+
+      This function is private because it assumes a calling convention specific to
+      this module and is not really reusable.
+
+
+.. py:function:: _householder(p0, T0, ll, M, atol, rtol, maxiter)
+
+   Find a zero of time of flight equation using the Householder method.
+
+   .. note::
+
+      This function is private because it assumes a calling convention specific to
+      this module and is not really reusable.
+
+

@@ -1,0 +1,177 @@
+:mod:`lamberthub.universal_solvers.gooding`
+===========================================
+
+.. py:module:: lamberthub.universal_solvers.gooding
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   A module hosting all algorithms devised by Gooding
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+
+   lamberthub.universal_solvers.gooding.gooding1990
+
+
+   lamberthub.universal_solvers.gooding.tlamb
+
+
+   lamberthub.universal_solvers.gooding.xlamb
+
+
+   lamberthub.universal_solvers.gooding.vlamb
+
+
+
+.. py:function:: gooding1990(mu, r1, r2, tof, M=0, prograde=True, low_path=True, maxiter=35, atol=1e-05, rtol=1e-07, full_output=False)
+
+   Lambert's problem solver using the method proposed by R. H. Gooding in 1990.
+
+   :param mu: Gravitational parameter, equivalent to :math:`GM` of attractor body.
+   :type mu: float
+   :param r1: Initial position vector.
+   :type r1: numpy.array
+   :param r2: Final position vector.
+   :type r2: numpy.array
+   :param M: Number of revolutions. Must be equal or greater than 0 value.
+   :type M: int
+   :param prograde: If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
+   :type prograde: bool
+   :param low_path: If two solutions are available, it selects between high or low path.
+   :type low_path: bool
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Absolute tolerance.
+   :type atol: float
+   :param rtol: Relative tolerance.
+   :type rtol: float
+   :param full_output: If True, the number of iterations and time per iteration are also returned.
+   :type full_output: bool
+
+   :returns: * **v1** (*numpy.array*) -- Initial velocity vector.
+             * **v2** (*numpy.array*) -- Final velocity vector.
+             * **numiter** (*int*) -- Number of iterations.
+             * **tpi** (*float*) -- Time per iteration in seconds.
+
+   .. rubric:: Notes
+
+   This module holds the Lambert's problem solver devised by R. H. Gooding in
+   his technical report [1]_ originally published in 1988. However, the
+   implementation corresponds to the one proposed by the author a couple of
+   years later in his article [2]_ from 1990. Some improvements to the
+   originally algorithm were also made by Klumpp in his performance comparison
+   [3]_ between Lamberts problem solvers.  Those have been added to this code
+   to prevent failures for particular inputs.  The result is a fully working
+   algorithm for both single and multi-revolution orbits.
+
+   The code has been kept as close as possible to the original FORTRAN-77  one.
+   However, some statements (like "goto line" ones) have been deprecated as
+   they introduce "spaghetti code". Since the original implementation imposed a
+   relative tolerance together with the number of iterations, these parameters
+   have been modified so the user can freely choose their values.
+
+   .. rubric:: References
+
+   .. [1] Gooding, R. H. (1988). On the solution of Lambert's orbital
+          boundary-value problem. ROYAL AEROSPACE ESTABLISHMENT FARNBOROUGH (UNITED
+          KINGDOM).
+
+   .. [2] Gooding, R. H. (1990). A procedure for the solution of Lambert's orbital
+          boundary-value problem. Celestial Mechanics and Dynamical Astronomy, 48(2),
+          145-165.
+
+   .. [3] Klumpp,  A. (1999). Performance  Comparison  of  Lambert  and  Kepler
+          Algorithms,  Interoffice  Memorandum, JPL.
+
+
+.. py:function:: tlamb(m, q, qsqfm1, x, n)
+
+   Auxiliary routine for computing the non-dimensional time of flight as
+   function of the number of revolutions, the transfer parameter and the
+   independent variable.
+
+   :param m: Number of revolutions.
+   :type m: float
+   :param q: The transfer angle parameter.
+   :type q: float
+   :param qsqfm1: Equivalent to :math:`1-q^2`.
+   :param x: The independent variable.
+   :type x: float
+   :param n: Number of output parameters to be returned.
+   :type n: float
+
+   :returns: * **t** (*float*) -- Non-dimensional time evaluated at :math:`x`.
+             * **dt** (*float*) -- First derivative of the non-dimensional time evaluated at :math:`x`.
+             * **d2t** (*float*) -- Second derivative of the non-dimensional time evaluated at :math:`x`.
+             * **d3t** (*float*) -- Third derivative of the non-dimensional time evaluated at :math:`x`.
+
+
+.. py:function:: xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol)
+
+   Auxiliary routine for finding the independent variable as function of the
+   number of revolutions, the transfer angle parameter and the non-dimensional
+   time of flight.
+
+   :param m: Number of revolutions.
+   :type m: float
+   :param q: The transfer angle parameter.
+   :type q: float
+   :param qsqfm1: Equivalent to :math:`1-q^2`.
+   :type qsqfm1: float
+   :param tin: The actual non-dimensional time of flight.
+   :type tin: float
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Desired absolute tolerance.
+   :type atol: float
+   :param rtol: Desired relative tolerance.
+   :type rtol: float
+
+   :returns: * **n_sol** (*int*) -- Number of solutions.
+             * **x** (*float*) -- First solution.
+             * **xpl** (*float*) -- Second solution, if available.
+             * **numiter** (*int*) -- Number of iterations.
+
+
+.. py:function:: vlamb(mu, r1_norm, r2_norm, dtheta, tof, low_path, maxiter, atol, rtol)
+
+   Auxiliary routine for computing the velocity vector components, both
+   radian and tangential ones.
+
+   :param mu: Gravitational parameter, equivalent to :math:`GM` of attractor body.
+   :type mu: float
+   :param r1_norm: Norm of the initial position vector.
+   :type r1_norm: float
+   :param r2_norm: Norm of the final position vector.
+   :type r2_norm: float
+   :param dtheta: Transfer angle between initial and final vectors.
+   :type dtheta: float
+   :param tof: Time of flight between initial and final position vectors.
+   :type tof: float
+   :param low_path: If two solutions are available, it selects between high or low path.
+   :type low_path: bool
+   :param maxiter: Maximum number of iterations.
+   :type maxiter: int
+   :param atol: Absolute tolerance :math:`abs(x_{i+1} - x_{i})`
+   :type atol: float
+   :param rtol: Relative tolerance :math:`abs(\frac{x_{i+1}}{x_{i}} - 1)`
+   :type rtol: float
+
+   :returns: * **n_sol** (*int*) -- Number of solutions
+             * **vri** (*float*) -- Radial velocity component at the initial position vector.
+             * **vti** (*float*) -- Tangential velocity component at the initial position vector.
+             * **vrf** (*float*) -- Radial velocity component at the final position vector.
+             * **vtf** (*float*) -- Tangential velocity component at the final position vector.
+             * **numiter** (*int*) -- Number of iterations required to compute solution.
+
+

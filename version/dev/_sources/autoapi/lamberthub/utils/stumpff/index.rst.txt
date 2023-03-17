@@ -1,0 +1,54 @@
+:mod:`lamberthub.utils.stumpff`
+===============================
+
+.. py:module:: lamberthub.utils.stumpff
+   :noindex:
+
+.. autoapi-nested-parse::
+
+   This module holds the so-called Stumpff functions. These set of functions
+   usually appear in a plethora of equations within the subject of astrodynamics.
+
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+
+   lamberthub.utils.stumpff.c2
+
+
+   lamberthub.utils.stumpff.c3
+
+
+
+.. py:function:: c2(psi)
+
+   Second Stumpff function.
+
+   For positive arguments:
+
+   .. math::
+
+       c_2(\psi) = \frac{1 - \cos{\sqrt{\psi}}}{\psi}
+
+
+
+.. py:function:: c3(psi)
+
+   Third Stumpff function.
+
+   For positive arguments:
+
+   .. math::
+
+       c_3(\psi) = \frac{\sqrt{\psi} - \sin{\sqrt{\psi}}}{\sqrt{\psi^3}}
+
+
+
