@@ -182,4 +182,5 @@ pseudoxml:
 	@echo "Build finished. The pseudo-XML files are in $(BUILDDIR)/pseudoxml."
 
 pdf:
-	touch documentation.pdf
+	mkdir -p $(BUILDDIR)/latex
+	touch $(BUILDDIR)/latex/documentation.pdf
