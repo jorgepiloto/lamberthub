@@ -41,7 +41,7 @@ dynamic = ["version", "description"]
 
 [project.optional-dependencies]
 tests = [
-    "pytest==7.2.0",
+    "pytest==7.3.0",
     "pytest-cov==4.0.0",
 ]
 doc = [
