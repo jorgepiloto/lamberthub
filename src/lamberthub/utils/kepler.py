@@ -1,12 +1,10 @@
-"""
-This module holds the so-called Kepler equations for each one of the particular
+"""This module holds the so-called Kepler equations for each one of the particular
 orbit shapes, that is elliptical, parabolic and hyperbolic.
 
 The required formulas are found to be within Vallado's[1] manual.
 
 References
 ----------
-
 [1] Vallado, D. A. (2001). Fundamentals of astrodynamics and applications
     (Vol. 12). Springer Science & Business Media.
 
@@ -18,8 +16,7 @@ from lamberthub.utils.angles import nu_to_B, nu_to_E, nu_to_H
 
 
 def kepler_elliptic(E, ecc):
-    """
-    Computes the time of flight since perigee passage at particular eccentric
+    """Computes the time of flight since perigee passage at particular eccentric
     anomaly for elliptical orbit.
 
     Parameters
@@ -40,8 +37,7 @@ def kepler_elliptic(E, ecc):
 
 
 def kepler_parabolic(B):
-    """
-    Computes the time of flight since perigee passage at particular eccentric
+    """Computes the time of flight since perigee passage at particular eccentric
     anomaly for paraboliparabolic orbit.
 
     Parameters
@@ -60,8 +56,7 @@ def kepler_parabolic(B):
 
 
 def kepler_hyperbolic(H, ecc):
-    """
-    Computes the time of flight since perigee passage at particular eccentric
+    """Computes the time of flight since perigee passage at particular eccentric
     anomaly for hyperbolic orbit.
 
     Parameters
@@ -82,8 +77,7 @@ def kepler_hyperbolic(H, ecc):
 
 
 def kepler_from_nu(nu, ecc):
-    """
-    Compute the mean anomaly depending on the particular orbit shape, that is
+    """Compute the mean anomaly depending on the particular orbit shape, that is
     elliptical, parabolic or hyperbolic.
 
     Parameters
@@ -99,7 +93,6 @@ def kepler_from_nu(nu, ecc):
         Mean anomaly.
 
     """
-
     if ecc < 0:
         raise ValueError("Eccentricity cannot be negative!")
     elif 0 <= ecc < 1:

@@ -20,6 +20,13 @@ I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) $(SRCDIR)
 
 .PHONY: help clean html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex latexpdf text man changes linkcheck doctest gettext
 
+.install-deps:
+	@pip freeze | grep -q "sphinx-autoapi @ git+https://github.com/ansys/sphinx-autoapi" && is_custom_sphinx_autoapi_installed="yes" || is_custom_sphinx_autoapi_installed="no"
+	@if [ "$$is_custom_sphinx_autoapi_installed" != "yes" ]; then \
+		pip uninstall --yes sphinx-autoapi; \
+		pip install "sphinx-autoapi @ git+https://github.com/ansys/sphinx-autoapi@feat/single-page-stable"; \
+	fi
+
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
 	@echo "  examples   to make Jupyter notebook examples from *.md"
@@ -54,7 +61,7 @@ examples:
 	cd $(SRCDIR)/$(EXAMPLESDIR) && jupytext --to ipynb --execute *.mystnb
 	@echo "Finished!"
 
-html:
+html: .install-deps
 	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."

@@ -22,8 +22,7 @@ def vallado2013(
     rtol=1e-7,
     full_output=False,
 ):
-    r"""
-    Vallado's algorithm makes use of the universal formulation to solve for the
+    r"""Vallado's algorithm makes use of the universal formulation to solve for the
     Lambert's problem. By making use of a bisection method, it guarantees the
     convergence to the solution but the amount of iterations require
     dramatically increases.
@@ -85,7 +84,6 @@ def vallado2013(
     (Vol. 12). Springer Science & Business Media.
 
     """
-
     # Check that input parameters are safe
     assert_parameters_are_valid(mu, r1, r2, tof, M)
 

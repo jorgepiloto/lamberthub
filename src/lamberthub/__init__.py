@@ -1,4 +1,4 @@
-""" A collection of Lambert's problem solvers """
+"""A collection of Lambert's problem solvers"""
 
 from lamberthub.ecc_solvers.avanzini import avanzini2008
 from lamberthub.p_solvers.battin import battin1984

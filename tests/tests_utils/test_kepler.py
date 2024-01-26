@@ -1,4 +1,4 @@
-""" Unitary tests related to Kepler's equation """
+"""Unitary tests related to Kepler's equation"""
 
 from numpy.testing import assert_allclose
 import pytest

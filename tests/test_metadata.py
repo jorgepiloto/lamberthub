@@ -1,4 +1,4 @@
-""" Tests regarding package metadata """
+"""Tests regarding package metadata"""
 
 import lamberthub
 

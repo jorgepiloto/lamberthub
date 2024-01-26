@@ -26,8 +26,7 @@ def gauss1809(
     rtol=1e-7,
     full_output=False,
 ):
-    r"""
-    Lambert's problem solver devised by Carl Friedrich Gauss in 1809. The method
+    r"""Lambert's problem solver devised by Carl Friedrich Gauss in 1809. The method
     has been implemented according to Bate's book (see [2]) and extended to the
     hyperbolic case. This method shows poor accuracy, being only suitable for
     low transfer angles.
@@ -85,7 +84,6 @@ def gauss1809(
     Fundamentals of astrodynamics. Courier Dover Publications.
 
     """
-
     # Check that input parameters are safe
     assert_parameters_are_valid(mu, r1, r2, tof, M)
 
@@ -298,7 +296,6 @@ def _X_at_x(x, order=50):
     This is equation (5.6-15) from Bate's book, in reference [2].
 
     """
-
     coefficients = [1]
     for n in range(3, (3 + order)):
         coeff = (2 * n) / (2 * n - 1)

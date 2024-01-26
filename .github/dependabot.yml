@@ -4,3 +4,16 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+    labels:
+      - "dependencies:pyproject"
+    commit-message:
+      prefix: "maint"
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies:ci"
+    commit-message:
+      prefix: "maint"

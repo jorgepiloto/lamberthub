@@ -1,5 +1,4 @@
-"""
-Holds auxiliary functions used by eccentricity based Lambert's problem
+"""Holds auxiliary functions used by eccentricity based Lambert's problem
 solvers. The majority of the routines hosted within this module were directly
 taken from the following publications [1] [2] [3].
 
@@ -30,11 +29,10 @@ from lamberthub.utils.kepler import kepler_from_nu
 
 
 def get_geometry(r1, r2, prograde):
-    """
-    Computes associated problem geometry.
+    """Computes associated problem geometry.
 
     Parameters
-    -----------
+    ----------
     r1: np.array
         Initial position vector.
     r2: np.array
@@ -56,7 +54,6 @@ def get_geometry(r1, r2, prograde):
         Angle between initial position and chord vectors.
 
     """
-
     # Solve for the norms
     r1_norm, r2_norm, c_norm = [
         np.linalg.norm(vec) for vec in [r1, r2, (r2 - r1)]
@@ -71,8 +68,7 @@ def get_geometry(r1, r2, prograde):
 
 
 def get_eccF(r1_norm, r2_norm, c_norm):
-    """
-    Computes the eccentricity component along the chord. This value is kept
+    """Computes the eccentricity component along the chord. This value is kept
     constant for all the problem as long as the boundary conditions are not
     changed.
 
@@ -100,8 +96,7 @@ def get_eccF(r1_norm, r2_norm, c_norm):
 
 
 def get_aF(r1_norm, r2_norm):
-    """
-    Computes the semi-major axis of the fundamental ellipse. This value is
+    """Computes the semi-major axis of the fundamental ellipse. This value is
     kept constant for all the problem as long as the boundary conditions are not
     changed.
 
@@ -123,14 +118,12 @@ def get_aF(r1_norm, r2_norm):
     [1].
 
     """
-
     a_F = (r1_norm + r2_norm) / 2
     return a_F
 
 
 def get_pF(a_F, ecc_F):
-    """
-    Computes the orbital parameter (semi-latus) rectum of the fundamental
+    """Computes the orbital parameter (semi-latus) rectum of the fundamental
     ellipse. This value is kept constant for all the problem as long as the
     boundary conditions are not changed.
 
@@ -156,8 +149,7 @@ def get_pF(a_F, ecc_F):
 
 
 def get_fundamental_ellipse_properties(r1_norm, r2_norm, c_norm):
-    """
-    Computes the fundamental ellipse properties. Those are the eccentricity,
+    """Computes the fundamental ellipse properties. Those are the eccentricity,
     semi-major axis and the orbital parameter.
 
     Parameters
@@ -179,7 +171,6 @@ def get_fundamental_ellipse_properties(r1_norm, r2_norm, c_norm):
         Orbital parameter / semi-latus rectum of the fundamental ellipse.
 
     """
-
     # Compute the fundamental ellipse parameters
     ecc_F = get_eccF(r1_norm, r2_norm, c_norm)
     a_F = get_aF(r1_norm, r2_norm)
@@ -189,8 +180,7 @@ def get_fundamental_ellipse_properties(r1_norm, r2_norm, c_norm):
 
 
 def ecc_at_eccT(ecc_T, ecc_F):
-    """
-    Computes transfer orbit eccentricity from transverse and fundamental
+    """Computes transfer orbit eccentricity from transverse and fundamental
     components.
 
     Parameters
@@ -206,14 +196,12 @@ def ecc_at_eccT(ecc_T, ecc_F):
         Eccentricity of the transfer orbit.
 
     """
-
     ecc = np.sqrt(ecc_T**2 + ecc_F**2)
     return ecc
 
 
 def p_at_eccT(ecc_T, r1_norm, r2_norm, c_norm, dtheta, p_F):
-    """
-    Computes the orbital parameter or semi-latus rectum of the transfer orbit.
+    """Computes the orbital parameter or semi-latus rectum of the transfer orbit.
 
     Parameters
     ----------
@@ -241,8 +229,7 @@ def p_at_eccT(ecc_T, r1_norm, r2_norm, c_norm, dtheta, p_F):
 
 
 def a_at_eccT(ecc_T, ecc_F, p):
-    """
-    Computes the semi-major axis of the transfer orbit.
+    """Computes the semi-major axis of the transfer orbit.
 
     Parameters
     ----------
@@ -264,8 +251,7 @@ def a_at_eccT(ecc_T, ecc_F, p):
 
 
 def eap_from_eccT(ecc_T, geometry):
-    """
-    Solves for transfer orbit eccentricity, semi-major axis and orbital
+    """Solves for transfer orbit eccentricity, semi-major axis and orbital
     parameter.
 
     Parameters
@@ -286,7 +272,6 @@ def eap_from_eccT(ecc_T, geometry):
         Semi-latus rectum of the transfer orbit.
 
     """
-
     # Unpack useful parameters
     r1_norm, r2_norm, c_norm, dtheta, w_c = geometry
 
@@ -305,8 +290,7 @@ def eap_from_eccT(ecc_T, geometry):
 
 
 def w_at_eccT(ecc_T, ecc_F, w_c):
-    """
-    Compute the true anomalies for the initial and final position vectors
+    """Compute the true anomalies for the initial and final position vectors
     with respect to the transfer orbit.
 
     Parameters
@@ -332,7 +316,6 @@ def w_at_eccT(ecc_T, ecc_F, w_c):
     This is equation (6) from Quan He's report [2].
 
     """
-
     # Compute the coordinates
     y = ecc_F * np.sin(w_c) + ecc_T * np.cos(w_c)
     x = ecc_F * np.cos(w_c) - ecc_T * np.sin(w_c)
@@ -342,8 +325,7 @@ def w_at_eccT(ecc_T, ecc_F, w_c):
 
 
 def get_true_anomalies(w, dtheta):
-    """
-    Compute the initial and final true anomalies.
+    """Compute the initial and final true anomalies.
 
     Parameters
     ----------
@@ -366,8 +348,7 @@ def get_true_anomalies(w, dtheta):
 
 
 def kepler_tof_at_eccT(ecc_T, mu, geometry):
-    """
-    Computes the time of flight at particular value of transverse eccentricity
+    """Computes the time of flight at particular value of transverse eccentricity
     and problem boundary conditions.
 
     Parameters
@@ -385,7 +366,6 @@ def kepler_tof_at_eccT(ecc_T, mu, geometry):
         Dimensional time of flight from Kepler's equation.
 
     """
-
     # Unpack useful parameters
     r1_norm, r2_norm, c_norm, dtheta, w_c = geometry
 
@@ -422,8 +402,7 @@ def kepler_tof_at_eccT(ecc_T, mu, geometry):
 
 
 def _f(x, ecc_T_at_x, mu, geometry, tof12_s):
-    """
-    Returns a zero once the value of x makes the numerically compute time of
+    """Returns a zero once the value of x makes the numerically compute time of
     flight to be exactly the desired one.
 
     Parameters
@@ -444,7 +423,6 @@ def _f(x, ecc_T_at_x, mu, geometry, tof12_s):
     This is equation (14) from Avanzini's report [1].
 
     """
-
     # Compute the predicted time of flight at particular ecc_T
     ecc_T = ecc_T_at_x(x)
     tof12 = kepler_tof_at_eccT(ecc_T, mu, geometry)
@@ -460,8 +438,7 @@ def _f(x, ecc_T_at_x, mu, geometry, tof12_s):
 
 
 def coe_at_eccT(ecc_T, r1, r2, sense):
-    """
-    Computes the classical orbita elements at particular value of transverse
+    """Computes the classical orbita elements at particular value of transverse
     eccentricity.
 
     Parameters
@@ -492,7 +469,6 @@ def coe_at_eccT(ecc_T, r1, r2, sense):
     nu_2: float
         True anomaly at the first final position vector.
     """
-
     # Retrieve auxiliary geometry parameters
     geometry = get_geometry(r1, r2, sense)
     r1_norm, r2_norm, c_norm, dtheta, w_c = geometry

@@ -21,8 +21,7 @@ def battin1984(
     rtol=1e-7,
     full_output=False,
 ):
-    r"""
-    Battin's elegant algorithm for solving the Lambert's problem. This algorithm
+    r"""Battin's elegant algorithm for solving the Lambert's problem. This algorithm
     is known to improve Gauss original one by removing the singularity for 180
     transfer angles and increasing its performance.
 
@@ -82,7 +81,6 @@ def battin1984(
     Technology).
 
     """
-
     # Check that input parameters are safe
     assert_parameters_are_valid(mu, r1, r2, tof, M)
 
@@ -219,7 +217,7 @@ def _battin_second_equation(u, h1, h2):
 
 
 def _get_lambda(c, s, dtheta):
-    """Comptues the transfer angle parameter.
+    """Computes the transfer angle parameter.
 
     Parameters
     ----------
@@ -418,7 +416,6 @@ def _xi_at_x(x, levels=125):
     much simpler to implement.
 
     """
-
     # Compute the value of eta, given by equation (52) in [1].
     eta = x / (np.sqrt(1 + x) + 1) ** 2
 
@@ -466,7 +463,6 @@ def _K_at_u(u, levels=1000):
     much simpler to implement.
 
     """
-
     # Initial values
     (
         delta,

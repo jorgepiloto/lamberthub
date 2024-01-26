@@ -1,4 +1,4 @@
-""" A module hosting all algorithms devised by Gooding  """
+"""A module hosting all algorithms devised by Gooding"""
 
 import time
 
@@ -25,8 +25,7 @@ def gooding1990(
     rtol=1e-7,
     full_output=False,
 ):
-    r"""
-    Lambert's problem solver using the method proposed by R. H. Gooding in 1990.
+    r"""Lambert's problem solver using the method proposed by R. H. Gooding in 1990.
 
     Parameters
     ----------
@@ -93,7 +92,6 @@ def gooding1990(
            Algorithms,  Interoffice  Memorandum, JPL.
 
     """
-
     # Check that input parameters are safe
     assert_parameters_are_valid(mu, r1, r2, tof, M)
 
@@ -139,8 +137,7 @@ def gooding1990(
 
 
 def tlamb(m, q, qsqfm1, x, n):
-    """
-    Auxiliary routine for computing the non-dimensional time of flight as
+    """Auxiliary routine for computing the non-dimensional time of flight as
     function of the number of revolutions, the transfer parameter and the
     independent variable.
 
@@ -169,7 +166,6 @@ def tlamb(m, q, qsqfm1, x, n):
         Third derivative of the non-dimensional time evaluated at :math:`x`.
 
     """
-
     # Define necessary parameters.
     sw = 0.4
     lm1 = n == -1
@@ -357,8 +353,7 @@ def tlamb(m, q, qsqfm1, x, n):
 
 
 def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
-    r"""
-    Auxiliary routine for finding the independent variable as function of the
+    r"""Auxiliary routine for finding the independent variable as function of the
     number of revolutions, the transfer angle parameter and the non-dimensional
     time of flight.
 
@@ -391,7 +386,6 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
         Number of iterations.
 
     """
-
     # Declare auxiliary parameters.
     xpl = 0
     c0, c1, c2, c3, c41, c42 = 1.7, 0.5, 0.03, 0.15, 1.0, 0.24
@@ -577,8 +571,7 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
 
 
 def vlamb(mu, r1_norm, r2_norm, dtheta, tof, low_path, maxiter, atol, rtol):
-    r"""
-    Auxiliary routine for computing the velocity vector components, both
+    r"""Auxiliary routine for computing the velocity vector components, both
     radian and tangential ones.
 
     Parameters
@@ -618,7 +611,6 @@ def vlamb(mu, r1_norm, r2_norm, dtheta, tof, low_path, maxiter, atol, rtol):
         Number of iterations required to compute solution.
 
     """
-
     # The following yields m = 0 when th = 2pi exactly
     # Neither this nor the original code works for
     # th < 0.0
