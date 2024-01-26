@@ -21,8 +21,8 @@ cname = os.getenv("DOCUMENTATION_CNAME", "lamberthub.docs.jorgemartinez.space")
 # Extensions and source file configuration
 extensions = [
     "autoapi.extension",
-    "myst_nb",
     "nbsphinx",
+    "sphinx_copybutton",
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
     "sphinx_gallery.load_style",
@@ -30,8 +30,6 @@ extensions = [
 
 source_suffix = {
     ".rst": "restructuredtext",
-    ".ipynb": "myst-nb",
-    ".myst": "myst-nb",
 }
 
 master_doc = "index"
@@ -89,6 +87,24 @@ nbsphinx_thumbnails = {
 nb_execution_timeout = 900
 myst_update_mathjax = False
 
+
+# -- Declare the Jinja context -----------------------------------------------
+exclude_patterns = []
+BUILD_API = True if os.environ.get("BUILD_API", "true") == "true" else False
+if not BUILD_API:
+    exclude_patterns.append("api")
+
+BUILD_EXAMPLES = True if os.environ.get("BUILD_EXAMPLES", "true") == "true" else False
+if not BUILD_EXAMPLES:
+    exclude_patterns.append("examples/**")
+    exclude_patterns.append("examples.rst")
+
+jinja_contexts = {
+    "main_toctree": {
+        "build_api": BUILD_API,
+        "build_examples": BUILD_EXAMPLES,
+    },
+}
 
 def prepare_jinja_env(jinja_env) -> None:
     """
