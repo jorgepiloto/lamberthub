@@ -42,6 +42,6 @@ maxdepth: 2
 caption: References
 ---
 references/about
-autoapi/index.rst
+api/index.rst
 references/references.md
 ```

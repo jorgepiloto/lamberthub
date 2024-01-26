@@ -88,3 +88,14 @@ nbsphinx_thumbnails = {
 }
 nb_execution_timeout = 900
 myst_update_mathjax = False
+
+
+def prepare_jinja_env(jinja_env) -> None:
+    """
+    Customize the jinja env.
+
+    Notes
+    -----
+    See https://jinja.palletsprojects.com/en/3.0.x/api/#jinja2.Environment
+    """
+    jinja_env.globals["project_name"] = project
