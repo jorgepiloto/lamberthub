@@ -10,4 +10,4 @@ repos:
   rev: v2.2.4
   hooks:
   - id: codespell
-    exclude: ^(doc/_build|doc/styles/|doc/source/_static/*.css)
+    exclude: ^(doc/_build|doc/styles/|doc/source/_static/highlight.css)
