@@ -2,8 +2,9 @@
 
 from datetime import datetime
 import os
+from pathlib import Path
 
-from ansys_sphinx_theme import get_version_match
+from ansys_sphinx_theme import get_autoapi_templates_dir_relative_path, get_version_match
 
 import lamberthub
 
@@ -65,11 +66,18 @@ html_css_files = ["custom.css"]
 
 # Autoapi configuration
 autoapi_type = "python"
-autoapi_dirs = ["../../src"]
-autodoc_typehints = "none"
-autoapi_template_dir = "_autoapi_templates"
-exclude_patterns.append("_autoapi_templates/index.rst")
-exclude_patterns.append("_autoapi_templates/python/module.rst")
+autoapi_dirs = ["../../src/ansys"]
+autoapi_root = "api"
+autoapi_options = [
+    "members",
+    "undoc-members",
+    "show-inheritance",
+    "show-module-summary",
+    "special-members",
+]
+autoapi_template_dir = get_autoapi_templates_dir_relative_path(Path(__file__))
+autoapi_keep_files = True
+autoapi_render_in_single_page = ["class", "enum", "exception", "function"]
 
 # Nbsphinx configuration
 nbsphinx_custom_formats = {
