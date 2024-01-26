@@ -8,6 +8,22 @@ different algorithms for solving the Lambert's problem:
    :width: 350px
    :align: center
 
+.. grid:: 2
+
+    .. grid-item-card:: Getting started :fa:`person-running`
+        :link: getting-started/index
+        :link-type: doc
+
+        Step by step guidelines on how to set up your environment to work with
+        lamberthub. Install the library and verify it works as expected.
+
+    .. grid-item-card:: User guide :fa:`book-open-reader`
+        :link: user-guide/index
+        :link-type: doc
+
+        Learn about the capabilities, features, and key topics in lamberthub.
+        This guide provides useful background information and explanations.
+
 Since the formulation of the problem, many different solutions have been
 devised, being the latest ones in the form of computer routines. By collecting
 and implementing all of them under a common programming language, it is possible
@@ -21,8 +37,8 @@ their routines.
        :hidden:
        :maxdepth: 3
     
-       getting_started/index
-       user_guide/index
+       getting-started/index
+       user-guide/index
        {% if build_examples %}
        examples
        {% endif %}
