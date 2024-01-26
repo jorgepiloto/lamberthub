@@ -25,7 +25,6 @@ extensions = [
     "sphinx_copybutton",
     "sphinx.ext.autodoc",
     "sphinx.ext.napoleon",
-    "sphinx_gallery.load_style",
 ]
 
 source_suffix = {
