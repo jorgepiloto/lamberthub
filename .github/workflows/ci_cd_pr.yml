@@ -1,0 +1,89 @@
+name: pull-request
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, labeled]
+
+env:
+  MAIN_PYTHON_VERSION: '3.10'
+  DOCUMENTATION_CNAME: 'lamberthub.docs.jorgemartinez.space' 
+  LIBRARY_NAME: 'lamberthub'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+
+jobs:
+
+  labeler:
+    name: "Labels"
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+     - uses: actions/checkout@v4
+
+     - name: "Update labels"
+       uses: micnncim/action-label-syncer@v1
+       env:
+         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+     - name: "Label pull-request"
+       uses: actions/labeler@v5.0.0
+       with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+  code-style:
+    name: "Code style"
+    runs-on: ubuntu-latest
+    needs: labeler
+    steps:
+      - uses: pyansys/actions/code-style@v5
+
+  doc-style:
+    name: "Doc style"
+    runs-on: ubuntu-latest
+    needs: labeler
+    steps:
+      - uses: pyansys/actions/doc-style@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+  tests:
+    name: "Test Python ${{ matrix.cfg.python-version }}"
+    runs-on: ${{ matrix.os }}
+    needs: code-style
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        cfg:
+          - {python-version: '3.8', extra-args: ''}
+          - {python-version: '3.9', extra-args: ''}
+          - {python-version: '3.10', extra-args: '--cov=lamberthub --cov-report=term --cov-report=html:.cov/html'}
+      fail-fast: false
+    steps:
+      - name: "Run tests"
+        uses: pyansys/actions/tests-pytest@v4
+        with:
+          pytest-extra-args: ${{ matrix.cfg.extra-args }}
+
+      - name: "Upload coverage"
+        uses: codecov/codecov-action@v3
+        if: matrix.cfg.python-version == env.MAIN_PYTHON_VERSION && matrix.os == 'ubuntu-latest'
+
+  doc-build:
+    name: "Doc build"
+    runs-on: ubuntu-latest
+    needs: doc-style
+    steps:
+      - uses: pyansys/actions/doc-build@v5
+
+  build-library:
+    name: "Build library"
+    runs-on: ubuntu-latest
+    needs: [doc-build, tests]
+    steps:
+      - uses: pyansys/actions/build-library@v5
+        with:
+          library-name: ${{ env.LIBRARY_NAME }}
