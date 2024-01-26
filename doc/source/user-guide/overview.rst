@@ -15,7 +15,7 @@ Checking for available solvers
 To answer this question, simply run the following code snippet or refer to the
 official package API reference:
 
-.. jupyter-execute::
+.. code-block:: python
 
     from lamberthub import ALL_SOLVERS
     print([solver.__name__ for solver in ALL_SOLVERS])
@@ -24,7 +24,7 @@ In addition, ``lamberthub`` provides other lists holding algorithms which
 present particular features such as multi-revolutions or high-robustness. These
 macros are listed down:
 
-.. jupyter-execute::
+.. code-block:: python
 
     from lamberthub import ALL_SOLVERS, ZERO_REV_SOLVERS, MULTI_REV_SOLVERS, ROBUST_SOLVERS
 
