@@ -66,7 +66,7 @@ html_css_files = ["custom.css"]
 
 # Autoapi configuration
 autoapi_type = "python"
-autoapi_dirs = ["../../src/ansys"]
+autoapi_dirs = ["../../src/lamberthub"]
 autoapi_root = "api"
 autoapi_options = [
     "members",
