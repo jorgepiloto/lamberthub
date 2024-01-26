@@ -1,14 +1,12 @@
-""" A collection of checkers for raising custom exceptions if required """
+"""A collection of checkers for raising custom exceptions if required"""
 
 import numpy as np
 
 
 def assert_parameters_are_valid(mu, r1, r2, tof, M):
-    """
-    Checks if solver input parameters are safe.
+    """Checks if solver input parameters are safe.
 
     """
-
     # Run all required checks
     assert_gravitational_parameter_is_positive(mu)
     assert_position_vectors_are_valid(r1, r2)
@@ -19,8 +17,7 @@ def assert_parameters_are_valid(mu, r1, r2, tof, M):
 
 
 def assert_gravitational_parameter_is_positive(mu):
-    """
-    Checks if the gravitational parameter is positive.
+    """Checks if the gravitational parameter is positive.
 
     Parameters
     ----------
@@ -28,7 +25,6 @@ def assert_gravitational_parameter_is_positive(mu):
         Gravitational parameter
 
     """
-
     # Check positive gravitational parameter
     if mu <= 0:
         raise ValueError("Gravitational parameter must be positive!")
@@ -37,8 +33,7 @@ def assert_gravitational_parameter_is_positive(mu):
 
 
 def assert_position_vector_is_valid(r):
-    """
-    Checks if position vector has proper dimensions and is not the null one.
+    """Checks if position vector has proper dimensions and is not the null one.
 
     Parameters
     ----------
@@ -46,7 +41,6 @@ def assert_position_vector_is_valid(r):
         Initial position vector.
 
     """
-
     # Check that vector belongs to three-dimensional space
     if r.shape != (3,):
         raise ValueError("Vector must be three-dimensional!")
@@ -58,8 +52,7 @@ def assert_position_vector_is_valid(r):
 
 
 def assert_position_vectors_are_valid(r1, r2):
-    """
-    Checks if position vectors are safe in dimension and values.
+    """Checks if position vectors are safe in dimension and values.
 
     Parameters
     ----------
@@ -69,7 +62,6 @@ def assert_position_vectors_are_valid(r1, r2):
         Final position vector.
 
     """
-
     # Check if position vectors have proper dimensions
     for r in [r1, r2]:
         assert_position_vector_is_valid(r1)
@@ -82,8 +74,7 @@ def assert_position_vectors_are_valid(r1, r2):
 
 
 def assert_time_of_flight_is_positive(tof):
-    """
-    Checks if time of flight is positive.
+    """Checks if time of flight is positive.
 
     Parameters
     ----------
@@ -91,7 +82,6 @@ def assert_time_of_flight_is_positive(tof):
         Time of flight.
 
     """
-
     if tof <= 0:
         raise ValueError("Time of flight must be positive!")
     else:
@@ -99,8 +89,7 @@ def assert_time_of_flight_is_positive(tof):
 
 
 def assert_number_of_revolutions_not_negative(M):
-    """
-    Checks if the number of revolutions is zero or positive, that is, it does
+    """Checks if the number of revolutions is zero or positive, that is, it does
     not have a negative value.
 
     Parameters
@@ -109,7 +98,6 @@ def assert_number_of_revolutions_not_negative(M):
         Number of revolutions
 
     """
-
     if M < 0:
         raise ValueError(
             "Number of revolutions must be equal or greater than zero!"
@@ -119,8 +107,7 @@ def assert_number_of_revolutions_not_negative(M):
 
 
 def assert_transfer_angle_not_zero(dtheta):
-    """
-    Checks if the transfer angle is the null value. If so, raises an exception.
+    """Checks if the transfer angle is the null value. If so, raises an exception.
 
     Parameters
     ----------
@@ -128,7 +115,6 @@ def assert_transfer_angle_not_zero(dtheta):
         Transfer angle value.
 
     """
-
     if dtheta == 0:
         raise ValueError("Transfer angle was found to be zero!")
     else:
@@ -136,8 +122,7 @@ def assert_transfer_angle_not_zero(dtheta):
 
 
 def assert_transfer_angle_not_pi(dtheta):
-    """
-    Checks if the transfer angle is pi radians or 180 degrees. If so, raises an
+    """Checks if the transfer angle is pi radians or 180 degrees. If so, raises an
     exception.
 
     Parameters
@@ -146,7 +131,6 @@ def assert_transfer_angle_not_pi(dtheta):
         Transfer angle value.
 
     """
-
     if dtheta == np.pi:
         raise ValueError("Transfer angle was found to be 180 degrees!")
     else:

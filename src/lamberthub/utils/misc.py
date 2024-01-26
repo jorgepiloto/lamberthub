@@ -1,4 +1,4 @@
-""" Miscellany utilities """
+"""Miscellany utilities"""
 
 import numpy as np
 
@@ -6,8 +6,7 @@ from lamberthub.utils.elements import rotation_matrix
 
 
 def get_solver_name(solver):
-    """
-    Returns solver's name.
+    """Returns solver's name.
 
     Parameters
     ----------
@@ -20,7 +19,6 @@ def get_solver_name(solver):
         String representation for the solver.
 
     """
-
     # Get the function name and its length
     raw_name = str(solver.__name__.capitalize())
     len_name = len(raw_name)
@@ -60,7 +58,6 @@ def _get_sample_vectors_from_theta_and_rho(theta, rho):
     the different available algorithms.
 
     """
-
     # Generate final position vector by rotating initial one a given theta
     r1_vec = np.array([1, 0, 0])
     r2_vec = rho * rotation_matrix(theta, axis=2) @ r1_vec

@@ -1,4 +1,4 @@
-""" A collection of hard tests only for robust solvers """
+"""A collection of hard tests only for robust solvers"""
 
 import numpy as np
 from numpy.testing import assert_allclose
@@ -37,11 +37,9 @@ Astrodynamics), by Gim J. Der, see https://amostech.com/TechnicalPapers/2011/Pos
 @pytest.mark.parametrize("solver", ROBUST_SOLVERS)
 @pytest.mark.parametrize("case", TABLE_OF_TRANSFERS)
 def test_hard_case(solver, case):
-    """
-    Example 2a from The Superior Lambert Algorithm (Der Astrodynamics), by Gim
+    """Example 2a from The Superior Lambert Algorithm (Der Astrodynamics), by Gim
     J. Der, see: https://amostech.com/TechnicalPapers/2011/Poster/DER.pdf
     """
-
     # Initial conditions
     mu_earth = 3.986004418e5  # [km ** 3 / s ** 2]
     r1 = np.array([7231.58074563487, 218.02523761425, 11.79251215952])  # [km]

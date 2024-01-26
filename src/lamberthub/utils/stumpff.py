@@ -1,5 +1,4 @@
-"""
-This module holds the so-called Stumpff functions. These set of functions
+"""This module holds the so-called Stumpff functions. These set of functions
 usually appear in a plethora of equations within the subject of astrodynamics.
 """
 

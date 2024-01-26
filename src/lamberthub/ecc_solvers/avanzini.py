@@ -1,5 +1,4 @@
-"""
-Lambert's problem solver using the method proposed by Giulio Avanzini in 2008.
+"""Lambert's problem solver using the method proposed by Giulio Avanzini in 2008.
 
 This module holds the implementation of the algorithm devised by Avanzini, which
 appeared for the first time in his article [1]. The solver takes advantage of
@@ -58,8 +57,7 @@ def avanzini2008(
     rtol=1e-7,
     full_output=False,
 ):
-    r"""
-    Solves Lambert problem using Gooding's devised algorithm.
+    r"""Solves Lambert problem using Gooding's devised algorithm.
 
     Parameters
     ----------
@@ -102,7 +100,6 @@ def avanzini2008(
     reproduce original report figures.
 
     """
-
     # Check proper value of multi-revolution. Although we could not accept M at
     # all, this ensures all routines within the library work under the same
     # number and type of parameters.
@@ -156,10 +153,8 @@ def avanzini2008(
 
 
 def _get_eccT_limits(geometry):
+    """Computes transverse eccentricity value limits as of problem geometry.
     """
-    Computes transverse eccentricity value limits as of problem geometry.
-    """
-
     # Solve for the fundamental ellipse properties
     r1_norm, r2_norm, c_norm, dtheta, _ = geometry
     ecc_F, a_F, p_F = get_fundamental_ellipse_properties(
@@ -175,8 +170,7 @@ def _get_eccT_limits(geometry):
 
 
 def _get_eccT_at_x(geometry):
-    """
-    Returns proper transverse eccentricity function depending on the value
+    """Returns proper transverse eccentricity function depending on the value
     of the transfer angle.
 
     Parameters
@@ -198,7 +192,6 @@ def _get_eccT_at_x(geometry):
     These are equations (16) and (18) from the official report [1].
 
     """
-
     # Compute the limits of the ecc_T value
     ecc_H, ecc_P = _get_eccT_limits(geometry)
     _, _, _, dtheta, _ = geometry

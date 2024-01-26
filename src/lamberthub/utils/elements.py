@@ -1,5 +1,4 @@
-"""
-Holds routines for converting between different orbital elements sets.
+"""Holds routines for converting between different orbital elements sets.
 
 .. note::
     Some of these functions were directly taken from the poliastro[1] library,
@@ -11,7 +10,6 @@ Holds routines for converting between different orbital elements sets.
 
 References
 ----------
-
 [1] poliastro: https://github.com/poliastro/poliastro/
 
 """
@@ -39,7 +37,6 @@ def rv_pqw(k, p, ecc, nu):
 
     Returns
     -------
-
     r: ndarray
         Position. Dimension 3 vector
     v: ndarray
@@ -112,7 +109,6 @@ def coe2rv(k, p, ecc, inc, raan, argp, nu):
 
     Notes
     -----
-
     .. math::
         \begin{align}
             \vec{r}_{IJK} &= [ROT3(-\Omega)][ROT1(-i)][ROT3(-\omega)]\vec{r}_{PQW}
@@ -225,7 +221,6 @@ def rv2coe(k, r, v, tol=1e-8):
         \right.
 
     """
-
     h = cross(r, v)
     n = cross([0, 0, 1], h)
     e = ((v.dot(v) - k / (norm(r))) * r - r.dot(v) * v) / k

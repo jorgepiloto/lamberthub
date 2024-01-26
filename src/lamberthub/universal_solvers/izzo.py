@@ -1,4 +1,4 @@
-""" A module hosting all algorithms devised by Izzo """
+"""A module hosting all algorithms devised by Izzo"""
 
 import time
 
@@ -23,8 +23,7 @@ def izzo2015(
     rtol=1e-7,
     full_output=False,
 ):
-    r"""
-    Solves Lambert problem using Izzo's devised algorithm.
+    r"""Solves Lambert problem using Izzo's devised algorithm.
 
     Parameters
     ----------
@@ -84,7 +83,6 @@ def izzo2015(
            Administration.
 
     """
-
     # Check that input parameters are safe
     assert_parameters_are_valid(mu, r1, r2, tof, M)
 
@@ -297,7 +295,7 @@ def _initial_guess(T, ll, M, low_path):
 def _halley(p0, T0, ll, atol, rtol, maxiter):
     """Find a minimum of time of flight equation using the Halley method.
 
-    Note
+    Note:
     ----
     This function is private because it assumes a calling convention specific to
     this module and is not really reusable.
@@ -324,13 +322,12 @@ def _halley(p0, T0, ll, atol, rtol, maxiter):
 def _householder(p0, T0, ll, M, atol, rtol, maxiter):
     """Find a zero of time of flight equation using the Householder method.
 
-    Note
+    Note:
     ----
     This function is private because it assumes a calling convention specific to
     this module and is not really reusable.
 
     """
-
     # The clock starts together with the iteration
     tic = time.perf_counter()
     for numiter in range(1, maxiter + 1):

@@ -1,4 +1,4 @@
-""" Utilities related to angles computations """
+"""Utilities related to angles computations"""
 
 import numpy as np
 from numpy import cross, dot
@@ -6,8 +6,7 @@ from numpy.linalg import norm
 
 
 def get_transfer_angle(r1, r2, prograde):
-    """
-    Solves for the transfer angle being known the sense of rotation.
+    """Solves for the transfer angle being known the sense of rotation.
 
     Parameters
     ----------
@@ -24,7 +23,6 @@ def get_transfer_angle(r1, r2, prograde):
         Transfer angle in radians.
 
     """
-
     # Check if both position vectors are collinear. If so, check if the transfer
     # angle is 0 or pi.
     if np.all(np.cross(r1, r2) == 0):
@@ -51,8 +49,7 @@ def get_transfer_angle(r1, r2, prograde):
 
 
 def get_orbit_normal_vector(r1, r2, prograde):
-    """
-    Computes a unitary normal vector aligned with the specific angular momentum
+    """Computes a unitary normal vector aligned with the specific angular momentum
     one of the orbit.
 
     Parameters
@@ -70,7 +67,6 @@ def get_orbit_normal_vector(r1, r2, prograde):
         Unitary vector aligned with orbit specific angular momentum.
 
     """
-
     # Compute the normal vector and its projection onto the vertical axis
     i_h = np.cross(r1, r2) / norm(np.cross(r1, r2))
 
@@ -89,8 +85,7 @@ def get_orbit_normal_vector(r1, r2, prograde):
 
 
 def get_orbit_inc_and_raan_from_position_vectors(r1, r2, prograde):
-    """
-    Computes the inclination of the orbit being known an initial and a final
+    """Computes the inclination of the orbit being known an initial and a final
     position vectors together with the sense of motion.
 
     Parameters
@@ -110,7 +105,6 @@ def get_orbit_inc_and_raan_from_position_vectors(r1, r2, prograde):
         Right ascension of the ascending node.
 
     """
-
     # Get a unitary vector aligned in direction and sense with the specific
     # angular momentum one.
     i_h = get_orbit_normal_vector(r1, r2, prograde)
@@ -137,8 +131,7 @@ def get_orbit_inc_and_raan_from_position_vectors(r1, r2, prograde):
 
 
 def nu_to_E(nu, ecc):
-    """
-    Retrieves eccentric anomaly from true one.
+    """Retrieves eccentric anomaly from true one.
 
     Parameters
     ----------
@@ -153,14 +146,12 @@ def nu_to_E(nu, ecc):
         Eccentric anomaly.
 
     """
-
     E = 2 * np.arctan(np.sqrt((1 - ecc) / (1 + ecc)) * np.tan(nu / 2))
     return E
 
 
 def E_to_nu(E, ecc):
-    """
-    Retrieves true anomaly from eccentric one.
+    """Retrieves true anomaly from eccentric one.
 
     Parameters
     ----------
@@ -175,14 +166,12 @@ def E_to_nu(E, ecc):
         True anomaly.
 
     """
-
     nu = 2 * np.arctan(np.sqrt((1 + ecc) / (1 - ecc)) * np.tan(E / 2))
     return nu
 
 
 def nu_to_B(nu):
-    """
-    Retrieves parabolic anomaly from true one.
+    """Retrieves parabolic anomaly from true one.
 
     Parameters
     ----------
@@ -205,8 +194,7 @@ def nu_to_B(nu):
 
 
 def B_to_nu(B):
-    """
-    Retrieves the true anomaly from parabolic one.
+    """Retrieves the true anomaly from parabolic one.
 
     Parameters
     ----------
@@ -229,8 +217,7 @@ def B_to_nu(B):
 
 
 def nu_to_H(nu, ecc):
-    """
-    Retrieves hyperbolic anomaly from true one.
+    """Retrieves hyperbolic anomaly from true one.
 
     Parameters
     ----------
@@ -250,8 +237,7 @@ def nu_to_H(nu, ecc):
 
 
 def H_to_nu(H, ecc):
-    """
-    Retrieves hyperbolic anomaly from true one.
+    """Retrieves hyperbolic anomaly from true one.
 
     Parameters
     ----------
