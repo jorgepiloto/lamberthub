@@ -78,6 +78,9 @@ jobs:
     needs: doc-style
     steps:
       - uses: pyansys/actions/doc-build@v5
+        env:
+          BUILD_EXAMPLES: true
+          BUILD_API: true
 
   build-library:
     name: "Build library"
