@@ -1,10 +1,53 @@
-documentation:
-- doc/source/**/*
-maintenance:
-- .github/**/*
-- .flake8
-- pyproject.toml
-dependencies:
-- requirements/*
-plotting:
-- src/lamberthub/plotting/**/*
+# This file is required by the the action 'https://github.com/actions/labeler'
+# and used in the '.github/workflows/ci_cd_pr.yml' workflow
+
+# -- Labels based on PR title ------------------------------------------------
+'fix':
+  - head-branch: ['fix']
+  
+'enhancement':
+  - head-branch: ['feat']
+
+# -- Documentation labels ----------------------------------------------------
+'docs':
+  - all:
+      - changed-files:
+          - any-glob-to-any-file: ['doc/source/**/*.rst']
+          - all-globs-to-all-files: ['!doc/source/examples.rst', '!doc/source/api/**/*.rst', '!doc/styles/**', '!doc/.vale.ini']
+
+'docs:api':
+  - any:
+      - changed-files:
+          - any-glob-to-any-file: ['doc/source/api/**/*.rst']
+
+'docs:examples':
+  - any:
+      - changed-files:
+          - any-glob-to-any-file: ['examples/**/*.py', 'doc/source/examples.rst']
+
+
+## -- Other labels ------------------------------------------------------------
+'code-style':
+  - any:
+      - changed-files:
+          - any-glob-to-any-file: ['.pre-commit-config.yaml', 'doc/.vale.ini']
+
+'docker':
+  - any:
+      - changed-files:
+          - any-glob-to-any-file: ['docker/**']
+
+'ci':
+  - any:
+      - changed-files:
+          - any-glob-to-any-file: ['.github/workflows/**']
+
+'tests':
+  - any:
+      - changed-files:
+          - any-glob-to-any-file: ['tests/**']
+
+'plotting':
+  - any:
+      - changed-files:
+          - any-glob-to-any-file: ['src/lamberthub/plotting/**']
