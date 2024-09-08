@@ -1,4 +1,4 @@
-""" A collection of Lambert's problem solvers """
+"""A collection of Lambert's problem solvers."""
 
 from lamberthub.ecc_solvers.avanzini import avanzini2008
 from lamberthub.p_solvers.battin import battin1984
@@ -9,7 +9,7 @@ from lamberthub.universal_solvers.izzo import izzo2015
 from lamberthub.universal_solvers.vallado import vallado2013
 
 __author__ = "Jorge Martinez Garrido"
-__version__ = "0.2.dev0"
+__version__ = "1.0.dev0"
 
 ALL_SOLVERS = [
     gauss1809,
