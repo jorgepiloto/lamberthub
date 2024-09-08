@@ -1,13 +1,14 @@
 repos:
 
-- repo: https://github.com/charliermarsh/ruff-pre-commit
-  rev: v0.1.6
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: v0.6.4
   hooks:
     - id: ruff
-      args: [--fix]
+      args: [ --fix ]
+    - id: ruff-format
 
 - repo: https://github.com/codespell-project/codespell
-  rev: v2.2.4
+  rev: v2.3.0
   hooks:
   - id: codespell
     exclude: ^(doc/_build|doc/styles/|doc/source/_static/highlight.css)

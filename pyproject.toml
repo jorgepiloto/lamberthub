@@ -6,12 +6,12 @@ build-backend = "flit_core.buildapi"
 name = "lamberthub"
 readme = "README.md"
 license = {file = "LICENSE" }
-requires-python = ">=3.7"
+requires-python = ">=3.10"
 authors = [
-    {name = "Jorge Martínez Garrido", email = "contact@jorgemartinez.space" }
+    {name = "Jorge Martinez Garrido", email = "contact@jorgemartinez.space" }
 ]
 maintainers = [
-    {name = "Jorge Martínez Garrido", email = "contact@jorgemartinez.space" }
+    {name = "Jorge Martinez Garrido", email = "contact@jorgemartinez.space" }
 ]
 keywords = [
     "aerospace",
@@ -29,8 +29,9 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: Implementation :: CPython",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Physics",
