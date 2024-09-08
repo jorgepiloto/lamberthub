@@ -44,17 +44,6 @@ tests = [
     "pytest==7.2.0",
     "pytest-cov==4.0.0",
 ]
-doc = [
-    "ansys-sphinx-theme>=0.9",
-    "jupytext==1.14.1",
-    "myst-nb==0.17.1",
-    "nbsphinx==0.8.10",
-    "notebook==6.5.2",
-    "sphinx==5.3.0",
-    "sphinx-autoapi==2.0.0",
-    "sphinx-gallery==0.11.1",
-]
-
 
 [project.urls]
 Source = "https://github.com/lamberthub/lamberthub"
