@@ -1,6 +1,6 @@
 # lamberthub: a hub of Lambert's problem solvers
 
-<img align="left" width=350px src="https://github.com/jorgepiloto/lamberthub/raw/main/doc/source/_static/lamberts_problem_geometry.png"/>
+<img align="center" width=350px src="https://github.com/jorgepiloto/lamberthub/raw/main/doc/source/_static/logo.png"/>
 
 [![Python](https://img.shields.io/pypi/pyversions/lamberthub?logo=pypi)](https://pypi.org/project/lamberthub/)
 [![PyPI](https://img.shields.io/pypi/v/lamberthub.svg?logo=python&logoColor=white)](https://pypi.org/project/lamberthub/)
