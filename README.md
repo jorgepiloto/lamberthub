@@ -9,7 +9,7 @@
 [![codecov](https://codecov.io/gh/jorgepiloto/lamberthub/branch/main/graph/badge.svg?token=3BY2J5AB8D)](https://codecov.io/gh/jorgepiloto/lamberthub)
 [![DOI](https://zenodo.org/badge/364482782.svg)](https://zenodo.org/badge/latestdoi/364482782)
 
-A collection of Lambert's problem solvers implemented using modern Python.
+A collection of Lambert's problem solvers implemented using modern Python and accelerated via Numba.
 
 **Install the latest stable release by running:**
 
@@ -45,8 +45,7 @@ from lamberthub import authorYYYY
 
 
 v1, v2 = authorYYYY(
-    mu, r1, r2, tof, M, prograde=True, low_path=True, maxiter=35, 
-    atol=1e-5, rtol=1e-7, full_output=False
+    mu, r1, r2, tof, M, prograde=True, low_path=True, maxiter=35, atol=1e-5, rtol=1e-7, full_output=False
 )
 ```
 
