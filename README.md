@@ -87,6 +87,55 @@ can be used.
 
 ## Examples
 
+### Example: solving for a direct and prograde transfer orbit
+
+**Problem statement**
+
+Suppose you want to solve for the orbit of an interplanetary vehicle (that is
+Sun is the main attractor) form which you know that the initial and final
+positions are given by:
+
 $$
-\vec{r_1} = \begin{bmatrix} 0.159321004 \\ 0.579266185 \\ 0.052359607 \end{bmatrix} \text{ [AU]} \quad ; \quad \vec{r_2} = \begin{bmatrix} 0.057594337 \\ 0.605750797 \\ 0.068345246 \end{bmatrix} \text{ [AU] }
+\vec{r_1} = \begin{bmatrix} 0.159321004 \\ 0.579266185 \\ 0.052359607 \end{bmatrix} \text{ [AU]}
 $$
+$$
+\vec{r_2} = \begin{bmatrix} 0.057594337 \\ 0.605750797 \\ 0.068345246 \end{bmatrix} \text{ [AU] }
+$$
+
+The time of flight is $\Delta t = 0.010794065 \text{[year]}$. The orbit is
+prograde and direct, thus $M=0$. Remember that when $M=0$, there is only one
+possible solution, so the `low_path` flag does not play any role in this
+problem.
+
+**Solution**
+
+For this problem, `gooding1990` is used. Any other solver would work too. Next,
+the parameters of the problem are instantiated. Finally, the initial and final
+velocity vectors are computed.
+
+```python
+from lamberthub import gooding1990
+import numpy as np
+
+
+mu_sun = 39.47692641
+r1 = np.array([0.159321004, 0.579266185, 0.052359607])
+r2 = np.array([0.057594337, 0.605750797, 0.068345246])
+tof = 0.010794065
+
+v1, v2 = gooding1990(mu_sun, r1, r2, tof)
+print(f"Initial velocity: {v1} [AU / years]")
+print(f"Final velocity:   {v2} [AU / years]")
+```
+
+**Result**
+
+```
+Initial velocity: [-9.303608    3.01862016  1.53636008] [AU / years]
+Final velocity: [-9.5111862   1.88884006  1.4213781 ] [AU / years]
+```
+
+Directly taken from *An Introduction to the Mathematics and Methods of
+Astrodynamics, revised edition, by R.H. Battin, problem 7-12.*.
+
+
