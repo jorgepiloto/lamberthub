@@ -4,11 +4,22 @@ import numpy as np
 
 
 def assert_parameters_are_valid(mu, r1, r2, tof, M):
-    """
-    Checks if solver input parameters are safe.
+    """Check if solver input parameters are safe.
+
+    Parameters
+    ----------
+    mu : float
+        Gravitational parameter.
+    r1 : np.array
+        Initial position vector.
+    r2 : np.array
+        Final position vector.
+    tof: float
+        Time of flight.
+    M : int
+        Number of revolutions
 
     """
-    # Run all required checks
     assert_gravitational_parameter_is_positive(mu)
     assert_position_vectors_are_valid(r1, r2)
     assert_time_of_flight_is_positive(tof)
@@ -18,13 +29,16 @@ def assert_parameters_are_valid(mu, r1, r2, tof, M):
 
 
 def assert_gravitational_parameter_is_positive(mu):
-    """
-    Checks if the gravitational parameter is positive.
+    """Check if the gravitational parameter is positive.
 
     Parameters
     ----------
     mu: float
         Gravitational parameter
+
+    Raises
+    ------
+    ValueError
 
     """
     # Check positive gravitational parameter
@@ -35,16 +49,18 @@ def assert_gravitational_parameter_is_positive(mu):
 
 
 def assert_position_vector_is_valid(r):
-    """
-    Checks if position vector has proper dimensions and is not the null one.
+    """Check if position vector has proper dimensions and is not the null one.
 
     Parameters
     ----------
     r: np.array
         Initial position vector.
 
+    Raises
+    ------
+    ValueError
+
     """
-    # Check that vector belongs to three-dimensional space
     if r.shape != (3,):
         raise ValueError("Vector must be three-dimensional!")
 
@@ -55,8 +71,7 @@ def assert_position_vector_is_valid(r):
 
 
 def assert_position_vectors_are_valid(r1, r2):
-    """
-    Checks if position vectors are safe in dimension and values.
+    """Check if position vectors are safe in dimension and values.
 
     Parameters
     ----------
@@ -64,6 +79,10 @@ def assert_position_vectors_are_valid(r1, r2):
         Initial position vector.
     r2: np.array
         Final position vector.
+
+    Raises
+    ------
+    ValueError
 
     """
     # Check if position vectors have proper dimensions
@@ -78,13 +97,16 @@ def assert_position_vectors_are_valid(r1, r2):
 
 
 def assert_time_of_flight_is_positive(tof):
-    """
-    Checks if time of flight is positive.
+    """Check if time of flight is positive.
 
     Parameters
     ----------
     tof: float
         Time of flight.
+
+    Raises
+    ------
+    ValueError
 
     """
     if tof <= 0:
@@ -94,14 +116,16 @@ def assert_time_of_flight_is_positive(tof):
 
 
 def assert_number_of_revolutions_not_negative(M):
-    """
-    Checks if the number of revolutions is zero or positive, that is, it does
-    not have a negative value.
+    """Check if the number of revolutions is not negative.
 
     Parameters
     ----------
     M: int
         Number of revolutions
+
+    Raises
+    ------
+    ValueError
 
     """
     if M < 0:
@@ -111,13 +135,16 @@ def assert_number_of_revolutions_not_negative(M):
 
 
 def assert_transfer_angle_not_zero(dtheta):
-    """
-    Checks if the transfer angle is the null value. If so, raises an exception.
+    """Check if the transfer angle is the null value.
 
     Parameters
     ----------
     dtheta: float
         Transfer angle value.
+
+    Raises
+    ------
+    ValueError
 
     """
     if dtheta == 0:
@@ -127,14 +154,16 @@ def assert_transfer_angle_not_zero(dtheta):
 
 
 def assert_transfer_angle_not_pi(dtheta):
-    """
-    Checks if the transfer angle is pi radians or 180 degrees. If so, raises an
-    exception.
+    """Check if the transfer angle is pi radians or 180 degrees.
 
     Parameters
     ----------
     dtheta: float
         Transfer angle value.
+
+    Raises
+    ------
+    ValueError
 
     """
     if dtheta == np.pi:

@@ -1,13 +1,14 @@
-"""
-This module holds the so-called Kepler equations for each one of the particular
-orbit shapes, that is elliptical, parabolic and hyperbolic.
+"""Module containing Kepler's equations.
 
-The required formulas are found to be within Vallado's[1] manual.
+Equations are declared for each one of the particular orbit shapes, that is
+elliptical, parabolic and hyperbolic.
+
+The required formulas are found to be within Vallado's [1]_ manual.
 
 References
 ----------
-[1] Vallado, D. A. (2001). Fundamentals of astrodynamics and applications
-    (Vol. 12). Springer Science & Business Media.
+.. [1] Vallado, D. A. (2001). Fundamentals of astrodynamics and applications
+   (Vol. 12). Springer Science & Business Media.
 
 """
 
@@ -17,9 +18,7 @@ from lamberthub.utils.angles import nu_to_B, nu_to_E, nu_to_H
 
 
 def kepler_elliptic(E, ecc):
-    """
-    Computes the time of flight since perigee passage at particular eccentric
-    anomaly for elliptical orbit.
+    """Compute the time since perigee passage at given eccentric anomaly.
 
     Parameters
     ----------
@@ -39,9 +38,7 @@ def kepler_elliptic(E, ecc):
 
 
 def kepler_parabolic(B):
-    """
-    Computes the time of flight since perigee passage at particular eccentric
-    anomaly for paraboliparabolic orbit.
+    """Compute the time since perigee passage at given parabolic anomaly.
 
     Parameters
     ----------
@@ -59,9 +56,7 @@ def kepler_parabolic(B):
 
 
 def kepler_hyperbolic(H, ecc):
-    """
-    Computes the time of flight since perigee passage at particular eccentric
-    anomaly for hyperbolic orbit.
+    """Compute the time since perigee passage at given hyperbolic anomaly.
 
     Parameters
     ----------
@@ -80,10 +75,8 @@ def kepler_hyperbolic(H, ecc):
     return Mh
 
 
-def kepler_from_nu(nu, ecc):
-    """
-    Compute the mean anomaly depending on the particular orbit shape, that is
-    elliptical, parabolic or hyperbolic.
+def kepler_from_nu(nu: float, ecc: float) -> float:
+    """Compute the mean anomaly at a given true anomaly.
 
     Parameters
     ----------
