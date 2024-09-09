@@ -61,29 +61,25 @@ where `author` is the name of the author which developed the solver and `YYYY`
 the year of publication. Any of the solvers hosted by the `ALL_SOLVERS` macro
 can be used.
 
-| Parameter | Description |
-|-----------|-------------|
-| `mu`      | The gravitational parameter, i.e., mass of the attracting body times the gravitational constant. |
-| `r1`      | Initial position vector. |
-| `r2`      | Final position vector. |
-| `tof`     | Time of flight between initial and final vectors. |
+### Parameters and Returns
 
-| Additional Parameters | Description |
-|-----------------------|-------------|
-| `M`                   | The number of revolutions. If zero (default), direct transfer is assumed. |
-| `prograde`            | Controls the inclination of the final orbit. If `True`, inclination between 0 and 90 degrees. If `False`, inclination between 90 and 180 degrees. |
-| `low_path`            | Selects the type of path when more than two solutions are available. No specific advantage unless there are mission constraints. |
-| `maxiter`             | Maximum number of iterations allowed when computing the solution. |
-| `atol`                | Absolute tolerance for the iterative method. |
-| `rtol`                | Relative tolerance for the iterative method. |
-| `full_output`         | If `True`, returns additional information such as the number of iterations. |
+| Parameters    | Description |
+|---------------|-------------|
+| `mu`          | The gravitational parameter, i.e., mass of the attracting body times the gravitational constant. |
+| `r1`          | Initial position vector. |
+| `r2`          | Final position vector. |
+| `tof`         | Time of flight between initial and final vectors. |
+| `M`           | The number of revolutions. If zero (default), direct transfer is assumed. |
+| `prograde`    | Controls the inclination of the final orbit. If `True`, inclination between 0 and 90 degrees. If `False`, inclination between 90 and 180 degrees. |
+| `low_path`    | Selects the type of path when more than two solutions are available. No specific advantage unless there are mission constraints. |
+| `maxiter`     | Maximum number of iterations allowed when computing the solution. |
+| `atol`        | Absolute tolerance for the iterative method. |
+| `rtol`        | Relative tolerance for the iterative method. |
+| `full_output` | If `True`, returns additional information such as the number of iterations. |
 
-| Return | Description |
-|--------|-------------|
-| `v1`   | Initial velocity vector. |
-| `v2`   | Final velocity vector. |
-
-| Additional Returns | Description |
-|--------------------|-------------|
-| `numiter`          | Number of iterations (only if `full_output` is `True`). |
-| `tpi`              | Time per iteration (only if `full_output` is `True`). |
+| Returns       | Description |
+|---------------|-------------|
+| `v1`          | Initial velocity vector. |
+| `v2`          | Final velocity vector. |
+| `numiter`     | Number of iterations (only if `full_output` is `True`). |
+| `tpi`         | Time per iteration (only if `full_output` is `True`). |
