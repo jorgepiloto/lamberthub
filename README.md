@@ -1,6 +1,6 @@
 # lamberthub: a hub of Lambert's problem solvers
 
-<img align="center" width=350px src="https://github.com/jorgepiloto/lamberthub/raw/main/doc/source/_static/logo.png"/>
+<img align="center" src="https://github.com/jorgepiloto/lamberthub/raw/main/doc/source/_static/logo.png"/>
 
 [![Python](https://img.shields.io/pypi/pyversions/lamberthub?logo=pypi)](https://pypi.org/project/lamberthub/)
 [![PyPI](https://img.shields.io/pypi/v/lamberthub.svg?logo=python&logoColor=white)](https://pypi.org/project/lamberthub/)
@@ -11,9 +11,11 @@
 
 A collection of Lambert's problem solvers implemented using modern Python and accelerated via Numba.
 
-**Install the latest stable release by running:**
+## Installation
 
-```bash
+Install `lamberthub` by running:
+
+```console
 python -m pip install lamberthub
 ```
 
