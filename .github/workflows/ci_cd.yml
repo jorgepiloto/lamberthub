@@ -50,7 +50,7 @@ jobs:
       fail-fast: false
     steps:
       - name: "Run tests"
-        uses: ansys/actions/tests-pytest@v4
+        uses: ansys/actions/tests-pytest@v7
         with:
           pytest-extra-args: ${{ matrix.cfg.extra-args }}
 
