@@ -1,6 +1,12 @@
 # lamberthub: a hub of Lambert's problem solvers
 
-<img align="center" src="https://github.com/jorgepiloto/lamberthub/raw/main/doc/source/_static/logo.png"/>
+<img align="left" src="https://github.com/jorgepiloto/lamberthub/raw/main/doc/source/_static/lamberts_problem_geometry.png"/>
+
+A Python library designed to provide solutions to Lambert's problem, a
+classical problem in astrodynamics that involves determining the orbit of a
+spacecraft given two points in space and the time of flight between them. The
+problem is essential for trajectory planning, particularly for interplanetary
+missions.
 
 [![Python](https://img.shields.io/pypi/pyversions/lamberthub?logo=pypi)](https://pypi.org/project/lamberthub/)
 [![PyPI](https://img.shields.io/pypi/v/lamberthub.svg?logo=python&logoColor=white)](https://pypi.org/project/lamberthub/)
@@ -9,7 +15,6 @@
 [![codecov](https://codecov.io/gh/jorgepiloto/lamberthub/branch/main/graph/badge.svg?token=3BY2J5AB8D)](https://codecov.io/gh/jorgepiloto/lamberthub)
 [![DOI](https://zenodo.org/badge/364482782.svg)](https://zenodo.org/badge/latestdoi/364482782)
 
-A collection of Lambert's problem solvers implemented using modern Python and accelerated via Numba.
 
 ## Installation
 
