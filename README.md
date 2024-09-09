@@ -98,8 +98,9 @@ positions are given by:
 ```math
 \vec{r_1} = \begin{bmatrix} 0.159321004 \\ 0.579266185 \\ 0.052359607 \end{bmatrix} \text{ [AU]} \quad \quad
 \vec{r_2} = \begin{bmatrix} 0.057594337 \\ 0.605750797 \\ 0.068345246 \end{bmatrix} \text{ [AU]} \quad \quad
-
 ```
+
+<br>
 
 The time of flight is $\Delta t = 0.010794065 \text{[year]}$. The orbit is
 prograde and direct, thus $M=0$. Remember that when $M=0$, there is only one
