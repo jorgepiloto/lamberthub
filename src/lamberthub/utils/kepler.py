@@ -6,7 +6,6 @@ The required formulas are found to be within Vallado's[1] manual.
 
 References
 ----------
-
 [1] Vallado, D. A. (2001). Fundamentals of astrodynamics and applications
     (Vol. 12). Springer Science & Business Media.
 
@@ -99,7 +98,6 @@ def kepler_from_nu(nu, ecc):
         Mean anomaly.
 
     """
-
     if ecc < 0:
         raise ValueError("Eccentricity cannot be negative!")
     elif 0 <= ecc < 1:

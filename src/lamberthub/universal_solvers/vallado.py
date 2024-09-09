@@ -85,14 +85,11 @@ def vallado2013(
     (Vol. 12). Springer Science & Business Media.
 
     """
-
     # Check that input parameters are safe
     assert_parameters_are_valid(mu, r1, r2, tof, M)
 
     # Retrieve the fundamental geometry of the problem
-    r1_norm, r2_norm, c_norm = [
-        np.linalg.norm(vec) for vec in [r1, r2, r2 - r1]
-    ]
+    r1_norm, r2_norm, c_norm = [np.linalg.norm(vec) for vec in [r1, r2, r2 - r1]]
     dtheta = get_transfer_angle(r1, r2, prograde)
 
     # Compute Vallado's transfer angle parameter

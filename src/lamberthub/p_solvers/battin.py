@@ -82,14 +82,11 @@ def battin1984(
     Technology).
 
     """
-
     # Check that input parameters are safe
     assert_parameters_are_valid(mu, r1, r2, tof, M)
 
     # Retrieve the fundamental geometry of the problem
-    r1_norm, r2_norm, c_norm = [
-        np.linalg.norm(vec) for vec in [r1, r2, r2 - r1]
-    ]
+    r1_norm, r2_norm, c_norm = [np.linalg.norm(vec) for vec in [r1, r2, r2 - r1]]
     semiperimeter = (r1_norm + r2_norm + c_norm) / 2
     dtheta = get_transfer_angle(r1, r2, prograde)
 
@@ -418,7 +415,6 @@ def _xi_at_x(x, levels=125):
     much simpler to implement.
 
     """
-
     # Compute the value of eta, given by equation (52) in [1].
     eta = x / (np.sqrt(1 + x) + 1) ** 2
 
@@ -466,7 +462,6 @@ def _K_at_u(u, levels=1000):
     much simpler to implement.
 
     """
-
     # Initial values
     (
         delta,

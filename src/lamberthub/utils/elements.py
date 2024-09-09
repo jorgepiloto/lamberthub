@@ -11,7 +11,6 @@ Holds routines for converting between different orbital elements sets.
 
 References
 ----------
-
 [1] poliastro: https://github.com/poliastro/poliastro/
 
 """
@@ -39,7 +38,6 @@ def rv_pqw(k, p, ecc, nu):
 
     Returns
     -------
-
     r: ndarray
         Position. Dimension 3 vector
     v: ndarray
@@ -65,9 +63,9 @@ def rv_pqw(k, p, ecc, nu):
         \end{bmatrix}
 
     """
-    pqw = np.array(
-        [[cos(nu), sin(nu), 0], [-sin(nu), ecc + cos(nu), 0]]
-    ) * np.array([[p / (1 + ecc * cos(nu))], [sqrt(k / p)]])
+    pqw = np.array([[cos(nu), sin(nu), 0], [-sin(nu), ecc + cos(nu), 0]]) * np.array(
+        [[p / (1 + ecc * cos(nu))], [sqrt(k / p)]]
+    )
     return pqw
 
 
@@ -225,7 +223,6 @@ def rv2coe(k, r, v, tol=1e-8):
         \right.
 
     """
-
     h = cross(r, v)
     n = cross([0, 0, 1], h)
     e = ((v.dot(v) - k / (norm(r))) * r - r.dot(v) * v) / k

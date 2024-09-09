@@ -1,4 +1,4 @@
-""" A module hosting all algorithms devised by Izzo """
+"""A module hosting all algorithms devised by Izzo"""
 
 import time
 
@@ -84,7 +84,6 @@ def izzo2015(
            Administration.
 
     """
-
     # Check that input parameters are safe
     assert_parameters_are_valid(mu, r1, r2, tof, M)
 
@@ -112,9 +111,7 @@ def izzo2015(
 
     # Correct transfer angle parameter and tangential vectors regarding orbit's
     # inclination
-    ll, i_t1, i_t2 = (
-        (-ll, -i_t1, -i_t2) if prograde is False else (ll, i_t1, i_t2)
-    )
+    ll, i_t1, i_t2 = (-ll, -i_t1, -i_t2) if prograde is False else (ll, i_t1, i_t2)
 
     # Non dimensional time of flight
     T = np.sqrt(2 * mu / s**3) * tof
@@ -129,9 +126,7 @@ def izzo2015(
 
     # Compute the radial and tangential components at initial and final
     # position vectors
-    V_r1, V_r2, V_t1, V_t2 = _reconstruct(
-        x, y, r1_norm, r2_norm, ll, gamma, rho, sigma
-    )
+    V_r1, V_r2, V_t1, V_t2 = _reconstruct(x, y, r1_norm, r2_norm, ll, gamma, rho, sigma)
 
     # Solve for the initial and final velocity
     v1 = V_r1 * (r1 / r1_norm) + V_t1 * i_t1
@@ -231,15 +226,11 @@ def _tof_equation_p(x, y, T, ll):
 
 
 def _tof_equation_p2(x, y, T, dT, ll):
-    return (3 * T + 5 * x * dT + 2 * (1 - ll**2) * ll**3 / y**3) / (
-        1 - x**2
-    )
+    return (3 * T + 5 * x * dT + 2 * (1 - ll**2) * ll**3 / y**3) / (1 - x**2)
 
 
 def _tof_equation_p3(x, y, _, dT, ddT, ll):
-    return (
-        7 * x * ddT + 8 * dT - 6 * (1 - ll**2) * ll**5 * x / y**5
-    ) / (1 - x**2)
+    return (7 * x * ddT + 8 * dT - 6 * (1 - ll**2) * ll**5 * x / y**5) / (1 - x**2)
 
 
 def _compute_T_min(ll, M, maxiter, atol, rtol):
@@ -287,9 +278,7 @@ def _initial_guess(T, ll, M, low_path):
         )
 
         # Filter out the solution
-        x_0 = (
-            np.max([x_0l, x_0r]) if low_path is True else np.min([x_0l, x_0r])
-        )
+        x_0 = np.max([x_0l, x_0r]) if low_path is True else np.min([x_0l, x_0r])
 
         return x_0
 
@@ -330,7 +319,6 @@ def _householder(p0, T0, ll, M, atol, rtol, maxiter):
     this module and is not really reusable.
 
     """
-
     # The clock starts together with the iteration
     tic = time.perf_counter()
     for numiter in range(1, maxiter + 1):

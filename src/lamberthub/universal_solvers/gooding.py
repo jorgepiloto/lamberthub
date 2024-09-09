@@ -1,4 +1,4 @@
-""" A module hosting all algorithms devised by Gooding  """
+"""A module hosting all algorithms devised by Gooding"""
 
 import time
 
@@ -93,15 +93,12 @@ def gooding1990(
            Algorithms,  Interoffice  Memorandum, JPL.
 
     """
-
     # Check that input parameters are safe
     assert_parameters_are_valid(mu, r1, r2, tof, M)
 
     # Norm of the initial and final position vectors.
     r1_norm, r2_norm = [norm(r) for r in [r1, r2]]
-    i_r1, i_r2 = [
-        r / r_norm for r, r_norm in zip([r1, r2], [r1_norm, r2_norm])
-    ]
+    i_r1, i_r2 = [r / r_norm for r, r_norm in zip([r1, r2], [r1_norm, r2_norm])]
 
     # Compute the real transfer angle according to sense of motion. Raise an
     # exception its value is found to be the zero.
@@ -169,7 +166,6 @@ def tlamb(m, q, qsqfm1, x, n):
         Third derivative of the non-dimensional time evaluated at :math:`x`.
 
     """
-
     # Define necessary parameters.
     sw = 0.4
     lm1 = n == -1
@@ -251,9 +247,7 @@ def tlamb(m, q, qsqfm1, x, n):
                 if l2:
                     d2t = (3.0 * t + 5.0 * x * dt + 4.0 * qz * qsqfm1) / u
                 if l3:
-                    d3t = (
-                        8.0 * dt + 7.0 * x * d2t - 12.0 * qz * qz2 * x * qsqfm1
-                    ) / u
+                    d3t = (8.0 * dt + 7.0 * x * d2t - 12.0 * qz * qz2 * x * qsqfm1) / u
 
     else:
         # Compute by series.
@@ -299,9 +293,7 @@ def tlamb(m, q, qsqfm1, x, n):
         told = t
         tterm = term / (2.0 * p + 3.0)
         tqterm = tterm * tqsum
-        t = t - u0i * (
-            (1.5 * p + 0.25) * tqterm / (p * p - 0.25) - ttmold * tq
-        )
+        t = t - u0i * ((1.5 * p + 0.25) * tqterm / (p * p - 0.25) - ttmold * tq)
         ttmold = tterm
         tqterm = tqterm * p
 
@@ -331,9 +323,7 @@ def tlamb(m, q, qsqfm1, x, n):
             told = t
             tterm = term / (2.0 * p + 3.0)
             tqterm = tterm * tqsum
-            t = t - u0i * (
-                (1.5 * p + 0.25) * tqterm / (p * p - 0.25) - ttmold * tq
-            )
+            t = t - u0i * ((1.5 * p + 0.25) * tqterm / (p * p - 0.25) - ttmold * tq)
             ttmold = tterm
             tqterm = tqterm * p
 
@@ -391,7 +381,6 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
         Number of iterations.
 
     """
-
     # Declare auxiliary parameters.
     xpl = 0
     c0, c1, c2, c3, c41, c42 = 1.7, 0.5, 0.03, 0.15, 1.0, 0.24
@@ -422,9 +411,7 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
             w = x + c0 * np.sqrt(2.0 * (1.0 - thr2))
 
             if w < 0.0:
-                x = x - np.sqrt(d8rt(-w)) * (
-                    x + np.sqrt(tdiff / (tdiff + 1.5 * t0))
-                )
+                x = x - np.sqrt(d8rt(-w)) * (x + np.sqrt(tdiff / (tdiff + 1.5 * t0)))
 
             w = 4.0 / (4.0 + tdiff)
             x = x * (1.0 + x * (c1 * w - c2 * x * np.sqrt(w)))
@@ -545,17 +532,13 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
         tdiff = tin - t0
 
         if tdiff <= 0.0:
-            x = xm - np.sqrt(
-                tdiffm / (d2t2 - tdiffm * (d2t2 / tdiff0 - 1.0 / xm**2))
-            )
+            x = xm - np.sqrt(tdiffm / (d2t2 - tdiffm * (d2t2 / tdiff0 - 1.0 / xm**2)))
         else:
             x = -tdiff / (tdiff + 4.0)
             w = x + c0 * np.sqrt(2.0 * (1.0 - thr2))
 
             if w < 0.0:
-                x = x - np.sqrt(d8rt(-w)) * (
-                    x + np.sqrt(tdiff / (tdiff + 1.5 * t0))
-                )
+                x = x - np.sqrt(d8rt(-w)) * (x + np.sqrt(tdiff / (tdiff + 1.5 * t0)))
 
             w = 4.0 / (4.0 + tdiff)
             x = x * (
@@ -618,7 +601,6 @@ def vlamb(mu, r1_norm, r2_norm, dtheta, tof, low_path, maxiter, atol, rtol):
         Number of iterations required to compute solution.
 
     """
-
     # The following yields m = 0 when th = 2pi exactly
     # Neither this nor the original code works for
     # th < 0.0
@@ -651,9 +633,7 @@ def vlamb(mu, r1_norm, r2_norm, dtheta, tof, low_path, maxiter, atol, rtol):
     t = 4.0 * mus * tof / s**2
 
     # Compute the number of solutions and
-    n_sol, x1_sol, x2_sol, numiter, tpi = xlamb(
-        m, q, qsqfm1, t, maxiter, atol, rtol
-    )
+    n_sol, x1_sol, x2_sol, numiter, tpi = xlamb(m, q, qsqfm1, t, maxiter, atol, rtol)
 
     # Filter the solution
     if n_sol > 1:

@@ -85,7 +85,6 @@ def gauss1809(
     Fundamentals of astrodynamics. Courier Dover Publications.
 
     """
-
     # Check that input parameters are safe
     assert_parameters_are_valid(mu, r1, r2, tof, M)
 
@@ -145,10 +144,7 @@ def gauss1809(
     p = (r1_norm * r2_norm * (1 - np.cos(dtheta))) / (
         r1_norm
         + r2_norm
-        - 2
-        * np.sqrt(r1_norm * r2_norm)
-        * np.cos(dtheta / 2)
-        * np.cos(deltaAnomaly / 2)
+        - 2 * np.sqrt(r1_norm * r2_norm) * np.cos(dtheta / 2) * np.cos(deltaAnomaly / 2)
     )
 
     # Evaluate f, g, f_dot and g_dot functions for future solving v1 and v2
@@ -222,9 +218,7 @@ def _get_w(mu, tof, r1_norm, r2_norm, dtheta):
     This is equation number (5.6-3) from Bate's book [2].
 
     """
-    w = (mu * tof**2) / (
-        2 * np.sqrt(r1_norm * r2_norm) * np.cos(dtheta / 2)
-    ) ** 3
+    w = (mu * tof**2) / (2 * np.sqrt(r1_norm * r2_norm) * np.cos(dtheta / 2)) ** 3
     return w
 
 
@@ -298,7 +292,6 @@ def _X_at_x(x, order=50):
     This is equation (5.6-15) from Bate's book, in reference [2].
 
     """
-
     coefficients = [1]
     for n in range(3, (3 + order)):
         coeff = (2 * n) / (2 * n - 1)

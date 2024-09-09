@@ -16,9 +16,7 @@ def test_exception_for_180_transfer_angle():
         v1, v2 = vallado2013(
             mu_earth, r1, r2, tof, maxiter=1, prograde=True, low_path=True
         )
-    assert (
-        "Cannot compute orbit, phase angle is 180 degrees" in excinfo.exconly()
-    )
+    assert "Cannot compute orbit, phase angle is 180 degrees" in excinfo.exconly()
 
 
 def test_raised_maximum_number_of_iterations():

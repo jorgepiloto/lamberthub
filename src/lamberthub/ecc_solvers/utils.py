@@ -34,7 +34,7 @@ def get_geometry(r1, r2, prograde):
     Computes associated problem geometry.
 
     Parameters
-    -----------
+    ----------
     r1: np.array
         Initial position vector.
     r2: np.array
@@ -56,11 +56,8 @@ def get_geometry(r1, r2, prograde):
         Angle between initial position and chord vectors.
 
     """
-
     # Solve for the norms
-    r1_norm, r2_norm, c_norm = [
-        np.linalg.norm(vec) for vec in [r1, r2, (r2 - r1)]
-    ]
+    r1_norm, r2_norm, c_norm = [np.linalg.norm(vec) for vec in [r1, r2, (r2 - r1)]]
 
     # Compute angles
     dtheta = get_transfer_angle(r1, r2, prograde)
@@ -123,7 +120,6 @@ def get_aF(r1_norm, r2_norm):
     [1].
 
     """
-
     a_F = (r1_norm + r2_norm) / 2
     return a_F
 
@@ -179,7 +175,6 @@ def get_fundamental_ellipse_properties(r1_norm, r2_norm, c_norm):
         Orbital parameter / semi-latus rectum of the fundamental ellipse.
 
     """
-
     # Compute the fundamental ellipse parameters
     ecc_F = get_eccF(r1_norm, r2_norm, c_norm)
     a_F = get_aF(r1_norm, r2_norm)
@@ -206,7 +201,6 @@ def ecc_at_eccT(ecc_T, ecc_F):
         Eccentricity of the transfer orbit.
 
     """
-
     ecc = np.sqrt(ecc_T**2 + ecc_F**2)
     return ecc
 
@@ -286,14 +280,11 @@ def eap_from_eccT(ecc_T, geometry):
         Semi-latus rectum of the transfer orbit.
 
     """
-
     # Unpack useful parameters
     r1_norm, r2_norm, c_norm, dtheta, w_c = geometry
 
     # Solve for the fundamental ellipse properties
-    ecc_F, a_F, p_F = get_fundamental_ellipse_properties(
-        r1_norm, r2_norm, c_norm
-    )
+    ecc_F, a_F, p_F = get_fundamental_ellipse_properties(r1_norm, r2_norm, c_norm)
 
     # Compute the transfer orbit eccentricity, semi-latus rectum and
     # semi-major axis.
@@ -332,7 +323,6 @@ def w_at_eccT(ecc_T, ecc_F, w_c):
     This is equation (6) from Quan He's report [2].
 
     """
-
     # Compute the coordinates
     y = ecc_F * np.sin(w_c) + ecc_T * np.cos(w_c)
     x = ecc_F * np.cos(w_c) - ecc_T * np.sin(w_c)
@@ -385,7 +375,6 @@ def kepler_tof_at_eccT(ecc_T, mu, geometry):
         Dimensional time of flight from Kepler's equation.
 
     """
-
     # Unpack useful parameters
     r1_norm, r2_norm, c_norm, dtheta, w_c = geometry
 
@@ -444,7 +433,6 @@ def _f(x, ecc_T_at_x, mu, geometry, tof12_s):
     This is equation (14) from Avanzini's report [1].
 
     """
-
     # Compute the predicted time of flight at particular ecc_T
     ecc_T = ecc_T_at_x(x)
     tof12 = kepler_tof_at_eccT(ecc_T, mu, geometry)
@@ -492,7 +480,6 @@ def coe_at_eccT(ecc_T, r1, r2, sense):
     nu_2: float
         True anomaly at the first final position vector.
     """
-
     # Retrieve auxiliary geometry parameters
     geometry = get_geometry(r1, r2, sense)
     r1_norm, r2_norm, c_norm, dtheta, w_c = geometry
@@ -504,9 +491,7 @@ def coe_at_eccT(ecc_T, r1, r2, sense):
     nu_1, nu_2 = get_true_anomalies(w, dtheta)
 
     # Compute the orbit inclination and RAAN
-    i_r1, i_r2 = [
-        r / r_norm for r, r_norm in zip([r1, r2], [r1_norm, r2_norm])
-    ]
+    i_r1, i_r2 = [r / r_norm for r, r_norm in zip([r1, r2], [r1_norm, r2_norm])]
 
     # Compute a normal vector normal to orbit plane with proper sense
     i_h = get_orbit_normal_vector(r1, r2, sense)

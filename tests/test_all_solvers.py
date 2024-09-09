@@ -1,16 +1,13 @@
-""" Basic unitary tests for checking all available solvers """
+"""Basic unitary tests for checking all available solvers"""
 
 import numpy as np
 from numpy.testing import assert_allclose
 import pytest
 
-from lamberthub import ALL_SOLVERS as ALL_SOLVERS_LAMBERTHUB
-from lamberthub import NON_ROBUST_SOLVERS
+from lamberthub import ALL_SOLVERS as ALL_SOLVERS_LAMBERTHUB, NON_ROBUST_SOLVERS
 
 ALL_SOLVERS = [
-    solver
-    for solver in ALL_SOLVERS_LAMBERTHUB
-    if solver not in NON_ROBUST_SOLVERS
+    solver for solver in ALL_SOLVERS_LAMBERTHUB if solver not in NON_ROBUST_SOLVERS
 ]
 """A list holding all solvers which present a decent accuracy. Most of the
 solvers from the NON_ROBUST_SOLVERS macro were developed in the old days."""
@@ -25,7 +22,6 @@ def test_case_from_vallado_book(solver):
     Example 5.7 from Fundamentals of Astrodynamics and Applications (4th
     Edition), by David A. Vallado
     """
-
     # Initial conditions
     mu_earth = 3.986004418e5  # [km ** 3 / s ** 2]
     r1 = np.array([15945.34, 0.0, 0.0])  # [km]
@@ -50,7 +46,6 @@ def test_case_from_curtiss_book(solver):
     Example 5.2 from Orbital Mechanics for Engineering Students (3rd
     Edition), by Howard D. Curtiss
     """
-
     # Initial conditions
     mu_earth = 3.986004418e5  # [km ** 3 / s ** 2]
     r1 = np.array([5000.0, 10000.0, 2100.0])  # [km]
@@ -85,9 +80,7 @@ def test_case_from_battin_book(solver):
     v1, v2 = solver(mu_sun, r1, r2, tof)
 
     # Expected final results
-    expected_v1 = np.array(
-        [-9.303603251, 3.018641330, 1.536362143]
-    )  # [AU / year]
+    expected_v1 = np.array([-9.303603251, 3.018641330, 1.536362143])  # [AU / year]
 
     # Assert the results
     assert_allclose(v1, expected_v1, atol=ATOL, rtol=RTOL)
@@ -100,7 +93,6 @@ def test_case_from_GMAT_hyperbolic_prograde(solver):
     an initial position and velocity vectors around the Earth and propagating
     the resulting orbit in time.
     """
-
     # Initial conditions
     mu_earth = 3.986004418e5  # [km ** 3 / s ** 2]
     r1 = np.array([7100, 200, 1300])  # [km]
@@ -128,7 +120,6 @@ def test_case_from_GMAT_hyperbolic_retrograde(solver):
     an initial position and velocity vectors around the Earth and propagating
     the resulting orbit in time.
     """
-
     # Initial conditions
     mu_earth = 3.986004418e5  # [km ** 3 / s ** 2]
     r1 = np.array([7100, 200, 1300])  # [km]
@@ -168,7 +159,6 @@ def test_case_from_der_article_I(solver, case):
     Example from Astrodynamics 102, by Gim J. Der. see:
     http://derastrodynamics.com/docs/astrodynamics_102_v2.pdf
     """
-
     # Initial conditions
     mu_earth = 3.986004418e5  # [km ** 3 / s ** 2]
     r1 = np.array([2249.171260, 1898.007100, 5639.599193])  # [km]
@@ -213,7 +203,6 @@ def test_case_from_der_article_II(solver, case):
     Example from Astrodynamics 102, by Gim J. Der. see:
     http://derastrodynamics.com/docs/astrodynamics_102_v2.pdf
     """
-
     # Initial conditions
     mu_earth = 3.986004418e5  # [km ** 3 / s ** 2]
     r1 = np.array([22592.145603, -1599.915239, -19783.950506])  # [km]

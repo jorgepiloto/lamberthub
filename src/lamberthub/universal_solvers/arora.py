@@ -1,5 +1,4 @@
-""" A module hosting all algorithms devised by Arora """
-
+"""A module hosting all algorithms devised by Arora"""
 
 import time
 
@@ -78,7 +77,6 @@ def arora2013(
     728.
 
     """
-
     # TODO: implement solver for the multi-revolution case
     if M > 0:
         raise NotImplementedError(
@@ -92,9 +90,7 @@ def arora2013(
     r1_norm, r2_norm, c_norm = [norm(r) for r in [r1, r2, (r2 - r1)]]
 
     # Unitary vectors along the radial directions
-    i_r1, i_r2 = [
-        r / r_norm for r, r_norm in zip([r1, r2], [r1_norm, r2_norm])
-    ]
+    i_r1, i_r2 = [r / r_norm for r, r_norm in zip([r1, r2], [r1_norm, r2_norm])]
 
     # Compute the transfer angle and the transfer angle parameter
     dtheta = get_transfer_angle(r1, r2, prograde)
@@ -135,14 +131,8 @@ def arora2013(
 
         # Equations (48a and 48b) from official report, used to fix the limits
         # between H1 and H2 regions
-        tof20 = (
-            S * np.sqrt(1 - 20 * tau) * (tau + 0.04940968903 * (1 - 20 * tau))
-        )
-        tof100 = (
-            S
-            * np.sqrt(1 - 100 * tau)
-            * (tau + 0.00999209404 * (1 - 100 * tau))
-        )
+        tof20 = S * np.sqrt(1 - 20 * tau) * (tau + 0.04940968903 * (1 - 20 * tau))
+        tof100 = S * np.sqrt(1 - 100 * tau) * (tau + 0.00999209404 * (1 - 100 * tau))
 
         # Apply the initial guess associated to a particular hyperbolic region.
 
@@ -183,10 +173,7 @@ def arora2013(
             # is directly applied.
             t_star, t_0, t_1 = tof, tof20, tof100
             k = (
-                (
-                    t_1 * (t_0 - t_star) * 10
-                    - t_0 * np.sqrt(20) * (t_1 - t_star)
-                )
+                (t_1 * (t_0 - t_star) * 10 - t_0 * np.sqrt(20) * (t_1 - t_star))
                 / (t_star * (t_0 - t_1))
             ) ** 2
 
@@ -272,9 +259,7 @@ def arora2013(
             # letter M associated with Multi-revolutions. The procedure, as
             # explained in the official report, consists into two parts: compute
             # k_bi and using this value to get the final initial guess.
-            raise NotImplementedError(
-                "Still need to implement Arora's multirev."
-            )
+            raise NotImplementedError("Still need to implement Arora's multirev.")
 
     # Now that the initial guess has been performed, it is possible to start the
     # iterative process. Initialize the timer also.
@@ -302,9 +287,7 @@ def arora2013(
         )
 
         # Solve Halley's step and check if convergence was achieved
-        deltak = -(tofc - tof) / (
-            tofc_p - (tofc - tof) * tofc_pp / (2.0 * tofc_p)
-        )
+        deltak = -(tofc - tof) / (tofc_p - (tofc - tof) * tofc_pp / (2.0 * tofc_p))
 
         # Update the value of the independent variable and carry a new iteration
         k += deltak
@@ -340,7 +323,6 @@ def arora2013(
 
 def _get_gammas(F_i, F_n, F_star):
     """Compute different gamma values"""
-
     gamma1, gamma2, gamma3 = (
         F_i * (F_star - F_n),
         F_star * (F_n - F_i),
@@ -377,7 +359,6 @@ def _get_x(F_0, F_1, F_i, F_star, Z, alpha):
     This is equation (44) from original report.
 
     """
-
     x = (
         (Z * (F_0 - F_star) * (F_1 - F_i))
         / ((F_i - F_star) * (F_1 - F_0) * Z + (F_0 - F_i) * (F_1 - F_star))
@@ -409,7 +390,6 @@ def _get_W(k, M, epsilon=2e-2):
     This is equation (27) from official report.
 
     """
-
     # Evaluate the sign of k
     m = 2 - k**2
     sgn_k = np.sign(k)
@@ -419,9 +399,9 @@ def _get_W(k, M, epsilon=2e-2):
 
     if -sq2 <= k < (sq2 - epsilon):
         # Elliptical orbits
-        W = (
-            (1 - sgn_k) * np.pi + sgn_k * np.arccos(1 - m) + 2 * np.pi * M
-        ) / (np.sqrt(m**3)) - k / m
+        W = ((1 - sgn_k) * np.pi + sgn_k * np.arccos(1 - m) + 2 * np.pi * M) / (
+            np.sqrt(m**3)
+        ) - k / m
 
     elif k > sq2 + epsilon:
         # Hyperbolic orbits
@@ -470,7 +450,6 @@ def _get_Wsprime(k):
     author assumed it was trivial.
 
     """
-
     # Allocate auxiliary variables
     sq2 = np.sqrt(2)
     v = k - sq2
@@ -509,7 +488,6 @@ def _get_Ws2prime(k):
     author assumed it was trivial.
 
     """
-
     # Allocate auxiliary variables
     sq2 = np.sqrt(2)
     v = k - sq2
@@ -550,7 +528,6 @@ def _get_Wprime(k, W, epsilon=2e-2):
     This is equation set (38) from official report.
 
     """
-
     # Evaluate m
     m = 2 - k**2
 
@@ -596,7 +573,6 @@ def _get_W2prime(k, W, W_prime, epsilon=2e-2):
     This is equation set (39) from official report.
 
     """
-
     # Evaluate m
     m = 2 - k**2
 
@@ -642,6 +618,5 @@ def _get_TOF(k, tau, S, W):
     This is equation (26) form official report.
 
     """
-
     TOF = S * np.sqrt(1 - k * tau) * (tau + (1 - k * tau) * W)
     return TOF

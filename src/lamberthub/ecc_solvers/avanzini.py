@@ -102,7 +102,6 @@ def avanzini2008(
     reproduce original report figures.
 
     """
-
     # Check proper value of multi-revolution. Although we could not accept M at
     # all, this ensures all routines within the library work under the same
     # number and type of parameters.
@@ -148,9 +147,7 @@ def avanzini2008(
     p, ecc, inc, raan, argp, nu_1, nu_2 = coe_at_eccT(ecc_T, r1, r2, prograde)
 
     # Compute the velocity vectors from the classic orbital elements
-    (_, v1), (_, v2) = [
-        coe2rv(mu, p, ecc, inc, raan, argp, nu) for nu in [nu_1, nu_2]
-    ]
+    (_, v1), (_, v2) = [coe2rv(mu, p, ecc, inc, raan, argp, nu) for nu in [nu_1, nu_2]]
 
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
@@ -159,12 +156,9 @@ def _get_eccT_limits(geometry):
     """
     Computes transverse eccentricity value limits as of problem geometry.
     """
-
     # Solve for the fundamental ellipse properties
     r1_norm, r2_norm, c_norm, dtheta, _ = geometry
-    ecc_F, a_F, p_F = get_fundamental_ellipse_properties(
-        r1_norm, r2_norm, c_norm
-    )
+    ecc_F, a_F, p_F = get_fundamental_ellipse_properties(r1_norm, r2_norm, c_norm)
 
     # Compute the limits
     ecc_max = -1 / np.cos(dtheta / 2)
@@ -198,7 +192,6 @@ def _get_eccT_at_x(geometry):
     These are equations (16) and (18) from the official report [1].
 
     """
-
     # Compute the limits of the ecc_T value
     ecc_H, ecc_P = _get_eccT_limits(geometry)
     _, _, _, dtheta, _ = geometry

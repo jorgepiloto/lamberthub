@@ -1,4 +1,4 @@
-""" Utilities related to angles computations """
+"""Utilities related to angles computations"""
 
 import numpy as np
 from numpy import cross, dot
@@ -24,7 +24,6 @@ def get_transfer_angle(r1, r2, prograde):
         Transfer angle in radians.
 
     """
-
     # Check if both position vectors are collinear. If so, check if the transfer
     # angle is 0 or pi.
     if np.all(np.cross(r1, r2) == 0):
@@ -70,7 +69,6 @@ def get_orbit_normal_vector(r1, r2, prograde):
         Unitary vector aligned with orbit specific angular momentum.
 
     """
-
     # Compute the normal vector and its projection onto the vertical axis
     i_h = np.cross(r1, r2) / norm(np.cross(r1, r2))
 
@@ -110,7 +108,6 @@ def get_orbit_inc_and_raan_from_position_vectors(r1, r2, prograde):
         Right ascension of the ascending node.
 
     """
-
     # Get a unitary vector aligned in direction and sense with the specific
     # angular momentum one.
     i_h = get_orbit_normal_vector(r1, r2, prograde)
@@ -153,7 +150,6 @@ def nu_to_E(nu, ecc):
         Eccentric anomaly.
 
     """
-
     E = 2 * np.arctan(np.sqrt((1 - ecc) / (1 + ecc)) * np.tan(nu / 2))
     return E
 
@@ -175,7 +171,6 @@ def E_to_nu(E, ecc):
         True anomaly.
 
     """
-
     nu = 2 * np.arctan(np.sqrt((1 + ecc) / (1 - ecc)) * np.tan(E / 2))
     return nu
 
