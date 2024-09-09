@@ -53,7 +53,8 @@ from lamberthub import authorYYYY
 
 
 v1, v2 = authorYYYY(
-    mu, r1, r2, tof, M, prograde=True, low_path=True, maxiter=35, atol=1e-5, rtol=1e-7, full_output=False
+    mu, r1, r2, tof, M=0, prograde=True, low_path=True,  # Type of solution
+    maxiter=35, atol=1e-5, rtol=1e-7, full_output=False  # Iteration config
 )
 ```
 
