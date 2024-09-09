@@ -13,6 +13,10 @@ publication year, for solving different variations of Lambert's problem. These
 algorithms can handle different types of orbits, including multi-revolution
 paths and direct transfers.
 
+The library allows users to compare performance and accuracy between solvers
+and provides a unified framework for using and potentially contributing new
+algorithms.
+
 [![Python](https://img.shields.io/pypi/pyversions/lamberthub?logo=pypi)](https://pypi.org/project/lamberthub/)
 [![PyPI](https://img.shields.io/pypi/v/lamberthub.svg?logo=python&logoColor=white)](https://pypi.org/project/lamberthub/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
