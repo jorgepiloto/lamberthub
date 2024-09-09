@@ -1,4 +1,4 @@
-"""A collection of checkers for raising custom exceptions if required"""
+"""A collection of checkers."""
 
 import numpy as np
 
