@@ -1,6 +1,6 @@
 # lamberthub: a hub of Lambert's problem solvers
 
-<img align="left" src="https://github.com/jorgepiloto/lamberthub/raw/main/doc/source/_static/lamberts_problem_geometry.png"/>
+<img align="left" width=350px src="https://github.com/jorgepiloto/lamberthub/raw/main/doc/source/_static/lamberts_problem_geometry.png"/>
 
 A Python library designed to provide solutions to Lambert's problem, a
 classical problem in astrodynamics that involves determining the orbit of a
