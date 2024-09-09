@@ -14,7 +14,6 @@ algorithms can handle different types of orbits, including multi-revolution
 paths and direct transfers.
 
 |
-|
 
 [![Python](https://img.shields.io/pypi/pyversions/lamberthub?logo=pypi)](https://pypi.org/project/lamberthub/)
 [![PyPI](https://img.shields.io/pypi/v/lamberthub.svg?logo=python&logoColor=white)](https://pypi.org/project/lamberthub/)
