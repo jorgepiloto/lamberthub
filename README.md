@@ -133,7 +133,7 @@ print(f"Final velocity:   {v2} [AU / years]")
 
 ```
 Initial velocity: [-9.303608    3.01862016  1.53636008] [AU / years]
-Final velocity: [-9.5111862   1.88884006  1.4213781 ] [AU / years]
+Final velocity:   [-9.511186    1.88884006  1.42137810] [AU / years]
 ```
 
 Directly taken from *An Introduction to the Mathematics and Methods of
