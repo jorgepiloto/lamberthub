@@ -8,6 +8,11 @@ spacecraft given two points in space and the time of flight between them. The
 problem is essential for trajectory planning, particularly for interplanetary
 missions.
 
+Lamberthub implements multiple algorithms, each named after its author and
+publication year, for solving different variations of Lambert's problem. These
+algorithms can handle different types of orbits, including multi-revolution
+paths and direct transfers.
+
 [![Python](https://img.shields.io/pypi/pyversions/lamberthub?logo=pypi)](https://pypi.org/project/lamberthub/)
 [![PyPI](https://img.shields.io/pypi/v/lamberthub.svg?logo=python&logoColor=white)](https://pypi.org/project/lamberthub/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
