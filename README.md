@@ -84,3 +84,9 @@ can be used.
 | `v2`          | Final velocity vector. |
 | `numiter`     | Number of iterations (only if `full_output` is `True`). |
 | `tpi`         | Time per iteration (only if `full_output` is `True`). |
+
+## Examples
+
+$$
+\vec{r_1} = \begin{bmatrix} 0.159321004 \\ 0.579266185 \\ 0.052359607 \end{bmatrix} \text{ [AU]} \quad ; \quad \vec{r_2} = \begin{bmatrix} 0.057594337 \\ 0.605750797 \\ 0.068345246 \end{bmatrix} \text{ [AU] }
+$$
