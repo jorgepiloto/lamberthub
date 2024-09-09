@@ -102,7 +102,7 @@ positions are given by:
 
 <br>
 
-The time of flight is $\Delta t = 0.010794065 \text{[year]}$. The orbit is
+The time of flight is $\Delta t = 0.010794065$ years. The orbit is
 prograde and direct, thus $M=0$. Remember that when $M=0$, there is only one
 possible solution, so the `low_path` flag does not play any role in this
 problem.
