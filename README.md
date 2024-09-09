@@ -13,7 +13,7 @@ publication year, for solving different variations of Lambert's problem. These
 algorithms can handle different types of orbits, including multi-revolution
 paths and direct transfers.
 
-<br>
+<br><br>
 
 [![Python](https://img.shields.io/pypi/pyversions/lamberthub?logo=pypi)](https://pypi.org/project/lamberthub/)
 [![PyPI](https://img.shields.io/pypi/v/lamberthub.svg?logo=python&logoColor=white)](https://pypi.org/project/lamberthub/)
