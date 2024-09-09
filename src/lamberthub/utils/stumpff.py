@@ -1,6 +1,7 @@
-"""
-This module holds the so-called Stumpff functions. These set of functions
-usually appear in a plethora of equations within the subject of astrodynamics.
+"""Module containing the implementation of Stumpff functions.
+
+These set of functions usually appear in a plethora of equations within the
+subject of astrodynamics.
 """
 
 from math import gamma
