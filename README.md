@@ -59,8 +59,7 @@ v1, v2 = authorYYYY(
 ```
 
 where `author` is the name of the author which developed the solver and `YYYY`
-the year of publication. Any of the solvers hosted by the `ALL_SOLVERS` macro
-can be used.
+the year of publication. Any of the solvers hosted by the `ALL_SOLVERS` list.
 
 ### Parameters and Returns
 
@@ -123,19 +122,18 @@ r1 = np.array([0.159321004, 0.579266185, 0.052359607])
 r2 = np.array([0.057594337, 0.605750797, 0.068345246])
 tof = 0.010794065
 
-v1, v2 = gooding1990(mu_sun, r1, r2, tof)
+v1, v2 = gooding1990(mu_sun, r1, r2, tof, M=0, prograde=True)
 print(f"Initial velocity: {v1} [AU / years]")
 print(f"Final velocity:   {v2} [AU / years]")
 ```
 
 **Result**
 
-```
+```console
 Initial velocity: [-9.303608    3.01862016  1.53636008] [AU / years]
 Final velocity:   [-9.511186    1.88884006  1.42137810] [AU / years]
 ```
 
 Directly taken from *An Introduction to the Mathematics and Methods of
-Astrodynamics, revised edition, by R.H. Battin, problem 7-12.*.
-
+Astrodynamics, revised edition, by R.H. Battin, problem 7-12*.
 
