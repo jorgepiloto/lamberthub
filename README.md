@@ -66,7 +66,7 @@ can be used.
 
 | Parameters    | Description |
 |---------------|-------------|
-| `mu`          | The gravitational parameter, i.e., mass of the attracting body times the gravitational constant. |
+| `mu`          | The gravitational parameter, i.e., mass of the attracting body times the gravitational constant. Equivalent to gravitational constant times the mass of the attractor body. |
 | `r1`          | Initial position vector. |
 | `r2`          | Final position vector. |
 | `tof`         | Time of flight between initial and final vectors. |
