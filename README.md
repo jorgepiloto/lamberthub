@@ -68,7 +68,6 @@ can be used.
 | `r1`         | Initial position vector. |
 | `r2`         | Final position vector. |
 | `tof`        | Time of flight between initial and final vectors. |
-|--------------|-------------|
 | `M`          | The number of revolutions. If zero (default), direct transfer is assumed. |
 | `prograde`   | Controls the inclination of the final orbit. If `True`, inclination between 0 and 90 degrees. If `False`, inclination between 90 and 180 degrees. |
 | `low_path`   | Selects the type of path when more than two solutions are available. No specific advantage unless there are mission constraints. |
@@ -83,6 +82,5 @@ can be used.
 |..--------|-------------|
 | `v1`     | Initial velocity vector. |
 | `v2`     | Final velocity vector. |
-|----------|-------------|
 | `numiter`| Number of iterations (only if `full_output` is `True`). |
 | `tpi`    | Time per iteration (only if `full_output` is `True`). |
