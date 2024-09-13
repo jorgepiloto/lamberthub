@@ -90,7 +90,6 @@ jobs:
       - name: "Download distribution artifacts"
         uses: actions/download-artifact@v4
         with:
-          name: ${{ env.LIBRARY_NAME }}
           path: dist
 
       - name: "Release to GitHub"
