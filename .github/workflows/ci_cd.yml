@@ -57,6 +57,8 @@ jobs:
       - name: "Upload coverage"
         uses: codecov/codecov-action@v4
         if: matrix.cfg.python-version == env.MAIN_PYTHON_VERSION && matrix.os == 'ubuntu-latest'
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   build-library:
     name: "Build library"
