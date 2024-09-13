@@ -47,6 +47,7 @@ tests = [
 ]
 
 [project.urls]
+Homepage = "https://github.com/jorgepiloto/lamberthub"
 Source = "https://github.com/jorgepiloto/lamberthub"
 Issues = "https://github.com/jorgepiloto/lamberthub/issues"
 Documentation = "https://github.com/jorgepiloto/lamberthub/blob/main/README.md"
