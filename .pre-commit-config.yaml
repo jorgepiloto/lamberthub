@@ -12,4 +12,4 @@ repos:
   rev: v2.3.0
   hooks:
   - id: codespell
-    args: ["--ignore-words=./doc/styles/Vocab/LAMBERTHUB/accept.txt"]
+    args: ["--ignore-words=./doc/styles/config/vocabularies/LAMBERTHUB/accept.txt"]
