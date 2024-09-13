@@ -92,6 +92,10 @@ jobs:
         with:
           path: dist
 
+      - name: "List artifacts"
+        run: |
+          ls -R dist
+
       - name: "Release to GitHub"
         uses: softprops/action-gh-release@v2
         with:
