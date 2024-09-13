@@ -94,5 +94,5 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: |
-            dist/${{ env.LIBRARY_NAME }}/*.whl
-            dist/${{ env.LIBRARY_NAME }}/*.tar.gz
+            dist/${{ env.LIBRARY_NAME }}-artifacts/*.whl
+            dist/${{ env.LIBRARY_NAME }}-artifacts/*.tar.gz
