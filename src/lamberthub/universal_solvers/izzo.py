@@ -4,6 +4,8 @@ from numba import njit as jit
 import numpy as np
 from numpy import cross, pi
 
+from lamberthub.linalg import norm
+
 
 @jit
 def izzo2015(
@@ -374,8 +376,3 @@ def hyp2f1b(x):
             if res_old == res:
                 return res
             ii += 1
-
-
-@jit
-def norm(arr):
-    return np.sqrt(arr @ arr)

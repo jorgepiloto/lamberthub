@@ -1,26 +1,30 @@
 """Utilities related to angles computations"""
 
+from numba import njit as jit
 import numpy as np
-from numpy import cross, dot
-from numpy.linalg import norm
+
+from lamberthub.linalg import cross, dot, norm
 
 
+@jit
 def get_transfer_angle(r1, r2, prograde):
-    """
-    Solves for the transfer angle being known the sense of rotation.
+    """Compute the transfer angle of the trajectory.
+
+    Initial and final position vectors are required together with the direction
+    of motion.
 
     Parameters
     ----------
-    r1: np.array
+    r1 : ~np.array
         Initial position vector.
-    r2: np.array
+    r2 : ~np.array
         Final position vector.
-    prograde: bool
-        If True, it assumes prograde motion, otherwise assumes retrograde.
+    prograde : bool
+        ``True`` for prograde motion, ``False`` otherwise.
 
     Returns
     -------
-    dtheta: float
+    dtheta : float
         Transfer angle in radians.
 
     """
@@ -31,7 +35,7 @@ def get_transfer_angle(r1, r2, prograde):
 
     # Solve for a unitary vector normal to the vector plane. Its direction and
     # sense the one given by the cross product (right-hand) from r1 to r2.
-    h = cross(r1, r2) / norm(np.cross(r1, r2))
+    h = np.cross(r1, r2) / norm(np.cross(r1, r2))
 
     # Compute the projection of the normal vector onto the reference plane.
     alpha = dot(np.array([0, 0, 1]), h)
@@ -74,7 +78,7 @@ def get_orbit_normal_vector(r1, r2, prograde):
 
     # Solve the projection onto the positive vertical direction of the
     # fundamental plane.
-    alpha = dot(np.array([0, 0, 1]), i_h)
+    alpha = np.array([0, 0, 1]) @ i_h
 
     # An prograde orbit always has a positive vertical component of its specific
     # angular momentum. Therefore, we just need to check for this condition
