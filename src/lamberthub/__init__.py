@@ -9,7 +9,7 @@ from lamberthub.universal_solvers.izzo import izzo2015
 from lamberthub.universal_solvers.vallado import vallado2013
 
 __author__ = "Jorge Martinez Garrido"
-__version__ = "1.0.dev0"
+__version__ = "1.0.0a1"
 
 ALL_SOLVERS = [
     gauss1809,
