@@ -220,7 +220,6 @@ def _tof_equation_y(x, y, T0, ll, M):
 
 @jit
 def _tof_equation_p(x, y, T, ll):
-    # TODO: What about derivatives when x approaches 1?
     return (3 * T * x - 2 + 2 * ll**3 * x / y) / (1 - x**2)
 
 

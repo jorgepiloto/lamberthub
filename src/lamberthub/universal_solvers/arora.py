@@ -586,9 +586,8 @@ def _get_W2prime(k, W, W_prime, epsilon=2e-2):
         W_2prime = _get_Ws2prime(k)
 
     else:
-        # TODO: a minus sign before "m" is imposed in original report. However,
-        # if placed, it does not provide convergence. This needs further
-        # investigation
+        # TODO: a minus sign before "m" is imposed in original report
+        # https://github.com/jorgepiloto/lamberthub/issues/151
 
         # W_2prime = (5 * W_prime * k + 3 * W) / -m
         W_2prime = (5 * W_prime * k + 3 * W) / m

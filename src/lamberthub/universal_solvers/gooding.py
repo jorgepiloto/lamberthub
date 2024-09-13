@@ -488,9 +488,7 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
                 # GOTO 3
                 goto3 = True
 
-    # --- THE ITERATION METHOD STARTS NOW ---
-    # The iterative Halley method starts now
-    # TODO: THIS IS THE HALLEY METHOD
+    # --- THE ITERATION METHOD FOR HALLEY STARTS NOW ---
 
     while True:
         # 5: LINE OF STATEMENT
