@@ -63,13 +63,26 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   build-library:
-    name: "Build library"
-    runs-on: ubuntu-latest
+    name: "Build library in ${{ matrix.os}} with ${{ matrix.python }}"
+    runs-on: ${{ matrix.os }}
     needs: tests
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ['3.10', '3.11', '3.12']
+        should-release:
+          - ${{ github.event_name == 'push' && contains(github.ref, 'refs/tags') }}
+        exclude:
+          - should-release: false
+            os: macos-latest
+          - should-release: false
+            os: windows-latest
     steps:
       - uses: ansys/actions/build-library@v7
         with:
-          library-name: ${{ env.LIBRARY_NAME }}
+          library-name: ${{ env.LIBRARY_NAME }}-${{ matrix.os }}-${{ matrix.python }}
+          python-version: ${{ matrix.python }}
 
   release:
     name: "Release"
@@ -87,7 +100,15 @@ jobs:
           library-name: ${{ env.LIBRARY_NAME }}
           use-trusted-publisher: true
 
+      - name: "Download distribution artifacts"
+        uses: actions/download-artifacs@v4
+        with:
+          path: dist
+          pattern: ${{ env.LIBRARY_NAME }}
+          merge-multiple: true
+
       - name: "Release to GitHub"
-        uses: ansys/actions/release-github@v7
+        uses: softprops/action-gh-release@v2
         with:
           library-name: ${{ env.LIBRARY_NAME }}
+          files: dist
