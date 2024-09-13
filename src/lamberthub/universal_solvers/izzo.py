@@ -1,7 +1,5 @@
 """A module hosting all algorithms devised by Izzo"""
 
-import time
-
 import numpy as np
 from numpy import cross, pi
 from numpy.linalg import norm
@@ -21,7 +19,6 @@ def izzo2015(
     maxiter=35,
     atol=1e-5,
     rtol=1e-7,
-    full_output=False,
 ):
     r"""
     Solves Lambert problem using Izzo's devised algorithm.
@@ -46,8 +43,6 @@ def izzo2015(
         Absolute tolerance.
     rtol: float
         Relative tolerance.
-    full_output: bool
-        If True, the number of iterations is also returned.
 
     Returns
     -------
@@ -117,7 +112,7 @@ def izzo2015(
     T = np.sqrt(2 * mu / s**3) * tof
 
     # Find solutions and filter them
-    x, y, numiter, tpi = _find_xy(ll, T, M, maxiter, atol, rtol, low_path)
+    x, y = _find_xy(ll, T, M, maxiter, atol, rtol, low_path)
 
     # Reconstruct
     gamma = np.sqrt(mu * s / 2)
@@ -131,8 +126,7 @@ def izzo2015(
     # Solve for the initial and final velocity
     v1 = V_r1 * (r1 / r1_norm) + V_t1 * i_t1
     v2 = V_r2 * (r2 / r2_norm) + V_t2 * i_t2
-
-    return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
+    return v1, v2
 
 
 def _reconstruct(x, y, r1, r2, ll, gamma, rho, sigma):
@@ -167,10 +161,10 @@ def _find_xy(ll, T, M, maxiter, atol, rtol, low_path):
     x_0 = _initial_guess(T, ll, M, low_path)
 
     # Start Householder iterations from x_0 and find x, y
-    x, numiter, tpi = _householder(x_0, T, ll, M, atol, rtol, maxiter)
+    x = _householder(x_0, T, ll, M, atol, rtol, maxiter)
     y = _compute_y(x, ll)
 
-    return x, y, numiter, tpi
+    return x, y
 
 
 def _compute_y(x, ll):
@@ -295,7 +289,7 @@ def _halley(p0, T0, ll, atol, rtol, maxiter):
     this module and is not really reusable.
 
     """
-    for ii in range(1, maxiter + 1):
+    for _ in range(1, maxiter + 1):
         y = _compute_y(p0, ll)
         fder = _tof_equation_p(p0, y, T0, ll)
         fder2 = _tof_equation_p2(p0, y, T0, fder, ll)
@@ -322,9 +316,7 @@ def _householder(p0, T0, ll, M, atol, rtol, maxiter):
     this module and is not really reusable.
 
     """
-    # The clock starts together with the iteration
-    tic = time.perf_counter()
-    for numiter in range(1, maxiter + 1):
+    for _ in range(1, maxiter + 1):
         y = _compute_y(p0, ll)
         fval = _tof_equation_y(p0, y, T0, ll, M)
         T = fval + T0
@@ -339,11 +331,7 @@ def _householder(p0, T0, ll, M, atol, rtol, maxiter):
         )
 
         if abs(p - p0) < rtol * np.abs(p0) + atol:
-            # Stop the clock and compute the time per iteration
-            tac = time.perf_counter()
-            tpi = (tac - tic) / numiter
-
-            return p, numiter, tpi
+            return p
         p0 = p
 
     raise RuntimeError("Failed to converge")
