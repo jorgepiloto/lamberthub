@@ -81,11 +81,11 @@ jobs:
       contents: write
     steps:
 
-      - name: "Release to the public PyPI repository"
-        uses: ansys/actions/release-pypi-public@v7
-        with:
-          library-name: ${{ env.LIBRARY_NAME }}
-          use-trusted-publisher: true
+      #      - name: "Release to the public PyPI repository"
+      #        uses: ansys/actions/release-pypi-public@v7
+      #        with:
+      #          library-name: ${{ env.LIBRARY_NAME }}
+      #          use-trusted-publisher: true
 
       - name: "Download distribution artifacts"
         uses: actions/download-artifact@v4
