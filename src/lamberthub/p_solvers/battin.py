@@ -216,7 +216,7 @@ def _battin_second_equation(u, h1, h2):
 
 
 def _get_lambda(c, s, dtheta):
-    """Comptues the transfer angle parameter.
+    """Compute the transfer angle parameter.
 
     Parameters
     ----------

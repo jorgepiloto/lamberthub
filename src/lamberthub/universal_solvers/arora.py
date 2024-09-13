@@ -78,6 +78,7 @@ def arora2013(
 
     """
     # TODO: implement solver for the multi-revolution case
+    # https://github.com/jorgepiloto/lamberthub/issues/3
     if M > 0:
         raise NotImplementedError(
             "See https://github.com/jorgepiloto/lamberthub/issues/3"
@@ -541,9 +542,8 @@ def _get_Wprime(k, W, epsilon=2e-2):
         W_prime = _get_Wsprime(k)
 
     else:
-        # TODO: a minus sign before "m" is imposed in original report. However,
-        # if placed, it does not provide convergence. This needs further
-        # investigation
+        # TODO: a minus sign before "m" is imposed in original report
+        # https://github.com/jorgepiloto/lamberthub/issues/151
 
         # W_prime = (-2 + 3 * W * k) / -m
         W_prime = (-2 + 3 * W * k) / m
