@@ -81,22 +81,18 @@ jobs:
       contents: write
     steps:
 
-      #      - name: "Release to the public PyPI repository"
-      #        uses: ansys/actions/release-pypi-public@v7
-      #        with:
-      #          library-name: ${{ env.LIBRARY_NAME }}
-      #          use-trusted-publisher: true
+      - name: "Release to the public PyPI repository"
+        uses: ansys/actions/release-pypi-public@v7
+        with:
+          library-name: ${{ env.LIBRARY_NAME }}
+          use-trusted-publisher: true
 
       - name: "Download distribution artifacts"
         uses: actions/download-artifact@v4
-        with:
-          path: dist
-
-      - name: "List artifacts"
-        run: |
-          ls -R dist
 
       - name: "Release to GitHub"
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/lamberthub-artifacts
+          files: |
+            dist/${{ env.LIBRARY_NAME }}/*.whl
+            dist/${{ env.LIBRARY_NAME }}/*.tar.gz
