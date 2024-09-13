@@ -263,11 +263,14 @@ def _initial_guess(T, ll, M, low_path):
         elif T < T_1:
             x_0 = 5 / 2 * T_1 / T * (T_1 - T) / (1 - ll**5) + 1
         else:
-            # This is the real condition, which is not exactly equivalent
-            # elif T_1 < T < T_0
-            x_0 = (T_0 / T) ** (np.log2(T_1 / T_0)) - 1
+            # This is the condition T_1 < T < T_0
+            # Corrected initial guess for piecewise equation right after
+            # expression (30) in the original paper is incorrect.
+            # See https://github.com/poliastro/poliastro/issues/1362
+            x_0 = np.exp(np.log(2) * np.log(T / T_0) / np.log(T_1 / T_0)) - 1
 
         return x_0
+
     else:
         # Multiple revolution
         x_0l = (((M * pi + pi) / (8 * T)) ** (2 / 3) - 1) / (
