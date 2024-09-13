@@ -95,5 +95,4 @@ jobs:
       - name: "Release to GitHub"
         uses: softprops/action-gh-release@v2
         with:
-          library-name: ${{ env.LIBRARY_NAME }}
-          files: dist
+          files: dist/lamberthub-artifacts
