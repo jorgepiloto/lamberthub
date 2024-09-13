@@ -53,6 +53,9 @@ jobs:
         uses: ansys/actions/tests-pytest@v7
         with:
           pytest-extra-args: ${{ matrix.cfg.extra-args }}
+        env:
+          # Do not run Numba when measuring code coverage to get accurate values
+          NUMBA_DISABLE_JIT: 1
 
       - name: "Upload coverage"
         uses: codecov/codecov-action@v4

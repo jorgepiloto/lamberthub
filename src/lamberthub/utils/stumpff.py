@@ -6,11 +6,11 @@ subject of astrodynamics.
 
 from math import gamma
 
-from numba import njit
+from numba import njit as jit
 import numpy as np
 
 
-@njit
+@jit
 def c2(psi):
     r"""Second Stumpff function.
 
@@ -38,7 +38,7 @@ def c2(psi):
     return res
 
 
-@njit
+@jit
 def c3(psi):
     r"""Third Stumpff function.
 
