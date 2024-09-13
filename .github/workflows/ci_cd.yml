@@ -39,7 +39,7 @@ jobs:
   tests:
     name: "Tests"
     runs-on: ${{ matrix.os }}
-    needs: code-style
+    needs: [code-style, doc-style]
     strategy:
       matrix:
         os: [ubuntu-latest]
