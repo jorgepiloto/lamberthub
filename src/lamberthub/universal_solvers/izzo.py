@@ -1,13 +1,11 @@
 """A module hosting all algorithms devised by Izzo"""
 
+from numba import njit as jit
 import numpy as np
 from numpy import cross, pi
-from numpy.linalg import norm
-from scipy.special import hyp2f1
-
-from lamberthub.utils.assertions import assert_parameters_are_valid
 
 
+@jit
 def izzo2015(
     mu,
     r1,
@@ -80,7 +78,7 @@ def izzo2015(
 
     """
     # Check that input parameters are safe
-    assert_parameters_are_valid(mu, r1, r2, tof, M)
+    # assert_parameters_are_valid(mu, r1, r2, tof, M)
 
     # Chord
     c = r2 - r1
@@ -129,6 +127,7 @@ def izzo2015(
     return v1, v2
 
 
+@jit
 def _reconstruct(x, y, r1, r2, ll, gamma, rho, sigma):
     """Reconstruct solution velocity vectors."""
     V_r1 = gamma * ((ll * y - x) - rho * (ll * y + x)) / r1
@@ -138,6 +137,7 @@ def _reconstruct(x, y, r1, r2, ll, gamma, rho, sigma):
     return [V_r1, V_r2, V_t1, V_t2]
 
 
+@jit
 def _find_xy(ll, T, M, maxiter, atol, rtol, low_path):
     """Computes all x, y for given number of revolutions."""
     # For abs(ll) == 1 the derivative is not continuous
@@ -167,11 +167,13 @@ def _find_xy(ll, T, M, maxiter, atol, rtol, low_path):
     return x, y
 
 
+@jit
 def _compute_y(x, ll):
     """Computes y."""
     return np.sqrt(1 - ll**2 * (1 - x**2))
 
 
+@jit
 def _compute_psi(x, y, ll):
     """Computes psi.
 
@@ -192,17 +194,19 @@ def _compute_psi(x, y, ll):
         return 0.0
 
 
+@jit
 def _tof_equation(x, T0, ll, M):
     """Time of flight equation."""
     return _tof_equation_y(x, _compute_y(x, ll), T0, ll, M)
 
 
+@jit
 def _tof_equation_y(x, y, T0, ll, M):
     """Time of flight equation with externally computated y."""
     if M == 0 and np.sqrt(0.6) < x < np.sqrt(1.4):
         eta = y - ll * x
         S_1 = (1 - ll - x * eta) * 0.5
-        Q = 4 / 3 * hyp2f1(3, 1, 5 / 2, S_1)
+        Q = 4 / 3 * hyp2f1b(S_1)
         T_ = (eta**3 * Q + 4 * ll * eta) * 0.5
     else:
         psi = _compute_psi(x, y, ll)
@@ -214,19 +218,23 @@ def _tof_equation_y(x, y, T0, ll, M):
     return T_ - T0
 
 
+@jit
 def _tof_equation_p(x, y, T, ll):
     # TODO: What about derivatives when x approaches 1?
     return (3 * T * x - 2 + 2 * ll**3 * x / y) / (1 - x**2)
 
 
+@jit
 def _tof_equation_p2(x, y, T, dT, ll):
     return (3 * T + 5 * x * dT + 2 * (1 - ll**2) * ll**3 / y**3) / (1 - x**2)
 
 
+@jit
 def _tof_equation_p3(x, y, _, dT, ddT, ll):
     return (7 * x * ddT + 8 * dT - 6 * (1 - ll**2) * ll**5 * x / y**5) / (1 - x**2)
 
 
+@jit
 def _compute_T_min(ll, M, maxiter, atol, rtol):
     """Compute minimum T."""
     if ll == 1:
@@ -246,6 +254,7 @@ def _compute_T_min(ll, M, maxiter, atol, rtol):
     return [x_T_min, T_min]
 
 
+@jit
 def _initial_guess(T, ll, M, low_path):
     """Initial guess."""
     if M == 0:
@@ -275,11 +284,16 @@ def _initial_guess(T, ll, M, low_path):
         )
 
         # Filter out the solution
-        x_0 = np.max([x_0l, x_0r]) if low_path is True else np.min([x_0l, x_0r])
+        x_0 = (
+            np.max(np.array([x_0l, x_0r]))
+            if low_path is True
+            else np.min(np.array([x_0l, x_0r]))
+        )
 
         return x_0
 
 
+@jit
 def _halley(p0, T0, ll, atol, rtol, maxiter):
     """Find a minimum of time of flight equation using the Halley method.
 
@@ -307,6 +321,7 @@ def _halley(p0, T0, ll, atol, rtol, maxiter):
     raise RuntimeError("Failed to converge")
 
 
+@jit
 def _householder(p0, T0, ll, M, atol, rtol, maxiter):
     """Find a zero of time of flight equation using the Householder method.
 
@@ -335,3 +350,33 @@ def _householder(p0, T0, ll, M, atol, rtol, maxiter):
         p0 = p
 
     raise RuntimeError("Failed to converge")
+
+
+@jit
+def hyp2f1b(x):
+    """Hypergeometric function 2F1(3, 1, 5/2, x), see [Battin].
+
+    Notes
+    -----
+    More information about hypergeometric function can be checked at
+    https://en.wikipedia.org/wiki/Hypergeometric_function
+
+    """
+    if x >= 1.0:
+        return np.inf
+    else:
+        res = 1.0
+        term = 1.0
+        ii = 0
+        while True:
+            term = term * (3 + ii) * (1 + ii) / (5 / 2 + ii) * x / (ii + 1)
+            res_old = res
+            res += term
+            if res_old == res:
+                return res
+            ii += 1
+
+
+@jit
+def norm(arr):
+    return np.sqrt(arr @ arr)
