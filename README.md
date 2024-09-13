@@ -64,26 +64,28 @@ the year of publication. Any of the solvers hosted by the `ALL_SOLVERS` list.
 
 ### Parameters and Returns
 
-| Parameters    | Description |
-|---------------|-------------|
-| `mu`          | The gravitational parameter, i.e., mass of the attracting body times the gravitational constant. Equivalent to gravitational constant times the mass of the attractor body. |
-| `r1`          | Initial position vector. |
-| `r2`          | Final position vector. |
-| `tof`         | Time of flight between initial and final vectors. |
-| `M`           | The number of revolutions. If zero (default), direct transfer is assumed. |
-| `prograde`    | Controls the inclination of the final orbit. If `True`, inclination between 0 and 90 degrees. If `False`, inclination between 90 and 180 degrees. |
-| `low_path`    | Selects the type of path when more than two solutions are available. No specific advantage unless there are mission constraints. |
-| `maxiter`     | Maximum number of iterations allowed when computing the solution. |
-| `atol`        | Absolute tolerance for the iterative method. |
-| `rtol`        | Relative tolerance for the iterative method. |
-| `full_output` | If `True`, returns additional information such as the number of iterations. |
+| Parameters    | Type      | Description |
+|---------------|-----------|-------------|
+| `mu`          | `float`   | The gravitational parameter, i.e., mass of the attracting body times the gravitational constant. Equivalent to gravitational constant times the mass of the attractor body. |
+| `r1`          | `np.array`| Initial position vector. |
+| `r2`          | `np.array`| Final position vector. |
+| `tof`         | `float`   | Time of flight between initial and final vectors. |
+| `M`           | `int`     | The number of revolutions. If zero (default), direct transfer is assumed. |
+| `prograde`    | `bool`    | Controls the inclination of the final orbit. If `True`, inclination between 0 and 90 degrees. If `False`, inclination between 90 and 180 degrees. |
+| `low_path`    | `bool`    | Selects the type of path when more than two solutions are available. No specific advantage unless there are mission constraints. |
+| `maxiter`     | `int`     | Maximum number of iterations allowed when computing the solution. |
+| `atol`        | `float`   | Absolute tolerance for the iterative method. |
+| `rtol`        | `float`   | Relative tolerance for the iterative method. |
+| `full_output` | `bool`    | If `True`, returns additional information such as the number of iterations. |
 
-| Returns       | Description |
-|---------------|-------------|
-| `v1`          | Initial velocity vector. |
-| `v2`          | Final velocity vector. |
-| `numiter`     | Number of iterations (only if `full_output` is `True`). |
-| `tpi`         | Time per iteration (only if `full_output` is `True`). |
+### Returns Table:
+
+| Returns       | Type       | Description |
+|---------------|------------|-------------|
+| `v1`          | `np.array` | Initial velocity vector. |
+| `v2`          | `np.array` | Final velocity vector. |
+| `numiter`     | `int`      | Number of iterations (only if `full_output` is `True`). |
+| `tpi`         | `float`    | Time per iteration (only if `full_output` is `True`). |
 
 ## Examples
 
