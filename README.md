@@ -22,15 +22,14 @@ paths and direct transfers.
 [![codecov](https://codecov.io/gh/jorgepiloto/lamberthub/branch/main/graph/badge.svg?token=3BY2J5AB8D)](https://codecov.io/gh/jorgepiloto/lamberthub)
 [![DOI](https://zenodo.org/badge/364482782.svg)](https://zenodo.org/badge/latestdoi/364482782)
 
-
-
 ## Installation
 
-Install `lamberthub` by running:
+Multiple installation methods are supported:
 
-```console
-python -m pip install lamberthub
-```
+|                             **Logo**                              | **Platform** |                                    **Command**                                    |
+|:-----------------------------------------------------------------:|:------------:|:---------------------------------------------------------------------------------:|
+|       ![PyPI logo](https://simpleicons.org/icons/pypi.svg)        |     PyPI     |                        ``python -m pip install lamberthub``                        |
+|     ![GitHub logo](https://simpleicons.org/icons/github.svg)      |    GitHub    | ``python -m pip install https://github.com/jorgepiloto/lamberthub/archive/main.zip`` |
 
 ## Available solvers
 
