@@ -30,12 +30,12 @@ def get_transfer_angle(r1, r2, prograde):
     """
     # Check if both position vectors are collinear. If so, check if the transfer
     # angle is 0 or pi.
-    if np.all(np.cross(r1, r2) == 0):
+    if np.all(cross(r1, r2) == 0):
         return 0 if np.all(np.sign(r1) == np.sign(r2)) else np.pi
 
     # Solve for a unitary vector normal to the vector plane. Its direction and
     # sense the one given by the cross product (right-hand) from r1 to r2.
-    h = np.cross(r1, r2) / norm(np.cross(r1, r2))
+    h = cross(r1, r2) / norm(cross(r1, r2))
 
     # Compute the projection of the normal vector onto the reference plane.
     alpha = dot(np.array([0, 0, 1]), h)
@@ -53,6 +53,7 @@ def get_transfer_angle(r1, r2, prograde):
     return dtheta
 
 
+@jit
 def get_orbit_normal_vector(r1, r2, prograde):
     """
     Computes a unitary normal vector aligned with the specific angular momentum
@@ -74,11 +75,11 @@ def get_orbit_normal_vector(r1, r2, prograde):
 
     """
     # Compute the normal vector and its projection onto the vertical axis
-    i_h = np.cross(r1, r2) / norm(np.cross(r1, r2))
+    i_h = cross(r1, r2) / norm(cross(r1, r2))
 
     # Solve the projection onto the positive vertical direction of the
     # fundamental plane.
-    alpha = np.array([0, 0, 1]) @ i_h
+    alpha = dot(np.array([0, 0, 1]), i_h)
 
     # An prograde orbit always has a positive vertical component of its specific
     # angular momentum. Therefore, we just need to check for this condition
@@ -90,6 +91,7 @@ def get_orbit_normal_vector(r1, r2, prograde):
     return i_h
 
 
+@jit
 def get_orbit_inc_and_raan_from_position_vectors(r1, r2, prograde):
     """
     Computes the inclination of the orbit being known an initial and a final
@@ -137,6 +139,7 @@ def get_orbit_inc_and_raan_from_position_vectors(r1, r2, prograde):
     return inc, raan
 
 
+@jit
 def nu_to_E(nu, ecc):
     """
     Retrieves eccentric anomaly from true one.
@@ -158,6 +161,7 @@ def nu_to_E(nu, ecc):
     return E
 
 
+@jit
 def E_to_nu(E, ecc):
     """
     Retrieves true anomaly from eccentric one.
@@ -179,6 +183,7 @@ def E_to_nu(E, ecc):
     return nu
 
 
+@jit
 def nu_to_B(nu):
     """
     Retrieves parabolic anomaly from true one.
@@ -203,6 +208,7 @@ def nu_to_B(nu):
     return B
 
 
+@jit
 def B_to_nu(B):
     """
     Retrieves the true anomaly from parabolic one.
@@ -227,6 +233,7 @@ def B_to_nu(B):
     return nu
 
 
+@jit
 def nu_to_H(nu, ecc):
     """
     Retrieves hyperbolic anomaly from true one.
@@ -248,6 +255,7 @@ def nu_to_H(nu, ecc):
     return H
 
 
+@jit
 def H_to_nu(H, ecc):
     """
     Retrieves hyperbolic anomaly from true one.

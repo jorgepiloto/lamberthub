@@ -26,7 +26,7 @@ def dot(v1, v2):
     this issue: https://github.com/numba/numba/issues/8676
 
     """
-    return v1.astype("d") @ v2.astype("d")
+    return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]
 
 
 @jit
@@ -46,7 +46,7 @@ def cross(v1, v2):
         Resultant vector of the cross product between the two vectors.
 
     """
-    return np.cross(v1.astype("d"), v2.astype("d"))
+    return np.cross(v1, v2)
 
 
 @jit
@@ -64,4 +64,4 @@ def norm(vector):
         Magnitude of the vector.
 
     """
-    return np.linalg.norm(vector.astype("d"))
+    return dot(vector, vector) ** 0.5
