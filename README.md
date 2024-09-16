@@ -15,12 +15,14 @@ paths and direct transfers.
 
 <br>
 
+<!-- vale off -->
 [![Python](https://img.shields.io/pypi/pyversions/lamberthub?logo=pypi)](https://pypi.org/project/lamberthub/)
 [![PyPI](https://img.shields.io/pypi/v/lamberthub.svg?logo=python&logoColor=white)](https://pypi.org/project/lamberthub/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![CI](https://github.com/jorgepiloto/lamberthub/actions/workflows/ci_cd.yml/badge.svg?branch=main)](https://github.com/jorgepiloto/lamberthub/actions/workflows/ci_cd.yml)
-[![codecov](https://codecov.io/gh/jorgepiloto/lamberthub/branch/main/graph/badge.svg?token=3BY2J5AB8D)](https://codecov.io/gh/jorgepiloto/lamberthub)
+[![Coverage](https://codecov.io/gh/jorgepiloto/lamberthub/branch/main/graph/badge.svg?token=3BY2J5AB8D)](https://codecov.io/gh/jorgepiloto/lamberthub)
 [![DOI](https://zenodo.org/badge/364482782.svg)](https://zenodo.org/badge/latestdoi/364482782)
+<!-- vale on -->
 
 ## Installation
 
@@ -69,7 +71,7 @@ the year of publication. Any of the solvers hosted by the `ALL_SOLVERS` list.
 
 | Parameters    | Type      | Description |
 |---------------|-----------|-------------|
-| `mu`          | `float`   | The gravitational parameter, i.e., mass of the attracting body times the gravitational constant. Equivalent to gravitational constant times the mass of the attractor body. |
+| `mu`          | `float`   | The gravitational parameter, that is, the mass of the attracting body times the gravitational constant. |
 | `r1`          | `np.array`| Initial position vector. |
 | `r2`          | `np.array`| Final position vector. |
 | `tof`         | `float`   | Time of flight between initial and final vectors. |
