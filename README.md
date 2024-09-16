@@ -8,7 +8,7 @@ spacecraft given two points in space and the time of flight between them. The
 problem is essential for trajectory planning, particularly for interplanetary
 missions.
 
-Lamberthub implements multiple algorithms, each named after its author and
+This library implements multiple algorithms, each named after its author and
 publication year, for solving different variations of Lambert's problem. These
 algorithms can handle different types of orbits, including multi-revolution
 paths and direct transfers.
@@ -33,6 +33,8 @@ Multiple installation methods are supported:
 
 ## Available solvers
 
+<!-- vale off -->
+
 | Algorithm     | Reference                                                                                                                                               |
 |---------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `gauss1809`   | C. F. Gauss, *Theoria motus corporum coelestium in sectionibus conicis solem ambientium*. 1809.                                                         |
@@ -42,6 +44,8 @@ Multiple installation methods are supported:
 | `arora2013`   | N. Arora and R. P. Russell, “A fast and robust multiple revolution lambert algorithm using a cosine transformation,” Paper AAS, vol. 13, p. 728, 2013.  |
 | `vallado2013` | D. A. Vallado, *Fundamentals of astrodynamics and applications*. Springer Science & Business Media, 2013, vol. 12.                                       |
 | `izzo2015`    | D. Izzo, “Revisiting lambert’s problem,” *Celestial Mechanics and Dynamical Astronomy*, vol. 121, no. 1, pp. 1–15, 2015.                                |
+
+<!-- vale on -->
 
 ## Using a solver
 
@@ -61,7 +65,7 @@ v1, v2 = authorYYYY(
 where `author` is the name of the author which developed the solver and `YYYY`
 the year of publication. Any of the solvers hosted by the `ALL_SOLVERS` list.
 
-### Parameters and Returns
+### Parameters
 
 | Parameters    | Type      | Description |
 |---------------|-----------|-------------|
@@ -77,7 +81,7 @@ the year of publication. Any of the solvers hosted by the `ALL_SOLVERS` list.
 | `rtol`        | `float`   | Relative tolerance for the iterative method. |
 | `full_output` | `bool`    | If `True`, returns additional information such as the number of iterations. |
 
-### Returns Table:
+### Returns
 
 | Returns       | Type       | Description |
 |---------------|------------|-------------|
