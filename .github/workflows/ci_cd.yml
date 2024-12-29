@@ -57,7 +57,7 @@ jobs:
           NUMBA_DISABLE_JIT: 1
 
       - name: "Upload coverage"
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         if: matrix.cfg.python-version == env.MAIN_PYTHON_VERSION && matrix.os == 'ubuntu-latest'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
