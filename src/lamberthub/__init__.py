@@ -1,5 +1,6 @@
 """A collection of Lambert's problem solvers."""
 
+from lamberthub.a_solvers.jiang import jiang2016
 from lamberthub.ecc_solvers.avanzini import avanzini2008
 from lamberthub.p_solvers.battin import battin1984
 from lamberthub.p_solvers.gauss import gauss1809
@@ -19,6 +20,7 @@ ALL_SOLVERS = [
     arora2013,
     vallado2013,
     izzo2015,
+    jiang2016,
 ]
 """ A list holding all lamberthub available solvers """
 

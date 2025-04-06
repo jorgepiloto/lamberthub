@@ -35,6 +35,11 @@ def test_case_from_vallado_book(solver):
     expected_v1 = np.array([2.058913, 2.915965, 0.0])  # [km / s]
     expected_v2 = np.array([-3.451565, 0.910315, 0.0])  # [km / s]
 
+    from lamberthub.utils.elements import rv2coe
+    p, ecc, _, _, _, _ = rv2coe(mu_earth, r1, expected_v1) 
+    a = p / (1 - ecc ** 2)
+    print(f"Expected {a = :.5f}")
+
     # Assert the results
     assert_allclose(v1, expected_v1, atol=ATOL, rtol=RTOL)
     assert_allclose(v2, expected_v2, atol=ATOL, rtol=ATOL)
@@ -226,3 +231,7 @@ def test_case_from_der_article_II(solver, case):
     # Assert the results
     assert_allclose(v1, expected_v1, atol=ATOL, rtol=RTOL)
     assert_allclose(v2, expected_v2, atol=ATOL, rtol=RTOL)
+
+if __name__ == "__main__":
+    from lamberthub import jiang2016
+    test_case_from_battin_book(jiang2016)
