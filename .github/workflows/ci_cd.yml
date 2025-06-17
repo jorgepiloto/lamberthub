@@ -24,13 +24,13 @@ jobs:
     name: "Code style"
     runs-on: ubuntu-latest
     steps:
-      - uses: ansys/actions/code-style@v9
+      - uses: ansys/actions/code-style@v10
 
   doc-style:
     name: "Doc style"
     runs-on: ubuntu-latest
     steps:
-      - uses: ansys/actions/doc-style@v9
+      - uses: ansys/actions/doc-style@v10
         with:
           files: "README.md"
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -49,7 +49,7 @@ jobs:
       fail-fast: false
     steps:
       - name: "Run tests"
-        uses: ansys/actions/tests-pytest@v9
+        uses: ansys/actions/tests-pytest@v10
         with:
           pytest-extra-args: ${{ matrix.cfg.extra-args }}
         env:
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: tests
     steps:
-      - uses: ansys/actions/build-library@v9
+      - uses: ansys/actions/build-library@v10
         with:
           library-name: ${{ env.LIBRARY_NAME }}
 
@@ -82,7 +82,7 @@ jobs:
     steps:
 
       - name: "Release to the public PyPI repository"
-        uses: ansys/actions/release-pypi-public@v9
+        uses: ansys/actions/release-pypi-public@v10
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           use-trusted-publisher: true
