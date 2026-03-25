@@ -40,7 +40,7 @@ classifiers = [
 dependencies = ["numba", "numpy", "scipy"]
 dynamic = ["version", "description"]
 
-[project.optional-dependencies]
+[dependency-groups]
 tests = [
     "pytest==8.4.1",
     "pytest-cov==6.2.1",
