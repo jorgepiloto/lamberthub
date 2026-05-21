@@ -105,6 +105,7 @@ def negrete2024(
 
 
 def _find_z(mu, r1_norm, r2_norm, A, tof, M, low_path, numiter, atol, rtol):
+    """Find the universal anomaly root from contour-integral moments."""
     if M == 0:
         tp = _tof_at_z(0.0, mu, r1_norm, r2_norm, A)
         if tof < tp:
@@ -155,6 +156,7 @@ def _find_z(mu, r1_norm, r2_norm, A, tof, M, low_path, numiter, atol, rtol):
 def _refine_single_root(
     z, z_min, z_max, mu, r1_norm, r2_norm, A, tof, numiter, atol, rtol
 ):
+    """Refine a candidate root using smaller local contours."""
     for _ in range(2):
         center = _refinement_center(z, z_min, z_max)
         radius = _refinement_radius(center, z_min, z_max)
@@ -166,12 +168,14 @@ def _refine_single_root(
 
 
 def _refinement_center(z, z_min, z_max):
+    """Choose the center for a root-refinement contour."""
     if z_min == 0.0 and z < z_min:
         return min(0.5, 0.25 * z_max)
     return z
 
 
 def _refinement_radius(z, z_min, z_max):
+    """Choose a bounded contour radius around a candidate root."""
     radius = 2.0
     if z_min == 0.0 and 0.0 < z < 1.0:
         radius = min(radius, z, 0.5 * (z_max - z))
@@ -183,6 +187,7 @@ def _refinement_radius(z, z_min, z_max):
 
 
 def _contour_integrals(center, radius, mu, r1_norm, r2_norm, A, tof, degree, numiter):
+    """Compute contour-integral moments around a circular path."""
     x = np.arange(numiter) / numiter
     exp = np.exp(2j * np.pi * x)
     z = center + radius * exp
@@ -196,18 +201,21 @@ def _contour_integrals(center, radius, mu, r1_norm, r2_norm, A, tof, degree, num
 
 
 def _pole_function(z, mu, r1_norm, r2_norm, A, tof):
+    """Evaluate the reciprocal time-of-flight residual in the complex plane."""
     y = _y_at_z(z, r1_norm, r2_norm, A)
     chi = np.sqrt(y / _c2(z))
     return 1.0 / (chi**3 * _c3(z) + A * np.sqrt(y) - np.sqrt(mu) * tof)
 
 
 def _tof_at_z(z, mu, r1_norm, r2_norm, A):
+    """Evaluate the universal-variable time of flight at a z value."""
     y = _y_at_z(z, r1_norm, r2_norm, A)
     chi = np.sqrt(y / _c2(z))
     return ((chi**3 * _c3(z) + A * np.sqrt(y)) / np.sqrt(mu)).real
 
 
 def _hyperbolic_contour(mu, r1_norm, r2_norm, A, tof):
+    """Build a negative-z contour for hyperbolic single-revolution transfers."""
     z_low = -1.0
     for _ in range(64):
         y = _y_at_z(z_low, r1_norm, r2_norm, A).real
@@ -223,21 +231,25 @@ def _hyperbolic_contour(mu, r1_norm, r2_norm, A, tof):
 
 
 def _real_solution(z, atol, rtol):
+    """Return a contour root if its imaginary component is negligible."""
     if abs(z.imag) > atol + rtol * abs(z.real):
         raise ValueError("Contour integral did not return a real solution!")
     return z.real
 
 
 def _get_A(r1_norm, r2_norm, dtheta):
+    """Compute Vallado's geometry parameter for the transfer angle."""
     t_m = 1 if dtheta < np.pi else -1
     return t_m * np.sqrt(r1_norm * r2_norm * (1 + np.cos(dtheta)))
 
 
 def _y_at_z(z, r1_norm, r2_norm, A):
+    """Compute the universal-variable y parameter at a z value."""
     return r1_norm + r2_norm + A * (z * _c3(z) - 1.0) / np.sqrt(_c2(z))
 
 
 def _c2(z):
+    """Evaluate the second Stumpff function for real or complex z values."""
     z = np.asarray(z, dtype=np.complex128)
     out = np.empty_like(z)
     mask = np.abs(z) < 1e-8
@@ -247,6 +259,7 @@ def _c2(z):
 
 
 def _c3(z):
+    """Evaluate the third Stumpff function for real or complex z values."""
     z = np.asarray(z, dtype=np.complex128)
     out = np.empty_like(z)
     mask = np.abs(z) < 1e-8
@@ -257,6 +270,7 @@ def _c3(z):
 
 
 def _stumpff_series(z, order):
+    """Evaluate a Stumpff function series for small z values."""
     term = np.ones_like(z, dtype=np.complex128) / factorial(order)
     total = term.copy()
     for k in range(1, 20):

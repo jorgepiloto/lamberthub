@@ -199,12 +199,14 @@ def _get_eccT_at_x(geometry):
     if dtheta > np.pi:
         # Equation (16) is applied
         def eccT_at_x(x):
+            """Compute transverse eccentricity for transfers above pi radians."""
             X = np.exp((1 / ecc_H + 1 / ecc_P) * x)
             return ecc_P * ecc_H * (X - 1) / (ecc_P + ecc_H * X)
 
     else:
         # Equation (18) is applied
         def eccT_at_x(x):
+            """Compute transverse eccentricity for transfers below pi radians."""
             return ecc_P * (1 - np.exp(-x / ecc_P))
 
     return eccT_at_x

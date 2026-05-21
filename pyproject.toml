@@ -66,6 +66,13 @@ source = ["lamberthub"]
 [tool.coverage.report]
 show_missing = true
 
+[tool.interrogate]
+fail-under = 100
+exclude = ["tests", "doc", "build"]
+verbose = 1
+quiet = false
+color = true
+
 [tool.ruff]
 line-length = 88
 
