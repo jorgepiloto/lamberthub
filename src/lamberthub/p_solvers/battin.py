@@ -15,8 +15,8 @@ def battin1984(
     r2,
     tof,
     M=0,
-    prograde=True,
-    low_path=True,
+    is_prograde=True,
+    is_low_path=True,
     maxiter=35,
     atol=1e-5,
     rtol=1e-7,
@@ -37,9 +37,9 @@ def battin1984(
         Final position vector.
     M: int
         Number of revolutions. Must be equal or greater than 0 value.
-    prograde: bool
+    is_prograde: bool
         If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
-    low_path: bool
+    is_low_path: bool
         If two solutions are available, it selects between high or low path.
     maxiter: int
         Maximum number of iterations.
@@ -89,7 +89,7 @@ def battin1984(
     # Retrieve the fundamental geometry of the problem
     r1_norm, r2_norm, c_norm = [np.linalg.norm(vec) for vec in [r1, r2, r2 - r1]]
     semiperimeter = (r1_norm + r2_norm + c_norm) / 2
-    dtheta = get_transfer_angle(r1, r2, prograde)
+    dtheta = get_transfer_angle(r1, r2, is_prograde)
 
     # Compute the auxiliary lambda parameter. The variable _lambda is used here
     # as lambda is a reserved keyword in Python for declaring inline functions.

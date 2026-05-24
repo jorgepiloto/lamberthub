@@ -19,8 +19,8 @@ def gooding1990(
     r2,
     tof,
     M=0,
-    prograde=True,
-    low_path=True,
+    is_prograde=True,
+    is_low_path=True,
     maxiter=35,
     atol=1e-5,
     rtol=1e-7,
@@ -39,9 +39,9 @@ def gooding1990(
         Final position vector.
     M: int
         Number of revolutions. Must be equal or greater than 0 value.
-    prograde: bool
+    is_prograde: bool
         If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
-    low_path: bool
+    is_low_path: bool
         If two solutions are available, it selects between high or low path.
     maxiter: int
         Maximum number of iterations.
@@ -103,7 +103,7 @@ def gooding1990(
 
     # Compute the real transfer angle according to sense of motion. Raise an
     # exception its value is found to be the zero.
-    theta = get_transfer_angle(r1, r2, prograde)
+    theta = get_transfer_angle(r1, r2, is_prograde)
     assert_transfer_angle_not_zero(theta)
 
     # Include additional revolutions if necessary.
@@ -111,7 +111,7 @@ def gooding1990(
 
     # Compute a vector normal to orbit plane, parallel to angular momentum. Need
     # to specify orbit motion sense.
-    i_h = get_orbit_normal_vector(r1, r2, prograde)
+    i_h = get_orbit_normal_vector(r1, r2, is_prograde)
 
     # Compute the tangential unitary vectors at initial and final position vectors.
     i_t1, i_t2 = [np.cross(i_h, i_r) for i_r in [i_r1, i_r2]]
@@ -123,7 +123,7 @@ def gooding1990(
         r2_norm,
         dtheta,
         tof,
-        low_path,
+        is_low_path,
         maxiter,
         atol,
         rtol,
@@ -561,7 +561,7 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
     return n, x, xpl
 
 
-def vlamb(mu, r1_norm, r2_norm, dtheta, tof, low_path, maxiter, atol, rtol):
+def vlamb(mu, r1_norm, r2_norm, dtheta, tof, is_low_path, maxiter, atol, rtol):
     r"""
     Auxiliary routine for computing the velocity vector components, both
     radian and tangential ones.
@@ -578,7 +578,7 @@ def vlamb(mu, r1_norm, r2_norm, dtheta, tof, low_path, maxiter, atol, rtol):
         Transfer angle between initial and final vectors.
     tof: float
         Time of flight between initial and final position vectors.
-    low_path: bool
+    is_low_path: bool
         If two solutions are available, it selects between high or low path.
     maxiter: int
         Maximum number of iterations.
@@ -639,7 +639,7 @@ def vlamb(mu, r1_norm, r2_norm, dtheta, tof, low_path, maxiter, atol, rtol):
 
     # Filter the solution
     if n_sol > 1:
-        if low_path is True:
+        if is_low_path is True:
             x_sol = np.max([x1_sol, x2_sol])
         else:
             x_sol = np.min([x1_sol, x2_sol])

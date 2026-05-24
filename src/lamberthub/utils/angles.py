@@ -7,7 +7,7 @@ from lamberthub.linalg import cross, dot, norm
 
 
 @jit
-def get_transfer_angle(r1, r2, prograde):
+def get_transfer_angle(r1, r2, is_prograde):
     """Compute the transfer angle of the trajectory.
 
     Initial and final position vectors are required together with the direction
@@ -19,7 +19,7 @@ def get_transfer_angle(r1, r2, prograde):
         Initial position vector.
     r2 : ~np.array
         Final position vector.
-    prograde : bool
+    is_prograde : bool
         ``True`` for prograde motion, ``False`` otherwise.
 
     Returns
@@ -45,7 +45,7 @@ def get_transfer_angle(r1, r2, prograde):
     theta0 = np.arccos(dot(r1, r2) / (r1_norm * r2_norm))
 
     # Fix the value of theta if necessary
-    if prograde is True:
+    if is_prograde is True:
         dtheta = theta0 if alpha > 0 else 2 * np.pi - theta0
     else:
         dtheta = theta0 if alpha < 0 else 2 * np.pi - theta0
@@ -54,7 +54,7 @@ def get_transfer_angle(r1, r2, prograde):
 
 
 @jit
-def get_orbit_normal_vector(r1, r2, prograde):
+def get_orbit_normal_vector(r1, r2, is_prograde):
     """
     Computes a unitary normal vector aligned with the specific angular momentum
     one of the orbit.
@@ -65,7 +65,7 @@ def get_orbit_normal_vector(r1, r2, prograde):
         Initial position vector.
     r2: np.array
         Final position vector.
-    prograde: bool
+    is_prograde: bool
         If True, it assumes prograde motion, otherwise assumes retrograde.
 
     Returns
@@ -83,7 +83,7 @@ def get_orbit_normal_vector(r1, r2, prograde):
 
     # An prograde orbit always has a positive vertical component of its specific
     # angular momentum. Therefore, we just need to check for this condition
-    if prograde is True:
+    if is_prograde is True:
         i_h = i_h if alpha > 0 else -i_h
     else:
         i_h = i_h if alpha < 0 else -i_h
@@ -92,7 +92,7 @@ def get_orbit_normal_vector(r1, r2, prograde):
 
 
 @jit
-def get_orbit_inc_and_raan_from_position_vectors(r1, r2, prograde):
+def get_orbit_inc_and_raan_from_position_vectors(r1, r2, is_prograde):
     """
     Computes the inclination of the orbit being known an initial and a final
     position vectors together with the sense of motion.
@@ -103,7 +103,7 @@ def get_orbit_inc_and_raan_from_position_vectors(r1, r2, prograde):
         Initial position vector.
     r2: np.array
         Final position vector.
-    prograde: bool
+    is_prograde: bool
         If True, it assumes prograde motion, otherwise assumes retrograde.
 
     Returns
@@ -116,7 +116,7 @@ def get_orbit_inc_and_raan_from_position_vectors(r1, r2, prograde):
     """
     # Get a unitary vector aligned in direction and sense with the specific
     # angular momentum one.
-    i_h = get_orbit_normal_vector(r1, r2, prograde)
+    i_h = get_orbit_normal_vector(r1, r2, is_prograde)
 
     # Define the unitary vector along Z-axis of the fundamental plane
     i_K = np.array([0, 0, 1])

@@ -52,8 +52,8 @@ def avanzini2008(
     r2,
     tof,
     M=0,
-    prograde=True,
-    low_path=True,
+    is_prograde=True,
+    is_low_path=True,
     maxiter=35,
     atol=1e-5,
     rtol=1e-7,
@@ -72,9 +72,9 @@ def avanzini2008(
         Final position vector.
     M: int
         Number of revolutions. Must be equal or greater than 0 value.
-    prograde: bool
+    is_prograde: bool
         If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
-    low_path: bool
+    is_low_path: bool
         If two solutions are available, it selects between high or low path.
     maxiter: int
         Maximum number of iterations.
@@ -115,7 +115,7 @@ def avanzini2008(
     assert_parameters_are_valid(mu, r1, r2, tof, M)
 
     # Start by computing an auxiliary set of geometric parameters
-    geometry = get_geometry(r1, r2, prograde)
+    geometry = get_geometry(r1, r2, is_prograde)
 
     # Filter out the evolution of ecc_T w.r.t. the independent variable based on
     # the transfer angle criteria, see original report flowchart.
@@ -145,7 +145,7 @@ def avanzini2008(
 
     # Solve the actual value of ecc_T at solved x and retrieve COE elements
     ecc_T = eccT_at_x(x_sol)
-    p, ecc, inc, raan, argp, nu_1, nu_2 = coe_at_eccT(ecc_T, r1, r2, prograde)
+    p, ecc, inc, raan, argp, nu_1, nu_2 = coe_at_eccT(ecc_T, r1, r2, is_prograde)
 
     # Compute the velocity vectors from the classic orbital elements
     (_, v1), (_, v2) = [coe2rv(mu, p, ecc, inc, raan, argp, nu) for nu in [nu_1, nu_2]]

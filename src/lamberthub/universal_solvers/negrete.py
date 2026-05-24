@@ -18,8 +18,8 @@ def negrete2024(
     r2,
     tof,
     M=0,
-    prograde=True,
-    low_path=True,
+    is_prograde=True,
+    is_low_path=True,
     maxiter=64,
     atol=1e-5,
     rtol=1e-7,
@@ -40,9 +40,9 @@ def negrete2024(
         Time of flight between initial and final position vectors.
     M: int
         Number of revolutions. Must be equal or greater than 0 value.
-    prograde: bool
+    is_prograde: bool
         If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
-    low_path: bool
+    is_low_path: bool
         If two solutions are available, it selects between high or low path.
     maxiter: int
         Number of trapezoidal quadrature points used in each contour integral.
@@ -80,7 +80,7 @@ def negrete2024(
 
     r1_norm = np.linalg.norm(r1)
     r2_norm = np.linalg.norm(r2)
-    dtheta = get_transfer_angle(r1, r2, prograde)
+    dtheta = get_transfer_angle(r1, r2, is_prograde)
     assert_transfer_angle_not_zero(dtheta)
 
     A = _get_A(r1_norm, r2_norm, dtheta)
@@ -89,7 +89,7 @@ def negrete2024(
 
     numiter = max(4, int(maxiter))
     tic = time.perf_counter()
-    z = _find_z(mu, r1_norm, r2_norm, A, tof, M, low_path, numiter, atol, rtol)
+    z = _find_z(mu, r1_norm, r2_norm, A, tof, M, is_low_path, numiter, atol, rtol)
     tac = time.perf_counter()
 
     y = _y_at_z(z, r1_norm, r2_norm, A).real
@@ -104,7 +104,7 @@ def negrete2024(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
-def _find_z(mu, r1_norm, r2_norm, A, tof, M, low_path, numiter, atol, rtol):
+def _find_z(mu, r1_norm, r2_norm, A, tof, M, is_low_path, numiter, atol, rtol):
     """Find the universal anomaly root from contour-integral moments."""
     if M == 0:
         tp = _tof_at_z(0.0, mu, r1_norm, r2_norm, A)
@@ -150,7 +150,7 @@ def _find_z(mu, r1_norm, r2_norm, A, tof, M, low_path, numiter, atol, rtol):
         ]
     )
     roots.sort()
-    return roots[0] if low_path is True else roots[1]
+    return roots[0] if is_low_path is True else roots[1]
 
 
 def _refine_single_root(

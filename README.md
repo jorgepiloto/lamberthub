@@ -59,7 +59,7 @@ from lamberthub import authorYYYY
 
 
 v1, v2 = authorYYYY(
-    mu, r1, r2, tof, M=0, prograde=True, low_path=True,  # Type of solution
+    mu, r1, r2, tof, M=0, is_prograde=True, is_low_path=True,  # Type of solution
     maxiter=35, atol=1e-5, rtol=1e-7, full_output=False  # Iteration config
 )
 ```
@@ -76,8 +76,8 @@ the year of publication. Any of the solvers hosted by the `ALL_SOLVERS` list.
 | `r2`          | `np.array`| Final position vector. |
 | `tof`         | `float`   | Time of flight between initial and final vectors. |
 | `M`           | `int`     | The number of revolutions. If zero (default), direct transfer is assumed. |
-| `prograde`    | `bool`    | Controls the inclination of the final orbit. If `True`, inclination between 0 and 90 degrees. If `False`, inclination between 90 and 180 degrees. |
-| `low_path`    | `bool`    | Selects the type of path when more than two solutions are available. No specific advantage unless there are mission constraints. |
+| `is_prograde`    | `bool`    | Controls the inclination of the final orbit. If `True`, inclination between 0 and 90 degrees. If `False`, inclination between 90 and 180 degrees. |
+| `is_low_path`    | `bool`    | Selects the type of path when more than two solutions are available. No specific advantage unless there are mission constraints. |
 | `maxiter`     | `int`     | Maximum number of iterations allowed when computing the solution. |
 | `atol`        | `float`   | Absolute tolerance for the iterative method. |
 | `rtol`        | `float`   | Relative tolerance for the iterative method. |
@@ -111,7 +111,7 @@ positions are given by:
 
 The time of flight is $\Delta t = 0.010794065$ years. The orbit is
 prograde and direct, thus $M=0$. Remember that when $M=0$, there is only one
-possible solution, so the `low_path` flag does not play any role in this
+possible solution, so the `is_low_path` flag does not play any role in this
 problem.
 
 **Solution**
@@ -130,7 +130,7 @@ r1 = np.array([0.159321004, 0.579266185, 0.052359607])
 r2 = np.array([0.057594337, 0.605750797, 0.068345246])
 tof = 0.010794065
 
-v1, v2 = gooding1990(mu_sun, r1, r2, tof, M=0, prograde=True)
+v1, v2 = gooding1990(mu_sun, r1, r2, tof, M=0, is_prograde=True)
 print(f"Initial velocity: {v1} [AU / years]")
 print(f"Final velocity:   {v2} [AU / years]")
 ```

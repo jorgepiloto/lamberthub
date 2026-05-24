@@ -14,7 +14,7 @@ def test_exception_for_180_transfer_angle():
     # Solving the problem with only two iteration so an error is raised
     with pytest.raises(RuntimeError) as excinfo:
         v1, v2 = vallado2013(
-            mu_earth, r1, r2, tof, maxiter=1, prograde=True, low_path=True
+            mu_earth, r1, r2, tof, maxiter=1, is_prograde=True, is_low_path=True
         )
     assert "Cannot compute orbit, phase angle is 180 degrees" in excinfo.exconly()
 
@@ -29,6 +29,6 @@ def test_raised_maximum_number_of_iterations():
     # Solving the problem with only two iteration so an error is raised
     with pytest.raises(ValueError) as excinfo:
         v1, v2 = vallado2013(
-            mu_earth, r1, r2, tof, maxiter=1, prograde=True, low_path=True
+            mu_earth, r1, r2, tof, maxiter=1, is_prograde=True, is_low_path=True
         )
     assert "Exceeded maximum number of iterations!" in excinfo.exconly()
