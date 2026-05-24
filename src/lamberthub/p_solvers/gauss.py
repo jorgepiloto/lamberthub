@@ -2,6 +2,7 @@
 
 import time
 
+from numba import njit as jit
 import numpy as np
 from numpy.linalg import norm
 
@@ -164,6 +165,7 @@ def gauss1809(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
+@jit
 def _get_s(r1_norm, r2_norm, dtheta):
     """Returns the s auxiliary constant.
 
@@ -192,6 +194,7 @@ def _get_s(r1_norm, r2_norm, dtheta):
     return s
 
 
+@jit
 def _get_w(mu, tof, r1_norm, r2_norm, dtheta):
     """Returns the w auxiliary constant.
 
@@ -222,6 +225,7 @@ def _get_w(mu, tof, r1_norm, r2_norm, dtheta):
     return w
 
 
+@jit
 def _gauss_first_equation(y, s, w):
     """Evaluates Gauss' first equation.
 
@@ -248,6 +252,7 @@ def _gauss_first_equation(y, s, w):
     return x
 
 
+@jit
 def _gauss_second_equation(x, s):
     """Evaluates Gauss' second equation.
 
@@ -272,6 +277,7 @@ def _gauss_second_equation(x, s):
     return y
 
 
+@jit
 def _X_at_x(x, order=50):
     """Computes capital X as function of lower x.
 
@@ -292,9 +298,10 @@ def _X_at_x(x, order=50):
     This is equation (5.6-15) from Bate's book, in reference [2].
 
     """
-    coefficients = [1]
+    coeff = 1.0
+    X = coeff
     for n in range(3, (3 + order)):
-        coeff = (2 * n) / (2 * n - 1)
-        coefficients.append(np.prod(coefficients[-1]) * coeff * x)
-    X = (4 / 3) * np.sum(coefficients)
+        coeff = coeff * (2 * n) / (2 * n - 1) * x
+        X += coeff
+    X = (4 / 3) * X
     return X

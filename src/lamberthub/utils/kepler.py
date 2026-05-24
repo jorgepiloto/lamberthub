@@ -12,11 +12,13 @@ References
 
 """
 
+from numba import njit as jit
 import numpy as np
 
 from lamberthub.utils.angles import nu_to_B, nu_to_E, nu_to_H
 
 
+@jit
 def kepler_elliptic(E, ecc):
     """Compute the time since perigee passage at given eccentric anomaly.
 
@@ -37,6 +39,7 @@ def kepler_elliptic(E, ecc):
     return M
 
 
+@jit
 def kepler_parabolic(B):
     """Compute the time since perigee passage at given parabolic anomaly.
 
@@ -55,6 +58,7 @@ def kepler_parabolic(B):
     return Mp
 
 
+@jit
 def kepler_hyperbolic(H, ecc):
     """Compute the time since perigee passage at given hyperbolic anomaly.
 
@@ -75,6 +79,7 @@ def kepler_hyperbolic(H, ecc):
     return Mh
 
 
+@jit
 def kepler_from_nu(nu: float, ecc: float) -> float:
     """Compute the mean anomaly at a given true anomaly.
 
