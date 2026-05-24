@@ -10,7 +10,7 @@ on:
       - main
 
 env:
-  MAIN_PYTHON_VERSION: '3.10'
+  MAIN_PYTHON_VERSION: '3.12'
   LIBRARY_NAME: 'lamberthub'
 
 concurrency:
@@ -43,14 +43,15 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         cfg:
-          - {python-version: '3.10', extra-args: '--cov=lamberthub --cov-report=term --cov-report=html:.cov/html'}
-          - {python-version: '3.11', extra-args: ''}
-          - {python-version: '3.12', extra-args: ''}
+          - {python-version: '3.12', extra-args: '--cov=lamberthub --cov-report=term --cov-report=html:.cov/html'}
+          - {python-version: '3.13', extra-args: ''}
+          - {python-version: '3.14', extra-args: ''}
       fail-fast: false
     steps:
       - name: "Run tests"
         uses: ansys/actions/tests-pytest@v10
         with:
+          python-version: ${{ matrix.cfg.python-version }}
           pytest-extra-args: ${{ matrix.cfg.extra-args }}
         env:
           # Do not run Numba when measuring code coverage to get accurate values
