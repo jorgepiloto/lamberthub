@@ -13,3 +13,10 @@ repos:
   hooks:
   - id: codespell
     args: ["--ignore-words=./doc/styles/config/vocabularies/LAMBERTHUB/accept.txt"]
+
+- repo: https://github.com/econchick/interrogate
+  rev: 1.7.0
+  hooks:
+  - id: interrogate
+    args: [src]
+    pass_filenames: false

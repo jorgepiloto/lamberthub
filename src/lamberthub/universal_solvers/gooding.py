@@ -391,6 +391,7 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
 
     # Auxiliary function for 8th root.
     def d8rt(x):
+        """Compute the eighth root of a positive scalar."""
         return np.sqrt(np.sqrt(np.sqrt(x)))
 
     # Start computing the initial guess. The process is different depending
