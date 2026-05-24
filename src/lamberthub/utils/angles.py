@@ -6,7 +6,7 @@ import numpy as np
 from lamberthub.linalg import cross, dot, norm
 
 
-@jit
+@jit(cache=True)
 def get_transfer_angle(r1, r2, is_prograde):
     """Compute the transfer angle of the trajectory.
 
@@ -30,18 +30,20 @@ def get_transfer_angle(r1, r2, is_prograde):
     """
     # Check if both position vectors are collinear. If so, check if the transfer
     # angle is 0 or pi.
-    if np.all(cross(r1, r2) == 0):
+    cross_r1r2 = cross(r1, r2)
+    if np.all(cross_r1r2 == 0):
         return 0 if np.all(np.sign(r1) == np.sign(r2)) else np.pi
 
     # Solve for a unitary vector normal to the vector plane. Its direction and
     # sense the one given by the cross product (right-hand) from r1 to r2.
-    h = cross(r1, r2) / norm(cross(r1, r2))
+    h = cross_r1r2 / norm(cross_r1r2)
 
     # Compute the projection of the normal vector onto the reference plane.
     alpha = dot(np.array([0, 0, 1]), h)
 
     # Get the minimum angle (0 <= dtheta <= pi) between r1 and r2.
-    r1_norm, r2_norm = [norm(vec) for vec in [r1, r2]]
+    r1_norm = norm(r1)
+    r2_norm = norm(r2)
     theta0 = np.arccos(dot(r1, r2) / (r1_norm * r2_norm))
 
     # Fix the value of theta if necessary
@@ -53,7 +55,7 @@ def get_transfer_angle(r1, r2, is_prograde):
     return dtheta
 
 
-@jit
+@jit(cache=True)
 def get_orbit_normal_vector(r1, r2, is_prograde):
     """
     Computes a unitary normal vector aligned with the specific angular momentum
@@ -75,7 +77,8 @@ def get_orbit_normal_vector(r1, r2, is_prograde):
 
     """
     # Compute the normal vector and its projection onto the vertical axis
-    i_h = cross(r1, r2) / norm(cross(r1, r2))
+    cross_r1r2 = cross(r1, r2)
+    i_h = cross_r1r2 / norm(cross_r1r2)
 
     # Solve the projection onto the positive vertical direction of the
     # fundamental plane.
@@ -91,7 +94,7 @@ def get_orbit_normal_vector(r1, r2, is_prograde):
     return i_h
 
 
-@jit
+@jit(cache=True)
 def get_orbit_inc_and_raan_from_position_vectors(r1, r2, is_prograde):
     """
     Computes the inclination of the orbit being known an initial and a final
@@ -139,7 +142,7 @@ def get_orbit_inc_and_raan_from_position_vectors(r1, r2, is_prograde):
     return inc, raan
 
 
-@jit
+@jit(cache=True)
 def nu_to_E(nu, ecc):
     """
     Retrieves eccentric anomaly from true one.
@@ -161,7 +164,7 @@ def nu_to_E(nu, ecc):
     return E
 
 
-@jit
+@jit(cache=True)
 def E_to_nu(E, ecc):
     """
     Retrieves true anomaly from eccentric one.
@@ -183,7 +186,7 @@ def E_to_nu(E, ecc):
     return nu
 
 
-@jit
+@jit(cache=True)
 def nu_to_B(nu):
     """
     Retrieves parabolic anomaly from true one.
@@ -208,7 +211,7 @@ def nu_to_B(nu):
     return B
 
 
-@jit
+@jit(cache=True)
 def B_to_nu(B):
     """
     Retrieves the true anomaly from parabolic one.
@@ -233,7 +236,7 @@ def B_to_nu(B):
     return nu
 
 
-@jit
+@jit(cache=True)
 def nu_to_H(nu, ecc):
     """
     Retrieves hyperbolic anomaly from true one.
@@ -255,7 +258,7 @@ def nu_to_H(nu, ecc):
     return H
 
 
-@jit
+@jit(cache=True)
 def H_to_nu(H, ecc):
     """
     Retrieves hyperbolic anomaly from true one.

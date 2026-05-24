@@ -68,7 +68,7 @@ def get_geometry(r1, r2, is_prograde):
     return r1_norm, r2_norm, c_norm, dtheta, w_c
 
 
-@jit
+@jit(cache=True)
 def get_eccF(r1_norm, r2_norm, c_norm):
     """
     Computes the eccentricity component along the chord. This value is kept
@@ -98,7 +98,7 @@ def get_eccF(r1_norm, r2_norm, c_norm):
     return ecc_F
 
 
-@jit
+@jit(cache=True)
 def get_aF(r1_norm, r2_norm):
     """
     Computes the semi-major axis of the fundamental ellipse. This value is
@@ -127,7 +127,7 @@ def get_aF(r1_norm, r2_norm):
     return a_F
 
 
-@jit
+@jit(cache=True)
 def get_pF(a_F, ecc_F):
     """
     Computes the orbital parameter (semi-latus) rectum of the fundamental
@@ -155,7 +155,7 @@ def get_pF(a_F, ecc_F):
     return p_F
 
 
-@jit
+@jit(cache=True)
 def get_fundamental_ellipse_properties(r1_norm, r2_norm, c_norm):
     """
     Computes the fundamental ellipse properties. Those are the eccentricity,
@@ -188,7 +188,7 @@ def get_fundamental_ellipse_properties(r1_norm, r2_norm, c_norm):
     return ecc_F, a_F, p_F
 
 
-@jit
+@jit(cache=True)
 def ecc_at_eccT(ecc_T, ecc_F):
     """
     Computes transfer orbit eccentricity from transverse and fundamental
@@ -211,7 +211,7 @@ def ecc_at_eccT(ecc_T, ecc_F):
     return ecc
 
 
-@jit
+@jit(cache=True)
 def p_at_eccT(ecc_T, r1_norm, r2_norm, c_norm, dtheta, p_F):
     """
     Computes the orbital parameter or semi-latus rectum of the transfer orbit.
@@ -241,7 +241,7 @@ def p_at_eccT(ecc_T, r1_norm, r2_norm, c_norm, dtheta, p_F):
     return p
 
 
-@jit
+@jit(cache=True)
 def a_at_eccT(ecc_T, ecc_F, p):
     """
     Computes the semi-major axis of the transfer orbit.
@@ -265,7 +265,7 @@ def a_at_eccT(ecc_T, ecc_F, p):
     return a
 
 
-@jit
+@jit(cache=True)
 def eap_from_eccT(ecc_T, geometry):
     """
     Solves for transfer orbit eccentricity, semi-major axis and orbital
@@ -304,7 +304,7 @@ def eap_from_eccT(ecc_T, geometry):
     return ecc, a, p
 
 
-@jit
+@jit(cache=True)
 def w_at_eccT(ecc_T, ecc_F, w_c):
     """
     Compute the true anomalies for the initial and final position vectors
@@ -341,7 +341,7 @@ def w_at_eccT(ecc_T, ecc_F, w_c):
     return w
 
 
-@jit
+@jit(cache=True)
 def get_true_anomalies(w, dtheta):
     """
     Compute the initial and final true anomalies.
@@ -366,7 +366,7 @@ def get_true_anomalies(w, dtheta):
     return nu_1, nu_2
 
 
-@jit
+@jit(cache=True)
 def kepler_tof_at_eccT(ecc_T, mu, geometry):
     """
     Computes the time of flight at particular value of transverse eccentricity

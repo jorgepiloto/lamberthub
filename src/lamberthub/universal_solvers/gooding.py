@@ -136,13 +136,13 @@ def gooding1990(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
-@jit
+@jit(cache=True)
 def _d8rt(x):
     """Compute the eighth root of a positive scalar."""
     return np.sqrt(np.sqrt(np.sqrt(x)))
 
 
-@jit
+@jit(cache=True)
 def tlamb(m, q, qsqfm1, x, n):
     """
     Auxiliary routine for computing the non-dimensional time of flight as

@@ -165,7 +165,7 @@ def gauss1809(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
-@jit
+@jit(cache=True)
 def _get_s(r1_norm, r2_norm, dtheta):
     """Returns the s auxiliary constant.
 
@@ -194,7 +194,7 @@ def _get_s(r1_norm, r2_norm, dtheta):
     return s
 
 
-@jit
+@jit(cache=True)
 def _get_w(mu, tof, r1_norm, r2_norm, dtheta):
     """Returns the w auxiliary constant.
 
@@ -225,7 +225,7 @@ def _get_w(mu, tof, r1_norm, r2_norm, dtheta):
     return w
 
 
-@jit
+@jit(cache=True)
 def _gauss_first_equation(y, s, w):
     """Evaluates Gauss' first equation.
 
@@ -252,7 +252,7 @@ def _gauss_first_equation(y, s, w):
     return x
 
 
-@jit
+@jit(cache=True)
 def _gauss_second_equation(x, s):
     """Evaluates Gauss' second equation.
 
@@ -277,7 +277,7 @@ def _gauss_second_equation(x, s):
     return y
 
 
-@jit
+@jit(cache=True)
 def _X_at_x(x, order=50):
     """Computes capital X as function of lower x.
 

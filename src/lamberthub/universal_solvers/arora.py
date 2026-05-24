@@ -405,7 +405,7 @@ def _get_multirev_k_guess(tof, tau, S, M, is_low_path, atol, rtol):
     )
 
 
-@jit
+@jit(cache=True)
 def _get_gammas(F_i, F_n, F_star):
     """Compute gamma coefficients for Arora's rational initial guess.
 
@@ -436,7 +436,7 @@ def _get_gammas(F_i, F_n, F_star):
     return gamma1, gamma2, gamma3
 
 
-@jit
+@jit(cache=True)
 def _get_x(F_0, F_1, F_i, F_star, Z, alpha):
     """Computes Sundman transformation variable.
 
@@ -472,7 +472,7 @@ def _get_x(F_0, F_1, F_i, F_star, Z, alpha):
     return x
 
 
-@jit
+@jit(cache=True)
 def _get_W(k, M, epsilon=2e-2):
     """
     Evaluates the auxiliary function at particular value of the independent
@@ -544,7 +544,7 @@ def _get_W(k, M, epsilon=2e-2):
     return W
 
 
-@jit
+@jit(cache=True)
 def _get_Wsprime(k):
     """Evaluate the first derivative of Ws w.r.t. independent variable k.
 
@@ -588,7 +588,7 @@ def _get_Wsprime(k):
     return Ws_prime
 
 
-@jit
+@jit(cache=True)
 def _get_Ws2prime(k):
     """Evaluate the second derivative of Ws w.r.t. independent variable k.
 
@@ -630,7 +630,7 @@ def _get_Ws2prime(k):
     return Ws_2prime
 
 
-@jit
+@jit(cache=True)
 def _get_Wprime(k, W, M=0, epsilon=2e-2):
     """
     Evaluates the first derivative of the auxiliary function w.r.t. the
@@ -680,7 +680,7 @@ def _get_Wprime(k, W, M=0, epsilon=2e-2):
     return W_prime
 
 
-@jit
+@jit(cache=True)
 def _get_W2prime(k, W, W_prime, M=0, epsilon=2e-2):
     """
     Evaluates the second derivative of the auxiliary function w.r.t. the
@@ -732,7 +732,7 @@ def _get_W2prime(k, W, W_prime, M=0, epsilon=2e-2):
     return W_2prime
 
 
-@jit
+@jit(cache=True)
 def _get_TOF(k, tau, S, W):
     """Evaluates the time of flight at a particular value of the independent variable.
 

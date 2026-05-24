@@ -153,7 +153,7 @@ def avanzini2008(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
-@jit
+@jit(cache=True)
 def _get_eccT_limits(geometry):
     """
     Computes transverse eccentricity value limits as of problem geometry.

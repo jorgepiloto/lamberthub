@@ -10,7 +10,7 @@ from numba import njit as jit
 import numpy as np
 
 
-@jit
+@jit(cache=True)
 def c2(psi):
     r"""Second Stumpff function.
 
@@ -38,7 +38,7 @@ def c2(psi):
     return res
 
 
-@jit
+@jit(cache=True)
 def c3(psi):
     r"""Third Stumpff function.
 
@@ -51,9 +51,11 @@ def c3(psi):
     """
     eps = 1.0
     if psi > eps:
-        res = (np.sqrt(psi) - np.sin(np.sqrt(psi))) / (psi * np.sqrt(psi))
+        sqrt_psi = np.sqrt(psi)
+        res = (sqrt_psi - np.sin(sqrt_psi)) / (psi * sqrt_psi)
     elif psi < -eps:
-        res = (np.sinh(np.sqrt(-psi)) - np.sqrt(-psi)) / (-psi * np.sqrt(-psi))
+        sqrt_neg_psi = np.sqrt(-psi)
+        res = (np.sinh(sqrt_neg_psi) - sqrt_neg_psi) / (-psi * sqrt_neg_psi)
     else:
         res = 1.0 / 6.0
         delta = (-psi) / gamma(2 + 3 + 1)
