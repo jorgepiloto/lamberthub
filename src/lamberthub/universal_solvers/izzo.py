@@ -222,16 +222,19 @@ def _tof_equation_y(x, y, T0, ll, M):
 
 @jit
 def _tof_equation_p(x, y, T, ll):
+    """First derivative of Izzo's time-of-flight equation."""
     return (3 * T * x - 2 + 2 * ll**3 * x / y) / (1 - x**2)
 
 
 @jit
 def _tof_equation_p2(x, y, T, dT, ll):
+    """Second derivative of Izzo's time-of-flight equation."""
     return (3 * T + 5 * x * dT + 2 * (1 - ll**2) * ll**3 / y**3) / (1 - x**2)
 
 
 @jit
 def _tof_equation_p3(x, y, _, dT, ddT, ll):
+    """Third derivative of Izzo's time-of-flight equation."""
     return (7 * x * ddT + 8 * dT - 6 * (1 - ll**2) * ll**5 * x / y**5) / (1 - x**2)
 
 
