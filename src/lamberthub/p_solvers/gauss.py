@@ -20,8 +20,8 @@ def gauss1809(
     r2,
     tof,
     M=0,
-    prograde=True,
-    low_path=True,
+    is_prograde=True,
+    is_low_path=True,
     maxiter=250,
     atol=1e-5,
     rtol=1e-7,
@@ -43,9 +43,9 @@ def gauss1809(
         Final position vector.
     M: int
         Number of revolutions. Must be equal or greater than 0 value.
-    prograde: bool
+    is_prograde: bool
         If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
-    low_path: bool
+    is_low_path: bool
         If two solutions are available, it selects between high or low path.
     maxiter: int
         Maximum number of iterations.
@@ -93,7 +93,7 @@ def gauss1809(
     r1_norm, r2_norm = [norm(r) for r in [r1, r2]]
 
     # Compute the cosine of the transfer angle and check
-    dtheta = get_transfer_angle(r1, r2, prograde)
+    dtheta = get_transfer_angle(r1, r2, is_prograde)
     [
         check_angle(dtheta)
         for check_angle in [

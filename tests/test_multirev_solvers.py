@@ -48,7 +48,7 @@ def test_multirev_case(solver, case):
     path = True if path == "low" else False
 
     # Solve the problem
-    v1, v2 = solver(mu_earth, r1, r2, tof, M=M, prograde=sense, low_path=path)
+    v1, v2 = solver(mu_earth, r1, r2, tof, M=M, is_prograde=sense, is_low_path=path)
 
     # Expected final results
     expected_v1, expected_v2 = TABLE_OF_TRANSFERS[case]

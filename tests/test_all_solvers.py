@@ -29,7 +29,7 @@ def test_case_from_vallado_book(solver):
     tof = 76.0 * 60  # [s]
 
     # Solving the problem
-    v1, v2 = solver(mu_earth, r1, r2, tof, prograde=True, low_path=True)
+    v1, v2 = solver(mu_earth, r1, r2, tof, is_prograde=True, is_low_path=True)
 
     # Expected final results
     expected_v1 = np.array([2.058913, 2.915965, 0.0])  # [km / s]
@@ -53,7 +53,7 @@ def test_case_from_curtiss_book(solver):
     tof = 3600  # [s]
 
     # Solve the problem
-    v1, v2 = solver(mu_earth, r1, r2, tof, prograde=True)
+    v1, v2 = solver(mu_earth, r1, r2, tof, is_prograde=True)
 
     # Expected final results
     expected_v1 = np.array([-5.9925, 1.9254, 3.2456])  # [km / s]
@@ -129,7 +129,7 @@ def test_case_from_GMAT_hyperbolic_retrograde(solver):
     tof = 12000.0  # [s]
 
     # Solving the problem
-    v1, v2 = solver(mu_earth, r1, r2, tof, prograde=False)
+    v1, v2 = solver(mu_earth, r1, r2, tof, is_prograde=False)
 
     # Expected final results
     expected_v1 = np.array([0.0, -10.35, -5.5])  # [km / s]
@@ -174,7 +174,7 @@ def test_case_from_der_article_I(solver, case):
     path = True if path == "low" else False
 
     # Solve the problem
-    v1, v2 = solver(mu_earth, r1, r2, tof, M=M, prograde=sense, low_path=path)
+    v1, v2 = solver(mu_earth, r1, r2, tof, M=M, is_prograde=sense, is_low_path=path)
 
     # Expected final results
     expected_v1, expected_v2 = TABLE_OF_TRANSFERS_I[case]
@@ -218,7 +218,7 @@ def test_case_from_der_article_II(solver, case):
     path = True if path == "low" else False
 
     # Solve the problem
-    v1, v2 = solver(mu_earth, r1, r2, tof, M=M, prograde=sense, low_path=path)
+    v1, v2 = solver(mu_earth, r1, r2, tof, M=M, is_prograde=sense, is_low_path=path)
 
     # Expected final results
     expected_v1, expected_v2 = TABLE_OF_TRANSFERS_II[case]

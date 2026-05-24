@@ -14,6 +14,6 @@ def test_exceeded_maximum_number_of_iterations():
     # Solving the problem with only two iteration so an error is raised
     with pytest.raises(ValueError) as excinfo:
         v1, v2 = battin1984(
-            mu_earth, r1, r2, tof, maxiter=1, prograde=True, low_path=True
+            mu_earth, r1, r2, tof, maxiter=1, is_prograde=True, is_low_path=True
         )
     assert "Exceeded maximum number of iterations!" in excinfo.exconly()

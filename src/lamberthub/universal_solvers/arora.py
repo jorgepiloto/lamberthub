@@ -20,8 +20,8 @@ def arora2013(
     r2,
     tof,
     M=0,
-    prograde=True,
-    low_path=True,
+    is_prograde=True,
+    is_low_path=True,
     maxiter=35,
     atol=1e-5,
     rtol=1e-7,
@@ -42,9 +42,9 @@ def arora2013(
         Time of flight between initial and final position vectors.
     M: int
         Number of revolutions. Must be equal or greater than 0 value.
-    prograde: bool
+    is_prograde: bool
         If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
-    low_path: bool
+    is_low_path: bool
         If two solutions are available, it selects between high or low path.
     maxiter: int
         Maximum number of iterations.
@@ -91,7 +91,7 @@ def arora2013(
     i_r1, i_r2 = [r / r_norm for r, r_norm in zip([r1, r2], [r1_norm, r2_norm])]
 
     # Compute the transfer angle and the transfer angle parameter
-    dtheta = get_transfer_angle(r1, r2, prograde)
+    dtheta = get_transfer_angle(r1, r2, is_prograde)
     assert_transfer_angle_not_zero(dtheta)
     d = 1 if dtheta <= np.pi else -1
 
@@ -260,7 +260,7 @@ def arora2013(
             # letter M associated with Multi-revolutions. The procedure, as
             # explained in the official report, consists into two parts: compute
             # k_bi and using this value to get the final initial guess.
-            k = _get_multirev_k_guess(tof, tau, S, M, low_path, atol, rtol)
+            k = _get_multirev_k_guess(tof, tau, S, M, is_low_path, atol, rtol)
 
     # Now that the initial guess has been performed, it is possible to start the
     # iterative process. Initialize the timer also.
@@ -328,7 +328,7 @@ def arora2013(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
-def _get_multirev_k_guess(tof, tau, S, M, low_path, atol, rtol):
+def _get_multirev_k_guess(tof, tau, S, M, is_low_path, atol, rtol):
     """Find a multi-revolution root of Arora's time-of-flight equation.
 
     Parameters
@@ -341,7 +341,7 @@ def _get_multirev_k_guess(tof, tau, S, M, low_path, atol, rtol):
         Auxiliary time-scaling variable.
     M: int
         Number of complete revolutions.
-    low_path: bool
+    is_low_path: bool
         Selects the right branch of the multi-revolution time-of-flight curve
         when True, and the left branch otherwise.
     atol: float
@@ -394,7 +394,7 @@ def _get_multirev_k_guess(tof, tau, S, M, low_path, atol, rtol):
     if abs(tof - tof_min) <= atol:
         return k_min
 
-    lower, upper = (k_min, k_right) if low_path is True else (k_left, k_min)
+    lower, upper = (k_min, k_right) if is_low_path is True else (k_left, k_min)
     return brentq(
         lambda k: tof_at(k) - tof,
         lower,

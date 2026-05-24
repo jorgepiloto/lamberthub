@@ -14,8 +14,8 @@ def izzo2015(
     r2,
     tof,
     M=0,
-    prograde=True,
-    low_path=True,
+    is_prograde=True,
+    is_low_path=True,
     maxiter=35,
     atol=1e-5,
     rtol=1e-7,
@@ -33,9 +33,9 @@ def izzo2015(
         Final position vector.
     M: int
         Number of revolutions. Must be equal or greater than 0 value.
-    prograde: bool
+    is_prograde: bool
         If `True`, specifies prograde motion. Otherwise, retrograde motion is imposed.
-    low_path: bool
+    is_low_path: bool
         If two solutions are available, it selects between high or low path.
     maxiter: int
         Maximum number of iterations.
@@ -106,13 +106,13 @@ def izzo2015(
 
     # Correct transfer angle parameter and tangential vectors regarding orbit's
     # inclination
-    ll, i_t1, i_t2 = (-ll, -i_t1, -i_t2) if prograde is False else (ll, i_t1, i_t2)
+    ll, i_t1, i_t2 = (-ll, -i_t1, -i_t2) if is_prograde is False else (ll, i_t1, i_t2)
 
     # Non dimensional time of flight
     T = np.sqrt(2 * mu / s**3) * tof
 
     # Find solutions and filter them
-    x, y = _find_xy(ll, T, M, maxiter, atol, rtol, low_path)
+    x, y = _find_xy(ll, T, M, maxiter, atol, rtol, is_low_path)
 
     # Reconstruct
     gamma = np.sqrt(mu * s / 2)
@@ -140,7 +140,7 @@ def _reconstruct(x, y, r1, r2, ll, gamma, rho, sigma):
 
 
 @jit
-def _find_xy(ll, T, M, maxiter, atol, rtol, low_path):
+def _find_xy(ll, T, M, maxiter, atol, rtol, is_low_path):
     """Computes all x, y for given number of revolutions."""
     # For abs(ll) == 1 the derivative is not continuous
     assert abs(ll) < 1
@@ -160,7 +160,7 @@ def _find_xy(ll, T, M, maxiter, atol, rtol, low_path):
         raise ValueError("No feasible solution, try lower M!")
 
     # Initial guess
-    x_0 = _initial_guess(T, ll, M, low_path)
+    x_0 = _initial_guess(T, ll, M, is_low_path)
 
     # Start Householder iterations from x_0 and find x, y
     x = _householder(x_0, T, ll, M, atol, rtol, maxiter)
@@ -259,7 +259,7 @@ def _compute_T_min(ll, M, maxiter, atol, rtol):
 
 
 @jit
-def _initial_guess(T, ll, M, low_path):
+def _initial_guess(T, ll, M, is_low_path):
     """Initial guess."""
     if M == 0:
         # Single revolution
@@ -290,7 +290,7 @@ def _initial_guess(T, ll, M, low_path):
         # Filter out the solution
         x_0 = (
             np.max(np.array([x_0l, x_0r]))
-            if low_path is True
+            if is_low_path is True
             else np.min(np.array([x_0l, x_0r]))
         )
 

@@ -30,7 +30,7 @@ from lamberthub.utils.assertions import assert_transfer_angle_not_zero
 from lamberthub.utils.kepler import kepler_from_nu
 
 
-def get_geometry(r1, r2, prograde):
+def get_geometry(r1, r2, is_prograde):
     """
     Computes associated problem geometry.
 
@@ -40,7 +40,7 @@ def get_geometry(r1, r2, prograde):
         Initial position vector.
     r2: np.array
         Final position vector.
-    prograde: bool
+    is_prograde: bool
         If True, assumes prograde motion, otherwise retrograde is applied.
 
     Returns
@@ -61,9 +61,9 @@ def get_geometry(r1, r2, prograde):
     r1_norm, r2_norm, c_norm = [np.linalg.norm(vec) for vec in [r1, r2, (r2 - r1)]]
 
     # Compute angles
-    dtheta = get_transfer_angle(r1, r2, prograde)
+    dtheta = get_transfer_angle(r1, r2, is_prograde)
     assert_transfer_angle_not_zero(dtheta)
-    w_c = get_transfer_angle(r1, (r2 - r1), prograde)
+    w_c = get_transfer_angle(r1, (r2 - r1), is_prograde)
 
     return r1_norm, r2_norm, c_norm, dtheta, w_c
 

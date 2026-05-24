@@ -15,7 +15,7 @@ def test_exceeded_maximum_number_of_iterations():
 
     # Solving the problem
     with pytest.raises(ValueError) as excinfo:
-        v1, v2 = gauss1809(mu_earth, r1, r2, tof, prograde=True, low_path=True)
+        v1, v2 = gauss1809(mu_earth, r1, r2, tof, is_prograde=True, is_low_path=True)
     assert "Exceeded maximum number of iterations." in excinfo.exconly()
 
 
@@ -28,7 +28,7 @@ def test_singular_for_180_degrees_transfer():
 
     # Solving the problem
     with pytest.raises(ValueError) as excinfo:
-        v1, v2 = gauss1809(mu_earth, r1, r2, tof, prograde=True, low_path=True)
+        v1, v2 = gauss1809(mu_earth, r1, r2, tof, is_prograde=True, is_low_path=True)
     assert "Transfer angle was found to be 180 degrees!" in excinfo.exconly()
 
 
