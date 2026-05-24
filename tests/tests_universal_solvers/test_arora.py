@@ -11,8 +11,9 @@ def test_transfer_angle_is_zero_raises_exception():
     assert "Transfer angle was found to be zero!" in excinfo.exconly()
 
 
-def test_not_implemented_error_multi_revolution_scenario():
-    with pytest.raises(NotImplementedError) as excinfo:
-        r1, r2 = [i * np.ones(3) for i in range(1, 3)]
+def test_exception_try_lower_M_multi_revolution_scenario():
+    with pytest.raises(ValueError) as excinfo:
+        r1 = np.array([1.0, 0.0, 0.0])
+        r2 = np.array([0.0, 1.0, 0.0])
         arora2013(1.00, r1, r2, 1.00, M=1)
-    assert "See https://github.com/jorgepiloto/lamberthub/issues/3" in excinfo.exconly()
+    assert "No feasible solution, try lower M!" in excinfo.exconly()

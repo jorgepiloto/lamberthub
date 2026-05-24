@@ -5,6 +5,7 @@ import time
 from numba import njit as jit
 import numpy as np
 from numpy.linalg import norm
+from scipy.optimize import brentq, minimize_scalar
 
 from lamberthub.utils.angles import get_transfer_angle
 from lamberthub.utils.assertions import (
@@ -37,6 +38,8 @@ def arora2013(
         Initial position vector.
     r2: numpy.array
         Final position vector.
+    tof: float
+        Time of flight between initial and final position vectors.
     M: int
         Number of revolutions. Must be equal or greater than 0 value.
     prograde: bool
@@ -78,13 +81,6 @@ def arora2013(
     728.
 
     """
-    # TODO: implement solver for the multi-revolution case
-    # https://github.com/jorgepiloto/lamberthub/issues/3
-    if M > 0:
-        raise NotImplementedError(
-            "See https://github.com/jorgepiloto/lamberthub/issues/3"
-        )
-
     # Check that input parameters are safe
     assert_parameters_are_valid(mu, r1, r2, tof, M)
 
@@ -131,10 +127,13 @@ def arora2013(
         # d = 1 and other two with d = -1. These last two are named H1 or H2,
         # where H refers to Hyperbolic and 1 or 2 to the type of region.
 
-        # Equations (48a and 48b) from official report, used to fix the limits
-        # between H1 and H2 regions
-        tof20 = S * np.sqrt(1 - 20 * tau) * (tau + 0.04940968903 * (1 - 20 * tau))
-        tof100 = S * np.sqrt(1 - 100 * tau) * (tau + 0.00999209404 * (1 - 100 * tau))
+        if d == -1:
+            # Equations (48a and 48b) from official report, used to fix the
+            # limits between H1 and H2 regions.
+            tof20 = S * np.sqrt(1 - 20 * tau) * (tau + 0.04940968903 * (1 - 20 * tau))
+            tof100 = (
+                S * np.sqrt(1 - 100 * tau) * (tau + 0.00999209404 * (1 - 100 * tau))
+            )
 
         # Apply the initial guess associated to a particular hyperbolic region.
 
@@ -261,17 +260,19 @@ def arora2013(
             # letter M associated with Multi-revolutions. The procedure, as
             # explained in the official report, consists into two parts: compute
             # k_bi and using this value to get the final initial guess.
-            raise NotImplementedError("Still need to implement Arora's multirev.")
+            k = _get_multirev_k_guess(tof, tau, S, M, low_path, atol, rtol)
 
     # Now that the initial guess has been performed, it is possible to start the
     # iterative process. Initialize the timer also.
     tic = time.perf_counter()
+    tac = tic
+    converged = False
     for numiter in range(1, maxiter + 1):
         # Evaluate the auxiliary function, its first and second derivative
         # w.r.t. to the independent variable
         W = _get_W(k, M)
-        Wp = _get_Wprime(k, W)
-        Wpp = _get_W2prime(k, W, Wp)
+        Wp = _get_Wprime(k, W, M)
+        Wpp = _get_W2prime(k, W, Wp, M)
 
         # Evaluate the predicted time of flight with the current value of k
         c = (1 - k * tau) / tau
@@ -280,6 +281,7 @@ def arora2013(
         # Check computed time of flight matches target one
         if np.abs(tof - tofc) <= atol:
             tac = time.perf_counter()
+            converged = True
             break
 
         # Compute the time derivatives to proceed by using Halley's method
@@ -307,6 +309,9 @@ def arora2013(
         if tof < tof_p and d > 0 and (1 - tau * k) < 0:
             k = 1 / tau - 1e-12
 
+    if not converged:
+        raise RuntimeError("Failed to converge")
+
     # Compute the time per iteration
     tpi = (tac - tic) / numiter
 
@@ -323,9 +328,106 @@ def arora2013(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
+def _get_multirev_k_guess(tof, tau, S, M, low_path, atol, rtol):
+    """Find a multi-revolution root of Arora's time-of-flight equation.
+
+    Parameters
+    ----------
+    tof: float
+        Non-dimensional target time of flight.
+    tau: float
+        Lambert geometry parameter.
+    S: float
+        Auxiliary time-scaling variable.
+    M: int
+        Number of complete revolutions.
+    low_path: bool
+        Selects the right branch of the multi-revolution time-of-flight curve
+        when True, and the left branch otherwise.
+    atol: float
+        Absolute tolerance used to compare the target and minimum time of flight.
+    rtol: float
+        Relative tolerance used by the bracketing root solver.
+
+    Returns
+    -------
+    k: float
+        Initial value of Arora's independent variable for Halley's method.
+
+    Raises
+    ------
+    ValueError
+        If the requested number of revolutions has no feasible solution for the
+        supplied time of flight.
+    RuntimeError
+        If the minimum time of flight cannot be found.
+
+    Notes
+    -----
+    Multi-revolution transfers have two roots around the minimum time of flight.
+    This helper first locates that minimum, then brackets the selected branch.
+
+    """
+    sq2 = np.sqrt(2)
+    eps = 1e-8
+    k_left = -sq2 + eps
+    k_right = sq2 - eps
+
+    def tof_at(k):
+        """Evaluate the multi-revolution time of flight at ``k``."""
+        return _get_TOF(k, tau, S, _get_W(k, M))
+
+    minimum = minimize_scalar(
+        tof_at,
+        bounds=(k_left, k_right),
+        method="bounded",
+        options={"xatol": max(atol, 1e-13)},
+    )
+    if not minimum.success:
+        raise RuntimeError("Failed to find multi-revolution minimum")
+
+    k_min = minimum.x
+    tof_min = minimum.fun
+    if tof < tof_min - atol:
+        raise ValueError("No feasible solution, try lower M!")
+
+    if abs(tof - tof_min) <= atol:
+        return k_min
+
+    lower, upper = (k_min, k_right) if low_path is True else (k_left, k_min)
+    return brentq(
+        lambda k: tof_at(k) - tof,
+        lower,
+        upper,
+        xtol=atol,
+        rtol=rtol,
+        maxiter=100,
+    )
+
+
 @jit
 def _get_gammas(F_i, F_n, F_star):
-    """Compute different gamma values"""
+    """Compute gamma coefficients for Arora's rational initial guess.
+
+    Parameters
+    ----------
+    F_i: float
+        Function value at the interior interpolation point.
+    F_n: float
+        Function value at the lower boundary point.
+    F_star: float
+        Target function value.
+
+    Returns
+    -------
+    gamma1: float
+        First gamma coefficient.
+    gamma2: float
+        Second gamma coefficient.
+    gamma3: float
+        Third gamma coefficient.
+
+    """
     gamma1, gamma2, gamma3 = (
         F_i * (F_star - F_n),
         F_star * (F_n - F_i),
@@ -402,7 +504,7 @@ def _get_W(k, M, epsilon=2e-2):
 
     # Apply a particular formulae depending on the case
 
-    if -sq2 <= k < (sq2 - epsilon):
+    if -sq2 <= k < (sq2 - epsilon) or (M > 0 and -sq2 <= k < sq2):
         # Elliptical orbits
         W = ((1 - sgn_k) * np.pi + sgn_k * np.arccos(1 - m) + 2 * np.pi * M) / (
             np.sqrt(m**3)
@@ -412,7 +514,7 @@ def _get_W(k, M, epsilon=2e-2):
         # Hyperbolic orbits
         W = -np.arccosh(1 - m) / np.sqrt(-(m**3)) - k / m
 
-    elif sq2 - epsilon <= k <= sq2 + epsilon:
+    elif M == 0 and sq2 - epsilon <= k <= sq2 + epsilon:
         # Direct transfer, no complete revolutions (M = 0)
 
         # Allocate auxiliary variables
@@ -529,7 +631,7 @@ def _get_Ws2prime(k):
 
 
 @jit
-def _get_Wprime(k, W, epsilon=2e-2):
+def _get_Wprime(k, W, M=0, epsilon=2e-2):
     """
     Evaluates the first derivative of the auxiliary function w.r.t. the
     independent variable k.
@@ -540,6 +642,10 @@ def _get_Wprime(k, W, epsilon=2e-2):
         The independent variable.
     W: float
         The auxiliary function value.
+    M: int
+        Number of revolutions.
+    epsilon: float
+        Tolerance parameter. Default value as in the original report.
 
     Returns
     -------
@@ -555,10 +661,11 @@ def _get_Wprime(k, W, epsilon=2e-2):
     m = 2 - k**2
 
     # Filter case
-    if k < np.sqrt(2) - epsilon:
+    sq2 = np.sqrt(2)
+    if k < sq2 - epsilon or (M > 0 and k < sq2):
         W_prime = (-2 + 3 * W * k) / m
 
-    elif np.sqrt(2) - epsilon < k < np.sqrt(2) + epsilon:
+    elif M == 0 and sq2 - epsilon < k < sq2 + epsilon:
         # The partial derivative of Ws/k was not provided in the original
         # report. This is probably because it is trivial.
         W_prime = _get_Wsprime(k)
@@ -574,7 +681,7 @@ def _get_Wprime(k, W, epsilon=2e-2):
 
 
 @jit
-def _get_W2prime(k, W, W_prime, epsilon=2e-2):
+def _get_W2prime(k, W, W_prime, M=0, epsilon=2e-2):
     """
     Evaluates the second derivative of the auxiliary function w.r.t. the
     independent variable k.
@@ -585,6 +692,12 @@ def _get_W2prime(k, W, W_prime, epsilon=2e-2):
         The independent variable.
     W: float
         The auxiliary function value.
+    W_prime: float
+        The first derivative of the auxiliary function.
+    M: int
+        Number of revolutions.
+    epsilon: float
+        Tolerance parameter. Default value as in the original report.
 
     Returns
     -------
@@ -600,10 +713,11 @@ def _get_W2prime(k, W, W_prime, epsilon=2e-2):
     m = 2 - k**2
 
     # Filter case
-    if k < np.sqrt(2) - epsilon:
+    sq2 = np.sqrt(2)
+    if k < sq2 - epsilon or (M > 0 and k < sq2):
         W_2prime = (5 * W_prime * k + 3 * W) / m
 
-    elif np.sqrt(2) - epsilon < k < np.sqrt(2) + epsilon:
+    elif M == 0 and sq2 - epsilon < k < sq2 + epsilon:
         # The partial derivative of Ws/k was not provided in the original
         # report. This is probably because it is trivial.
         W_2prime = _get_Ws2prime(k)
@@ -630,6 +744,8 @@ def _get_TOF(k, tau, S, W):
         Lambert's geometry parameter.
     S: float
         Auxiliary variable.
+    W: float
+        Value of the auxiliary function.
 
     Returns
     -------

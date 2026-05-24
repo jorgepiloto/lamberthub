@@ -34,11 +34,11 @@ ZERO_REV_SOLVERS = [
 ]
 """ A list holding all direct-revolution lamberthub solvers """
 
-MULTI_REV_SOLVERS = [gooding1990, izzo2015, negrete2024]
+MULTI_REV_SOLVERS = [gooding1990, arora2013, izzo2015, negrete2024]
 """ A list holding all multi-revolution lamberthub solvers """
 
 NON_ROBUST_SOLVERS = [gauss1809]
 """ A list holding non-robust lamberthub solvers """
 
-ROBUST_SOLVERS = [gooding1990, izzo2015, negrete2024]
+ROBUST_SOLVERS = [gooding1990, arora2013, izzo2015, negrete2024]
 """ A list holding all robust lamberthub solvers """
