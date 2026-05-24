@@ -5,6 +5,7 @@ from lamberthub.p_solvers.battin import battin1984
 from lamberthub.p_solvers.gauss import gauss1809
 from lamberthub.series_solvers.thorne import thorne2004
 from lamberthub.universal_solvers.arora import arora2013
+from lamberthub.universal_solvers.der import der2011
 from lamberthub.universal_solvers.gooding import gooding1990
 from lamberthub.universal_solvers.izzo import izzo2015
 from lamberthub.universal_solvers.mcelreath import mcelreath2025
@@ -18,6 +19,7 @@ ALL_SOLVERS = [
     gauss1809,
     battin1984,
     gooding1990,
+    der2011,
     thorne2004,
     avanzini2008,
     arora2013,
@@ -31,6 +33,7 @@ ALL_SOLVERS = [
 ZERO_REV_SOLVERS = [
     battin1984,
     gooding1990,
+    der2011,
     thorne2004,
     avanzini2008,
     arora2013,
@@ -40,11 +43,25 @@ ZERO_REV_SOLVERS = [
 ]
 """ A list holding all direct-revolution lamberthub solvers """
 
-MULTI_REV_SOLVERS = [gooding1990, arora2013, izzo2015, negrete2024, mcelreath2025]
+MULTI_REV_SOLVERS = [
+    gooding1990,
+    der2011,
+    arora2013,
+    izzo2015,
+    negrete2024,
+    mcelreath2025,
+]
 """ A list holding all multi-revolution lamberthub solvers """
 
 NON_ROBUST_SOLVERS = [gauss1809]
 """ A list holding non-robust lamberthub solvers """
 
-ROBUST_SOLVERS = [gooding1990, arora2013, izzo2015, negrete2024, mcelreath2025]
+ROBUST_SOLVERS = [
+    gooding1990,
+    der2011,
+    arora2013,
+    izzo2015,
+    negrete2024,
+    mcelreath2025,
+]
 """ A list holding all robust lamberthub solvers """
