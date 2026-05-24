@@ -2,6 +2,7 @@
 
 import time
 
+from numba import njit as jit
 import numpy as np
 from numpy.linalg import norm
 
@@ -135,6 +136,13 @@ def gooding1990(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
+@jit
+def _d8rt(x):
+    """Compute the eighth root of a positive scalar."""
+    return np.sqrt(np.sqrt(np.sqrt(x)))
+
+
+@jit
 def tlamb(m, q, qsqfm1, x, n):
     """
     Auxiliary routine for computing the non-dimensional time of flight as
@@ -389,11 +397,6 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
     # Boolean variables to emulate original code as max as possible.
     goto3 = False
 
-    # Auxiliary function for 8th root.
-    def d8rt(x):
-        """Compute the eighth root of a positive scalar."""
-        return np.sqrt(np.sqrt(np.sqrt(x)))
-
     # Start computing the initial guess. The process is different depending
     # on the number of revolutions.
     if m == 0:
@@ -412,7 +415,7 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
             w = x + c0 * np.sqrt(2.0 * (1.0 - thr2))
 
             if w < 0.0:
-                x = x - np.sqrt(d8rt(-w)) * (x + np.sqrt(tdiff / (tdiff + 1.5 * t0)))
+                x = x - np.sqrt(_d8rt(-w)) * (x + np.sqrt(tdiff / (tdiff + 1.5 * t0)))
 
             w = 4.0 / (4.0 + tdiff)
             x = x * (1.0 + x * (c1 * w - c2 * x * np.sqrt(w)))
@@ -422,9 +425,9 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
         xm = 1.0 / (1.5 * (m + 0.5) * np.pi)
 
         if thr2 < 0.5:
-            xm = d8rt(2.0 * thr2) * xm
+            xm = _d8rt(2.0 * thr2) * xm
         if thr2 > 0.5:
-            xm = (2.0 - d8rt(2.0 - 2.0 * thr2)) * xm
+            xm = (2.0 - _d8rt(2.0 - 2.0 * thr2)) * xm
 
         # For locating Tmin, an iterative process is required. Original
         # implementation imposed 12 iterations but they were not considered to
@@ -537,7 +540,7 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
             w = x + c0 * np.sqrt(2.0 * (1.0 - thr2))
 
             if w < 0.0:
-                x = x - np.sqrt(d8rt(-w)) * (x + np.sqrt(tdiff / (tdiff + 1.5 * t0)))
+                x = x - np.sqrt(_d8rt(-w)) * (x + np.sqrt(tdiff / (tdiff + 1.5 * t0)))
 
             w = 4.0 / (4.0 + tdiff)
             x = x * (
