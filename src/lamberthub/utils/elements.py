@@ -23,7 +23,7 @@ from lamberthub.linalg import dot
 from lamberthub.utils.angles import E_to_nu, H_to_nu
 
 
-@jit
+@jit(cache=True)
 def rv_pqw(k, p, ecc, nu):
     r"""Return r and v vectors in perifocal frame.
 
@@ -71,7 +71,7 @@ def rv_pqw(k, p, ecc, nu):
     return pqw
 
 
-@jit
+@jit(cache=True)
 def coe_rotation_matrix(inc, raan, argp):
     """Create a rotation matrix for coe transformation."""
     r = rotation_matrix(raan, 2)
@@ -80,7 +80,7 @@ def coe_rotation_matrix(inc, raan, argp):
     return r
 
 
-@jit
+@jit(cache=True)
 def coe2rv(k, p, ecc, inc, raan, argp, nu):
     r"""Convert from classical orbital to state vectors.
 
@@ -144,7 +144,7 @@ def coe2rv(k, p, ecc, inc, raan, argp, nu):
     return ijk
 
 
-@jit
+@jit(cache=True)
 def rv2coe(k, r, v, tol=1e-8):
     r"""Convert from vectors to classical orbital elements.
 
@@ -276,7 +276,7 @@ def rv2coe(k, r, v, tol=1e-8):
     return p, ecc, inc, raan, argp, nu
 
 
-@jit
+@jit(cache=True)
 def rotation_matrix(angle, axis):
     """Return a rotation matrix for a certain angle around an axis.
 

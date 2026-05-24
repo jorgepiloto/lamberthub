@@ -4,7 +4,7 @@ from numba import njit as jit
 import numpy as np
 
 
-@jit
+@jit(cache=True, fastmath=True)
 def dot(v1, v2):
     """Compute the dot product between two vectors.
 
@@ -29,7 +29,7 @@ def dot(v1, v2):
     return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2]
 
 
-@jit
+@jit(cache=True, fastmath=True)
 def cross(v1, v2):
     """Compute the cross product between two vectors.
 
@@ -49,7 +49,7 @@ def cross(v1, v2):
     return np.cross(v1, v2)
 
 
-@jit
+@jit(cache=True, fastmath=True)
 def norm(vector):
     """Compute the magnitude of a vector.
 
