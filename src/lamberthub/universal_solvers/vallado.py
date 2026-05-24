@@ -2,6 +2,7 @@
 
 import time
 
+from numba import njit as jit
 import numpy as np
 
 from lamberthub.utils.angles import get_transfer_angle
@@ -145,6 +146,7 @@ def vallado2013(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
+@jit
 def _tof_vallado(mu, psi, X, A, y):
     """Evaluates universal Kepler's equation.
 
@@ -171,6 +173,7 @@ def _tof_vallado(mu, psi, X, A, y):
     return tof
 
 
+@jit
 def _X_at_psi(psi, y):
     """Computes the value of X at given psi.
 
@@ -191,6 +194,7 @@ def _X_at_psi(psi, y):
     return X
 
 
+@jit
 def _get_A(r1_norm, r2_norm, dtheta):
     """Computes the value of the A constant.
 
@@ -214,6 +218,7 @@ def _get_A(r1_norm, r2_norm, dtheta):
     return A
 
 
+@jit
 def _y_at_psi(psi, r1_norm, r2_norm, A):
     """Evaluates the value of y at given psi.
 

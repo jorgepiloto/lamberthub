@@ -15,13 +15,15 @@ References
 
 """
 
+from numba import njit as jit
 import numpy as np
 from numpy import cos, cross, sin, sqrt
-from numpy.linalg import norm
 
+from lamberthub.linalg import dot
 from lamberthub.utils.angles import E_to_nu, H_to_nu
 
 
+@jit
 def rv_pqw(k, p, ecc, nu):
     r"""Return r and v vectors in perifocal frame.
 
@@ -69,6 +71,7 @@ def rv_pqw(k, p, ecc, nu):
     return pqw
 
 
+@jit
 def coe_rotation_matrix(inc, raan, argp):
     """Create a rotation matrix for coe transformation."""
     r = rotation_matrix(raan, 2)
@@ -77,6 +80,7 @@ def coe_rotation_matrix(inc, raan, argp):
     return r
 
 
+@jit
 def coe2rv(k, p, ecc, inc, raan, argp, nu):
     r"""Convert from classical orbital to state vectors.
 
@@ -140,6 +144,7 @@ def coe2rv(k, p, ecc, inc, raan, argp, nu):
     return ijk
 
 
+@jit
 def rv2coe(k, r, v, tol=1e-8):
     r"""Convert from vectors to classical orbital elements.
 
@@ -224,11 +229,14 @@ def rv2coe(k, r, v, tol=1e-8):
 
     """
     h = cross(r, v)
-    n = cross([0, 0, 1], h)
-    e = ((v.dot(v) - k / (norm(r))) * r - r.dot(v) * v) / k
-    ecc = norm(e)
-    p = h.dot(h) / k
-    inc = np.arccos(h[2] / norm(h))
+    n = cross(np.array([0.0, 0.0, 1.0]), h)
+    r_norm = sqrt(dot(r, r))
+    v_norm = sqrt(dot(v, v))
+    h_norm = sqrt(dot(h, h))
+    e = ((dot(v, v) - k / r_norm) * r - dot(r, v) * v) / k
+    ecc = sqrt(dot(e, e))
+    p = dot(h, h) / k
+    inc = np.arccos(h[2] / h_norm)
 
     circular = ecc < tol
     equatorial = abs(inc) < tol
@@ -236,12 +244,12 @@ def rv2coe(k, r, v, tol=1e-8):
     if equatorial and not circular:
         raan = 0
         argp = np.arctan2(e[1], e[0]) % (2 * np.pi)  # Longitude of periapsis
-        nu = np.arctan2(h.dot(cross(e, r)) / norm(h), r.dot(e))
+        nu = np.arctan2(dot(h, cross(e, r)) / h_norm, dot(r, e))
     elif not equatorial and circular:
         raan = np.arctan2(n[1], n[0]) % (2 * np.pi)
         argp = 0
         # Argument of latitude
-        nu = np.arctan2(r.dot(cross(h, n)) / norm(h), r.dot(n))
+        nu = np.arctan2(dot(r, cross(h, n)) / h_norm, dot(r, n))
     elif equatorial and circular:
         raan = 0
         argp = 0
@@ -250,17 +258,17 @@ def rv2coe(k, r, v, tol=1e-8):
         a = p / (1 - (ecc**2))
         ka = k * a
         if a > 0:
-            e_se = r.dot(v) / sqrt(ka)
-            e_ce = norm(r) * v.dot(v) / k - 1
+            e_se = dot(r, v) / sqrt(ka)
+            e_ce = r_norm * dot(v, v) / k - 1
             nu = E_to_nu(np.arctan2(e_se, e_ce), ecc)
         else:
-            e_sh = r.dot(v) / sqrt(-ka)
-            e_ch = norm(r) * (norm(v) ** 2) / k - 1
+            e_sh = dot(r, v) / sqrt(-ka)
+            e_ch = r_norm * (v_norm**2) / k - 1
             nu = H_to_nu(np.log((e_ch + e_sh) / (e_ch - e_sh)) / 2, ecc)
 
         raan = np.arctan2(n[1], n[0]) % (2 * np.pi)
-        px = r.dot(n)
-        py = r.dot(cross(h, n)) / norm(h)
+        px = dot(r, n)
+        py = dot(r, cross(h, n)) / h_norm
         argp = (np.arctan2(py, px) - nu) % (2 * np.pi)
 
     nu = (nu + np.pi) % (2 * np.pi) - np.pi
@@ -268,6 +276,7 @@ def rv2coe(k, r, v, tol=1e-8):
     return p, ecc, inc, raan, argp, nu
 
 
+@jit
 def rotation_matrix(angle, axis):
     """Return a rotation matrix for a certain angle around an axis.
 

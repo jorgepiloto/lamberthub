@@ -2,6 +2,7 @@
 
 import time
 
+from numba import njit as jit
 import numpy as np
 from numpy.linalg import norm
 
@@ -322,6 +323,7 @@ def arora2013(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
+@jit
 def _get_gammas(F_i, F_n, F_star):
     """Compute different gamma values"""
     gamma1, gamma2, gamma3 = (
@@ -332,6 +334,7 @@ def _get_gammas(F_i, F_n, F_star):
     return gamma1, gamma2, gamma3
 
 
+@jit
 def _get_x(F_0, F_1, F_i, F_star, Z, alpha):
     """Computes Sundman transformation variable.
 
@@ -367,6 +370,7 @@ def _get_x(F_0, F_1, F_i, F_star, Z, alpha):
     return x
 
 
+@jit
 def _get_W(k, M, epsilon=2e-2):
     """
     Evaluates the auxiliary function at particular value of the independent
@@ -413,7 +417,13 @@ def _get_W(k, M, epsilon=2e-2):
 
         # Allocate auxiliary variables
         v = k - sq2
-        v2, v3, v4, v5, v6, v7, v8 = [v**i for i in range(2, 9)]
+        v2 = v**2
+        v3 = v**3
+        v4 = v**4
+        v5 = v**5
+        v6 = v**6
+        v7 = v**7
+        v8 = v**8
 
         W = (
             (np.sqrt(2) / 3)
@@ -432,6 +442,7 @@ def _get_W(k, M, epsilon=2e-2):
     return W
 
 
+@jit
 def _get_Wsprime(k):
     """Evaluate the first derivative of Ws w.r.t. independent variable k.
 
@@ -454,7 +465,12 @@ def _get_Wsprime(k):
     # Allocate auxiliary variables
     sq2 = np.sqrt(2)
     v = k - sq2
-    v2, v3, v4, v5, v6, v7 = [v**i for i in range(2, 8)]
+    v2 = v**2
+    v3 = v**3
+    v4 = v**4
+    v5 = v**5
+    v6 = v**6
+    v7 = v**7
 
     Ws_prime = (
         -1 / 5
@@ -470,6 +486,7 @@ def _get_Wsprime(k):
     return Ws_prime
 
 
+@jit
 def _get_Ws2prime(k):
     """Evaluate the second derivative of Ws w.r.t. independent variable k.
 
@@ -492,7 +509,11 @@ def _get_Ws2prime(k):
     # Allocate auxiliary variables
     sq2 = np.sqrt(2)
     v = k - sq2
-    v2, v3, v4, v5, v6 = [v**i for i in range(2, 7)]
+    v2 = v**2
+    v3 = v**3
+    v4 = v**4
+    v5 = v**5
+    v6 = v**6
 
     Ws_2prime = (
         sq2 * (4 / 35)
@@ -507,6 +528,7 @@ def _get_Ws2prime(k):
     return Ws_2prime
 
 
+@jit
 def _get_Wprime(k, W, epsilon=2e-2):
     """
     Evaluates the first derivative of the auxiliary function w.r.t. the
@@ -551,6 +573,7 @@ def _get_Wprime(k, W, epsilon=2e-2):
     return W_prime
 
 
+@jit
 def _get_W2prime(k, W, W_prime, epsilon=2e-2):
     """
     Evaluates the second derivative of the auxiliary function w.r.t. the
@@ -595,6 +618,7 @@ def _get_W2prime(k, W, W_prime, epsilon=2e-2):
     return W_2prime
 
 
+@jit
 def _get_TOF(k, tau, S, W):
     """Evaluates the time of flight at a particular value of the independent variable.
 
