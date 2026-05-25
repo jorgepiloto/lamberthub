@@ -45,6 +45,9 @@ tests = [
     "pytest==9.0.3",
     "pytest-cov==7.1.0",
 ]
+benchmarks = [
+    "pytest-benchmark==5.2.3",
+]
 
 [project.urls]
 Homepage = "https://github.com/jorgepiloto/lamberthub"
@@ -58,6 +61,12 @@ exclude = [
     "doc/",
     "tests",
     "art/",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = [
+    "benchmark: performance benchmarks",
 ]
 
 [tool.coverage.run]
