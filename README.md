@@ -151,3 +151,11 @@ Final velocity:   [-9.511186  1.88884006  1.42137810] [AU / years]
 
 Directly taken from *An Introduction to the Mathematics and Methods of
 Astrodynamics, revised edition, by R.H. Battin, problem 7-12*.
+
+## Performance comparison
+
+<!-- performance-comparison:start -->
+
+_This section is generated from CI benchmark artifacts._
+
+<!-- performance-comparison:end -->
