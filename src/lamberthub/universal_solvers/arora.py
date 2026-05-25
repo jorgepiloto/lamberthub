@@ -264,8 +264,7 @@ def arora2013(
 
     # Now that the initial guess has been performed, it is possible to start the
     # iterative process. Initialize the timer also.
-    tic = time.perf_counter()
-    tac = tic
+    tic = time.perf_counter() if full_output else 0.0
     converged = False
     for numiter in range(1, maxiter + 1):
         # Evaluate the auxiliary function, its first and second derivative
@@ -280,7 +279,6 @@ def arora2013(
 
         # Check computed time of flight matches target one
         if np.abs(tof - tofc) <= atol:
-            tac = time.perf_counter()
             converged = True
             break
 
@@ -313,7 +311,7 @@ def arora2013(
         raise RuntimeError("Failed to converge")
 
     # Compute the time per iteration
-    tpi = (tac - tic) / numiter
+    tpi = (time.perf_counter() - tic) / numiter if full_output else 0.0
 
     # Evaluate f and g functions. These are equations (32) and (33)
     f = 1 - (1 - k * tau) * (r1hat_norm + r2hat_norm) / r1hat_norm
@@ -405,7 +403,7 @@ def _get_multirev_k_guess(tof, tau, S, M, is_low_path, atol, rtol):
     )
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _get_gammas(F_i, F_n, F_star):
     """Compute gamma coefficients for Arora's rational initial guess.
 
@@ -436,7 +434,7 @@ def _get_gammas(F_i, F_n, F_star):
     return gamma1, gamma2, gamma3
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _get_x(F_0, F_1, F_i, F_star, Z, alpha):
     """Computes Sundman transformation variable.
 
@@ -472,7 +470,7 @@ def _get_x(F_0, F_1, F_i, F_star, Z, alpha):
     return x
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _get_W(k, M, epsilon=2e-2):
     """
     Evaluates the auxiliary function at particular value of the independent
@@ -544,7 +542,7 @@ def _get_W(k, M, epsilon=2e-2):
     return W
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _get_Wsprime(k):
     """Evaluate the first derivative of Ws w.r.t. independent variable k.
 
@@ -588,7 +586,7 @@ def _get_Wsprime(k):
     return Ws_prime
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _get_Ws2prime(k):
     """Evaluate the second derivative of Ws w.r.t. independent variable k.
 
@@ -630,7 +628,7 @@ def _get_Ws2prime(k):
     return Ws_2prime
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _get_Wprime(k, W, M=0, epsilon=2e-2):
     """
     Evaluates the first derivative of the auxiliary function w.r.t. the
@@ -680,7 +678,7 @@ def _get_Wprime(k, W, M=0, epsilon=2e-2):
     return W_prime
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _get_W2prime(k, W, W_prime, M=0, epsilon=2e-2):
     """
     Evaluates the second derivative of the auxiliary function w.r.t. the
@@ -732,7 +730,7 @@ def _get_W2prime(k, W, W_prime, M=0, epsilon=2e-2):
     return W_2prime
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _get_TOF(k, tau, S, W):
     """Evaluates the time of flight at a particular value of the independent variable.
 

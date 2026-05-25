@@ -104,12 +104,11 @@ def thorne2004(
     t_p = get_parabolic_tof(mu, semiperimeter, c_norm, mp)
     t_min = get_minimum_energy_tof(mu, semiperimeter, c_norm, mp)
 
-    tic = time.perf_counter()
+    tic = time.perf_counter() if full_output else 0.0
     a, branch, numiter = get_semimajor_axis(
         mu, semiperimeter, c_norm, tof, t_p, t_min, mp, maxiter, atol, rtol
     )
-    tac = time.perf_counter()
-    tpi = (tac - tic) / numiter
+    tpi = (time.perf_counter() - tic) / numiter if full_output else 0.0
 
     x = get_x_from_semimajor_axis(a, semiperimeter, branch)
     y = get_y_from_x(x, r1, r2, semiperimeter, c_norm, is_prograde)

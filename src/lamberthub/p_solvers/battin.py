@@ -121,7 +121,7 @@ def battin1984(
     x0 = ll if T > T_p else 0
 
     # The iterative procedure starts
-    tic = time.perf_counter()
+    tic = time.perf_counter() if full_output else 0.0
     for numiter in range(1, maxiter + 1):
         # Evaluate the h coefficients given by equations (47) and (48) from the
         # report [1] or the relations (7.111) and (7.112) from the book [2]. The
@@ -142,8 +142,7 @@ def battin1984(
         # stop the iteration procedure, otherwise update the initial guess and
         # keep performing the computation.
         if np.abs(x - x0) <= atol:
-            tac = time.perf_counter()
-            tpi = (tac - tic) / numiter
+            tpi = (time.perf_counter() - tic) / numiter if full_output else 0.0
             break
         else:
             x0 = x
@@ -161,7 +160,7 @@ def battin1984(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _battin_first_equation(y, ll, m):
     """Battin's first equation.
 
@@ -189,7 +188,7 @@ def _battin_first_equation(y, ll, m):
     return x
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _battin_second_equation(u, h1, h2):
     """Battin's second equation.
 
@@ -218,7 +217,7 @@ def _battin_second_equation(u, h1, h2):
     return y
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _get_lambda(c, s, dtheta):
     """Compute the transfer angle parameter.
 
@@ -246,7 +245,7 @@ def _get_lambda(c, s, dtheta):
     return _lambda
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _get_ll(_lambda):
     """Computes the l variable.
 
@@ -269,7 +268,7 @@ def _get_ll(_lambda):
     return ll
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _get_m(mu, tof, s, _lambda):
     """Computes the m auxiliary variable.
 
@@ -298,7 +297,7 @@ def _get_m(mu, tof, s, _lambda):
     return m
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _get_h_coefficients(x, ll, m):
     """Evaluates the h1 and h2 coefficients.
 
@@ -336,7 +335,7 @@ def _get_h_coefficients(x, ll, m):
     return (h1, h2)
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _u_at_h(h1, h2):
     """Evaluates u at h coefficients.
 
@@ -357,7 +356,7 @@ def _u_at_h(h1, h2):
     return u
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _u_at_B(B):
     """Evaluates u auxiliary variable at given B.
 
@@ -380,7 +379,7 @@ def _u_at_B(B):
     return u
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _B_at_h(h1, h2):
     """Evaluates B auxiliary variable at given h coefficients.
 
@@ -405,7 +404,7 @@ def _B_at_h(h1, h2):
     return B
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _xi_at_x(x, levels=125):
     """Evaluates the xi function at a particular value of x.
 
@@ -453,7 +452,7 @@ def _xi_at_x(x, levels=125):
     return xi
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _K_at_u(u, levels=1000):
     """Evaluates the K function at a particular value of u.
 

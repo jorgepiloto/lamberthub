@@ -96,7 +96,7 @@ def jiang2016(
 
     tof_parabolic = _tof_parabolic(mu, s, c, theta)
 
-    tic = time.perf_counter()
+    tic = time.perf_counter() if full_output else 0.0
     if np.isclose(tof, tof_parabolic, rtol=rtol, atol=atol):
         p = _parabolic_p(r1_norm, r2_norm, c, s, theta)
         numiter = 0
@@ -126,8 +126,11 @@ def jiang2016(
         )
         p = _hyperbolic_p(a, r1_norm, r2_norm, c, s, theta)
 
-    tac = time.perf_counter()
-    tpi = 0.0 if numiter == 0 else (tac - tic) / numiter
+    if full_output:
+        tac = time.perf_counter()
+        tpi = 0.0 if numiter == 0 else (tac - tic) / numiter
+    else:
+        tpi = 0.0
 
     v1, v2 = _reconstruct_velocities(mu, r1, r2, r1_norm, r2_norm, theta, p)
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)

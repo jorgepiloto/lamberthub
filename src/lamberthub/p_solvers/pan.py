@@ -111,7 +111,7 @@ def pan2016(
 
     geometry = _get_planar_geometry(r1, r2, theta, is_prograde)
 
-    tic = time.perf_counter()
+    tic = time.perf_counter() if full_output else 0.0
     try:
         omega, numiter = _find_argument_of_periapsis(
             mu,
@@ -135,8 +135,7 @@ def pan2016(
             rtol=rtol,
             full_output=full_output,
         )
-    tac = time.perf_counter()
-    tpi = (tac - tic) / numiter
+    tpi = (time.perf_counter() - tic) / numiter if full_output else 0.0
 
     elements = _elements_at_omega(geometry, omega)
     v1, v2 = _reconstruct_velocities(mu, geometry, elements)

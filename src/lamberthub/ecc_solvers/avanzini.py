@@ -34,7 +34,6 @@ import time
 
 from numba import njit as jit
 import numpy as np
-from scipy.optimize import newton
 
 from lamberthub.ecc_solvers.utils import (
     _f,
@@ -125,23 +124,13 @@ def avanzini2008(
     # did not provided a derivative for Kepler's equation of time w.r.t. the ecc_T
     # variable, so this root solver is the one required rather than the pure N-R
     # one.
-    tic = time.perf_counter()
-    x_sol, r = newton(
-        _f,
-        0,
-        args=(eccT_at_x, mu, geometry, tof),
-        maxiter=maxiter,
-        tol=atol,
-        rtol=rtol,
-        full_output=True,
+    tic = time.perf_counter() if full_output else 0.0
+    x_sol, numiter = _secant(
+        _f, 0.0, (eccT_at_x, mu, geometry, tof), maxiter, atol, rtol
     )
-    tac = time.perf_counter()
-
-    # Extract the number of iterations
-    numiter = r.iterations
 
     # Compute the time per iteration
-    tpi = (tac - tic) / numiter
+    tpi = (time.perf_counter() - tic) / numiter if full_output else 0.0
 
     # Solve the actual value of ecc_T at solved x and retrieve COE elements
     ecc_T = eccT_at_x(x_sol)
@@ -212,3 +201,19 @@ def _get_eccT_at_x(geometry):
             return ecc_P * (1 - np.exp(-x / ecc_P))
 
     return eccT_at_x
+
+
+def _secant(f, x0, args, maxiter, atol, rtol):
+    """Hand-rolled secant root-finder mirroring scipy.optimize.newton (no fprime)."""
+    f0 = f(x0, *args)
+    x1 = x0 + 1e-4 if x0 >= 0 else x0 - 1e-4
+    f1 = f(x1, *args)
+    for i in range(1, maxiter + 1):
+        if f1 == f0:
+            return (x1 + x0) * 0.5, i
+        x_new = x1 - f1 * (x1 - x0) / (f1 - f0)
+        if abs(x_new - x1) <= atol + rtol * abs(x_new):
+            return x_new, i
+        x0, f0 = x1, f1
+        x1, f1 = x_new, f(x_new, *args)
+    raise RuntimeError("Failed to converge")

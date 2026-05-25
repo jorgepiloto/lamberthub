@@ -101,7 +101,7 @@ def vallado2013(
     # The initial guess and limits for the bisection method
     psi, psi_low, psi_up = 0.0, -4 * np.pi**2, 4 * np.pi**2
 
-    tic = time.perf_counter()
+    tic = time.perf_counter() if full_output else 0.0
     for numiter in range(1, maxiter + 1):
         # Evaluate the value of y at a given psi
         y = _y_at_psi(psi, r1_norm, r2_norm, A)
@@ -122,8 +122,7 @@ def vallado2013(
 
         # Convergence check
         if np.abs((tof_new - tof) / tof) < rtol:
-            tac = time.perf_counter()
-            tpi = (tac - tic) / numiter
+            tpi = (time.perf_counter() - tic) / numiter if full_output else 0.0
             break
 
         # Bisection check
@@ -146,7 +145,7 @@ def vallado2013(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _tof_vallado(mu, psi, X, A, y):
     """Evaluates universal Kepler's equation.
 
@@ -173,7 +172,7 @@ def _tof_vallado(mu, psi, X, A, y):
     return tof
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _X_at_psi(psi, y):
     """Computes the value of X at given psi.
 
@@ -194,7 +193,7 @@ def _X_at_psi(psi, y):
     return X
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _get_A(r1_norm, r2_norm, dtheta):
     """Computes the value of the A constant.
 
@@ -218,7 +217,7 @@ def _get_A(r1_norm, r2_norm, dtheta):
     return A
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _y_at_psi(psi, r1_norm, r2_norm, A):
     """Evaluates the value of y at given psi.
 
