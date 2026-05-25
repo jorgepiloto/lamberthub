@@ -47,9 +47,9 @@ jobs:
       matrix:
         os: [ubuntu-latest]
         cfg:
-          - {python-version: '3.12', extra-args: '--cov=lamberthub --cov-report=term --cov-report=html:.cov/html'}
-          - {python-version: '3.13', extra-args: ''}
-          - {python-version: '3.14', extra-args: ''}
+          - {python-version: '3.12', extra-args: '-m "not benchmark" --cov=lamberthub --cov-report=term --cov-report=html:.cov/html'}
+          - {python-version: '3.13', extra-args: '-m "not benchmark"'}
+          - {python-version: '3.14', extra-args: '-m "not benchmark"'}
       fail-fast: false
     steps:
       - name: "Run tests"
