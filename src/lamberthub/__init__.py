@@ -5,6 +5,7 @@ from lamberthub.p_solvers.battin import battin1984
 from lamberthub.p_solvers.gauss import gauss1809
 from lamberthub.p_solvers.jiang import jiang2016
 from lamberthub.p_solvers.pan import pan2016
+from lamberthub.regularization.delatorre import delatorre2018
 from lamberthub.series_solvers.thorne import thorne2004
 from lamberthub.universal_solvers.arora import arora2013
 from lamberthub.universal_solvers.der import der2011
@@ -31,6 +32,7 @@ ALL_SOLVERS = [
     izzo2015,
     negrete2024,
     mcelreath2025,
+    delatorre2018,
 ]
 """ A list holding all lamberthub available solvers """
 
@@ -46,6 +48,7 @@ ZERO_REV_SOLVERS = [
     izzo2015,
     negrete2024,
     mcelreath2025,
+    delatorre2018,
 ]
 """ A list holding all direct-revolution lamberthub solvers """
 
@@ -56,6 +59,7 @@ MULTI_REV_SOLVERS = [
     izzo2015,
     negrete2024,
     mcelreath2025,
+    delatorre2018,
 ]
 """ A list holding all multi-revolution lamberthub solvers """
 
@@ -69,5 +73,6 @@ ROBUST_SOLVERS = [
     izzo2015,
     negrete2024,
     mcelreath2025,
+    delatorre2018,
 ]
 """ A list holding all robust lamberthub solvers """
