@@ -99,7 +99,7 @@ def der2011(
         if tau < tau_min:
             raise ValueError("No feasible solution, try lower M!")
 
-    tic = time.perf_counter()
+    tic = time.perf_counter() if full_output else 0.0
     x, y, numiter = _find_path_parameter(
         sigma,
         tau,
@@ -110,8 +110,7 @@ def der2011(
         atol,
         rtol,
     )
-    tac = time.perf_counter()
-    tpi = (tac - tic) / numiter
+    tpi = (time.perf_counter() - tic) / numiter if full_output else 0.0
 
     v1, v2 = _reconstruct_velocities(mu, r1, r2, r1_norm, r2_norm, c_norm, m, n, x, y)
 

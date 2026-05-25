@@ -2,6 +2,7 @@
 
 import time
 
+from numba import njit as jit
 import numpy as np
 
 from lamberthub.utils.angles import get_transfer_angle
@@ -89,13 +90,15 @@ def mcelreath2025(
     m = (-1) ** M * np.sqrt(r1_norm * r2_norm) * np.cos(dtheta / 2)
     tof = np.sqrt(mu) * tof
 
-    tic = time.perf_counter()
+    tic = time.perf_counter() if full_output else 0.0
     x, numiter = _find_x(
         tof, r1_norm, r2_norm, m, dtheta, M, is_low_path, maxiter, atol, rtol
     )
-    tac = time.perf_counter()
+    tpi = (time.perf_counter() - tic) / numiter if full_output else 0.0
 
-    _, _, u0_star, _ = _alpha_and_universal_values(x, r1_norm, r2_norm, m)
+    _, _, u0_star, _ = _alpha_and_universal_values(
+        np.complex128(x), r1_norm, r2_norm, m
+    )
     p = (
         r1_norm
         * r2_norm
@@ -113,11 +116,11 @@ def mcelreath2025(
 
     v1 = v_c * i_c + v_r * i_r1
     v2 = v_c * i_c - v_r * i_r2
-    tpi = (tac - tic) / numiter
 
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
+@jit(cache=True, fastmath=True)
 def _find_x(tof, r1_norm, r2_norm, m, dtheta, M, is_low_path, maxiter, atol, rtol):
     """Find McElreath's universal variable for the requested transfer."""
     r_norm_sum = r1_norm + r2_norm
@@ -131,37 +134,41 @@ def _find_x(tof, r1_norm, r2_norm, m, dtheta, M, is_low_path, maxiter, atol, rto
     )
 
 
+@jit(cache=True, fastmath=True)
 def _find_single_revolution_x(tof, r_norm_sum, m, dtheta, maxiter, atol, rtol):
     """Find the single-revolution elliptic or hyperbolic root."""
     tof_p = _get_parabolic_tof(r_norm_sum, m)
-    if np.isclose(tof, tof_p, atol=atol, rtol=rtol):
-        return 0.0, 1
+    if abs(tof - tof_p) <= atol + rtol * abs(tof_p):
+        return np.complex128(0.0), 1
 
     if tof > tof_p:
-        tof_theta = _tof_equation(dtheta, r_norm_sum, m)[0]
-        beta = np.sqrt((tof - tof_p) / (tof_theta - tof_p))
+        tof_theta = _tof_equation(np.complex128(dtheta), r_norm_sum, m)
+        beta = np.sqrt((tof - tof_p) / (tof_theta.real - tof_p))
         beta *= dtheta / (2 * np.pi - dtheta)
-        x_0 = 2 * np.pi * beta / (1 + beta)
-        bounds = (0.0, 2 * np.pi)
+        x_0 = np.complex128(2 * np.pi * beta / (1 + beta))
+        lo, hi = 0.0, 2 * np.pi
     elif dtheta < np.pi:
         tau = r_norm_sum**2 / (2 * m**2) - 1
         x_tau = 1j * np.log(tau + np.sqrt(tau**2 - 1))
         x_1 = x_tau * np.exp(-2.5)
-        tof_x1 = _tof_equation(x_1, r_norm_sum, m)[0]
-        tof_p_16 = complex(tof_p) ** 1.6
-        tof_x1_16 = complex(tof_x1) ** 1.6
+        tof_x1 = _tof_equation(np.complex128(x_1), r_norm_sum, m)
+        tof_p_16 = np.complex128(tof_p) ** 1.6
+        tof_x1_16 = np.complex128(tof_x1) ** 1.6
         exponent = 2.5 / (np.log(-tof_p_16) - np.log(tof_x1_16 - tof_p_16))
         x_0 = x_tau * (1 - (tof / tof_p) ** 1.6) ** exponent
-        x_0 = 1j * x_0.imag
-        bounds = (0.0, x_tau.imag)
+        x_0 = np.complex128(1j * x_0.imag)
+        lo, hi = 0.0, x_tau.imag
     else:
-        tof_theta = _tof_equation(1j * dtheta, r_norm_sum, m)[0]
-        x_0 = 1j * dtheta * np.sqrt(np.log(tof / tof_p) / np.log(tof_theta / tof_p))
-        bounds = (0.0, np.inf)
+        tof_theta = _tof_equation(np.complex128(1j * dtheta), r_norm_sum, m)
+        x_0 = np.complex128(
+            1j * dtheta * np.sqrt(np.log(tof / tof_p) / np.log(tof_theta / tof_p))
+        )
+        lo, hi = 0.0, np.inf
 
-    return _solve_desired_x(x_0, tof, r_norm_sum, m, 0, bounds, maxiter, rtol)
+    return _solve_desired_x(x_0, tof, r_norm_sum, m, 0, lo, hi, maxiter, rtol)
 
 
+@jit(cache=True, fastmath=True)
 def _find_multi_revolution_x(
     tof, r_norm_sum, m, dtheta, M, is_low_path, maxiter, atol, rtol
 ):
@@ -169,7 +176,7 @@ def _find_multi_revolution_x(
     two_pi = 2 * np.pi
     two_pi_revs = two_pi * M
     sqrt_revs = np.sqrt(M)
-    bounds = (two_pi_revs, two_pi_revs + two_pi)
+    lo, hi = two_pi_revs, two_pi_revs + two_pi
 
     if dtheta < np.pi:
         x_min = (
@@ -185,33 +192,39 @@ def _find_multi_revolution_x(
         )
 
     x_min, minimum_iterations = _solve_minimum_x(
-        x_min, tof, r_norm_sum, m, M, bounds, maxiter
+        np.complex128(x_min), tof, r_norm_sum, m, M, lo, hi, maxiter
     )
-    tof_min = _tof_equation(x_min, r_norm_sum, m)[0].real
+    tof_min = _tof_equation(np.complex128(x_min), r_norm_sum, m).real
 
     if tof < tof_min - atol:
         raise ValueError("No feasible solution, try lower M!")
 
-    if np.isclose(tof, tof_min, atol=atol, rtol=rtol):
-        return x_min, max(1, minimum_iterations)
+    if abs(tof - tof_min) <= atol + rtol * abs(tof_min):
+        if minimum_iterations < 1:
+            minimum_iterations = 1
+        return np.complex128(x_min), minimum_iterations
 
-    guesses = _multi_revolution_initial_guesses(
+    g_short, g_long = _multi_revolution_initial_guesses(
         tof, tof_min, x_min, r_norm_sum, m, dtheta, M
     )
-    x_0 = guesses[0] if is_low_path is True else guesses[1]
+    x_0 = np.complex128(g_short if is_low_path else g_long)
     x, desired_iterations = _solve_desired_x(
-        x_0, tof, r_norm_sum, m, M, bounds, maxiter, rtol
+        x_0, tof, r_norm_sum, m, M, lo, hi, maxiter, rtol
     )
-    return x, max(1, minimum_iterations + desired_iterations)
+    total = minimum_iterations + desired_iterations
+    if total < 1:
+        total = 1
+    return x, total
 
 
-def _solve_minimum_x(x, tof, r_norm_sum, m, M, bounds, maxiter):
+@jit(cache=True, fastmath=True)
+def _solve_minimum_x(x, tof, r_norm_sum, m, M, lo, hi, maxiter):
     """Solve for the multi-revolution minimum transfer-time location."""
     two_pi_revs = 2 * np.pi * M
     tolerance = 1e-2
     for numiter in range(1, maxiter + 1):
-        tof_current, tof_prime, tof_2prime, tof_3prime = _tof_equation(
-            x, r_norm_sum, m, True
+        tof_current, tof_prime, tof_2prime, tof_3prime = _tof_equation_full(
+            x, r_norm_sum, m
         )
         step = (
             -2 * tof_prime * tof_2prime / (2 * tof_2prime**2 - tof_prime * tof_3prime)
@@ -219,11 +232,11 @@ def _solve_minimum_x(x, tof, r_norm_sum, m, M, bounds, maxiter):
         x_old = x
         x = x + step
 
-        if _outside_bounds(x, bounds):
+        if _outside_bounds(x, lo, hi):
             x = x_old - tof_prime / tof_2prime
 
         err = abs((x - x_old) / (x - two_pi_revs + 2 * np.pi))
-        relative_gap = (tof - tof_current) / tof
+        relative_gap = (tof - tof_current.real) / tof
         if relative_gap < 1e-4:
             tolerance = 1e-8
         if err < tolerance:
@@ -232,12 +245,13 @@ def _solve_minimum_x(x, tof, r_norm_sum, m, M, bounds, maxiter):
     raise RuntimeError("Failed to converge")
 
 
+@jit(cache=True, fastmath=True)
 def _multi_revolution_initial_guesses(tof, tof_min, x_min, r_norm_sum, m, dtheta, M):
     """Compute the original short- and long-period initial guesses."""
     two_pi = 2 * np.pi
     two_pi_revs = two_pi * M
     x_theta = dtheta + two_pi_revs
-    tof_theta = _tof_equation(x_theta, r_norm_sum, m)[0]
+    tof_theta = _tof_equation(np.complex128(x_theta), r_norm_sum, m).real
     scale = (x_min - x_theta) ** 2 / (
         abs(tof_theta - tof_min)
         * (two_pi_revs - x_theta) ** 2
@@ -254,17 +268,18 @@ def _multi_revolution_initial_guesses(tof, tof_min, x_min, r_norm_sum, m, dtheta
     c_long = -(two_pi**2) * M * next_revs * gamma - x_min
     x_long = (-b_long + np.sqrt(b_long**2 + 4 * gamma * c_long)) / (-2 * gamma)
 
-    return x_short.real, x_long.real
+    return x_short, x_long
 
 
-def _solve_desired_x(x, tof, r_norm_sum, m, M, bounds, maxiter, rtol):
+@jit(cache=True, fastmath=True)
+def _solve_desired_x(x, tof, r_norm_sum, m, M, lo, hi, maxiter, rtol):
     """Solve for the requested transfer time with Householder updates."""
     two_pi_revs = 2 * np.pi * M
-    tolerance = min(rtol, 1e-10)
+    tolerance = rtol if rtol < 1e-10 else 1e-10
 
     for numiter in range(1, maxiter + 1):
-        tof_current, tof_prime, tof_2prime, tof_3prime = _tof_equation(
-            x, r_norm_sum, m, True
+        tof_current, tof_prime, tof_2prime, tof_3prime = _tof_equation_full(
+            x, r_norm_sum, m
         )
         residual = tof_current - tof
         step = -(
@@ -278,17 +293,16 @@ def _solve_desired_x(x, tof, r_norm_sum, m, M, bounds, maxiter, rtol):
         x_old = x
         x = x + step
 
-        if _outside_bounds(x, bounds):
+        if _outside_bounds(x, lo, hi):
             x = x_old - 2 * residual * tof_prime / (
                 2 * tof_prime**2 - residual * tof_2prime
             )
-            if _outside_bounds(x, bounds):
+            if _outside_bounds(x, lo, hi):
                 x = x_old - residual / tof_prime
-                if _outside_bounds(x, bounds):
-                    sign = np.sign(
-                        (-(residual / tof_prime)).real + (-(residual / tof_prime)).imag
-                    )
-                    boundary = bounds[1] if sign > 0 else bounds[0]
+                if _outside_bounds(x, lo, hi):
+                    rt = -(residual / tof_prime)
+                    sign = np.sign(rt.real + rt.imag)
+                    boundary = hi if sign > 0 else lo
                     x = x_old + 0.5 * (boundary - x_old)
 
         err = abs((x - x_old) / (x - two_pi_revs + 2 * np.pi))
@@ -298,35 +312,58 @@ def _solve_desired_x(x, tof, r_norm_sum, m, M, bounds, maxiter, rtol):
     raise RuntimeError("Failed to converge")
 
 
-def _outside_bounds(x, bounds):
+@jit(cache=True, fastmath=True)
+def _outside_bounds(x, lo, hi):
     """Check if an update stepped outside the solver bounds."""
     coordinate = x.real + x.imag
-    return coordinate > bounds[1] or coordinate < bounds[0]
+    return coordinate > hi or coordinate < lo
 
 
+@jit(cache=True, fastmath=True)
 def _clean_root(x):
-    """Return a real root when the imaginary component is numerical noise."""
-    return x.real if abs(x.imag) < 1e-14 else x
+    """Return a real root (as complex) when the imaginary component is noise."""
+    if abs(x.imag) < 1e-14:
+        return np.complex128(x.real)
+    return x
 
 
+@jit(cache=True, fastmath=True)
 def _get_parabolic_tof(r_norm_sum, m):
     """Compute the scaled parabolic time of flight."""
     chi = np.sqrt(2 * (r_norm_sum - 2 * m))
     return m * chi + chi**3 / 6
 
 
+@jit(cache=True, fastmath=True)
 def _tof_at_x(x, r1_norm, r2_norm, m):
     """Evaluate McElreath's scaled transfer-time equation at x."""
     if abs(x) < 1e-8:
         return _get_parabolic_tof(r1_norm + r2_norm, m)
 
-    _, u1_star, _, u3 = _alpha_and_universal_values(x, r1_norm, r2_norm, m)
+    _, u1_star, _, u3 = _alpha_and_universal_values(
+        np.complex128(x), r1_norm, r2_norm, m
+    )
     return (2 * u1_star * m + u3).real
 
 
-def _tof_equation(x, r_norm_sum, m, full_output=False):
+@jit(cache=True, fastmath=True)
+def _tof_equation(x, r_norm_sum, m):
+    """Evaluate the reference scaled transfer-time function (complex result)."""
+    u0 = np.cos(x)
+    u0_star = np.cos(0.5 * x)
+    alpha = (1 - u0) / (r_norm_sum - 2 * m * u0_star)
+    alpha_inv = 1 / alpha
+    alpha_sqrt = np.sqrt(alpha)
+    alpha_sqrt_inv = 1 / alpha_sqrt
+
+    u1_star = np.sin(0.5 * x) * alpha_sqrt_inv
+    u3 = (x * alpha_sqrt_inv - np.sin(x) * alpha_sqrt_inv) * alpha_inv
+    return 2 * u1_star * m + u3
+
+
+@jit(cache=True, fastmath=True)
+def _tof_equation_full(x, r_norm_sum, m):
     """Evaluate the reference scaled transfer-time function and derivatives."""
-    x = complex(x)
     u0 = np.cos(x)
     u0_star = np.cos(0.5 * x)
     alpha = (1 - u0) / (r_norm_sum - 2 * m * u0_star)
@@ -339,9 +376,6 @@ def _tof_equation(x, r_norm_sum, m, full_output=False):
     u2 = (1 - u0) * alpha_inv
     u3 = (x * alpha_sqrt_inv - u1) * alpha_inv
     tof_current = 2 * u1_star * m + u3
-
-    if full_output is False:
-        return (tof_current.real,)
 
     u1_star_inv = 1 / u1_star
     alpha_prime = 0.5 * u1_star_inv * alpha_sqrt * (2 * u0_star - m * alpha)
@@ -393,16 +427,16 @@ def _tof_equation(x, r_norm_sum, m, full_output=False):
         * alpha_2prime
         - (0.5 * tof_current + u3) * alpha_3prime
     )
-    return tof_current.real, tof_prime, tof_2prime, tof_3prime
+    return tof_current, tof_prime, tof_2prime, tof_3prime
 
 
+@jit(cache=True, fastmath=True)
 def _alpha_and_universal_values(x, r1_norm, r2_norm, m):
     """Evaluate alpha and the universal functions needed by the solver."""
-    x = complex(x)
     u0 = np.cos(x)
     u0_star = np.cos(x / 2)
     alpha = (1 - u0) / (r1_norm + r2_norm - 2 * m * u0_star)
-    alpha_sqrt = np.sqrt(alpha + 0j)
+    alpha_sqrt = np.sqrt(alpha)
     u1_star = np.sin(x / 2) / alpha_sqrt
     u3 = (x - np.sin(x)) / (alpha * alpha_sqrt)
     return alpha, u1_star, u0_star, u3

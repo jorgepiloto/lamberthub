@@ -110,7 +110,7 @@ def gauss1809(
     y0 = 1.00
 
     # The iterative procedure can start now
-    tic = time.perf_counter()
+    tic = time.perf_counter() if full_output else 0.0
     for numiter in range(1, maxiter + 1):
         # Compute the value of the free-parameter
         x = _gauss_first_equation(y0, s, w)
@@ -120,8 +120,7 @@ def gauss1809(
 
         # Check the convergence of the method
         if np.abs(y - y0) <= atol:
-            tac = time.perf_counter()
-            tpi = (tac - tic) / numiter
+            tpi = (time.perf_counter() - tic) / numiter if full_output else 0.0
             break
         else:
             # The new initial guess is the previously computed y value
@@ -165,7 +164,7 @@ def gauss1809(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _get_s(r1_norm, r2_norm, dtheta):
     """Returns the s auxiliary constant.
 
@@ -194,7 +193,7 @@ def _get_s(r1_norm, r2_norm, dtheta):
     return s
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _get_w(mu, tof, r1_norm, r2_norm, dtheta):
     """Returns the w auxiliary constant.
 
@@ -225,7 +224,7 @@ def _get_w(mu, tof, r1_norm, r2_norm, dtheta):
     return w
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _gauss_first_equation(y, s, w):
     """Evaluates Gauss' first equation.
 
@@ -252,7 +251,7 @@ def _gauss_first_equation(y, s, w):
     return x
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _gauss_second_equation(x, s):
     """Evaluates Gauss' second equation.
 
@@ -277,7 +276,7 @@ def _gauss_second_equation(x, s):
     return y
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _X_at_x(x, order=50):
     """Computes capital X as function of lower x.
 

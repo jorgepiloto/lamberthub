@@ -7,7 +7,7 @@ from numpy import cross, pi
 from lamberthub.linalg import norm
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def izzo2015(
     mu,
     r1,
@@ -129,7 +129,7 @@ def izzo2015(
     return v1, v2
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _reconstruct(x, y, r1, r2, ll, gamma, rho, sigma):
     """Reconstruct solution velocity vectors."""
     V_r1 = gamma * ((ll * y - x) - rho * (ll * y + x)) / r1
@@ -139,7 +139,7 @@ def _reconstruct(x, y, r1, r2, ll, gamma, rho, sigma):
     return [V_r1, V_r2, V_t1, V_t2]
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _find_xy(ll, T, M, maxiter, atol, rtol, is_low_path):
     """Computes all x, y for given number of revolutions."""
     # For abs(ll) == 1 the derivative is not continuous
@@ -169,13 +169,13 @@ def _find_xy(ll, T, M, maxiter, atol, rtol, is_low_path):
     return x, y
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _compute_y(x, ll):
     """Computes y."""
     return np.sqrt(1 - ll**2 * (1 - x**2))
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _compute_psi(x, y, ll):
     """Computes psi.
 
@@ -196,13 +196,13 @@ def _compute_psi(x, y, ll):
         return 0.0
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _tof_equation(x, T0, ll, M):
     """Time of flight equation."""
     return _tof_equation_y(x, _compute_y(x, ll), T0, ll, M)
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _tof_equation_y(x, y, T0, ll, M):
     """Time of flight equation with externally computated y."""
     if M == 0 and np.sqrt(0.6) < x < np.sqrt(1.4):
@@ -212,33 +212,30 @@ def _tof_equation_y(x, y, T0, ll, M):
         T_ = (eta**3 * Q + 4 * ll * eta) * 0.5
     else:
         psi = _compute_psi(x, y, ll)
-        T_ = np.divide(
-            np.divide(psi + M * pi, np.sqrt(np.abs(1 - x**2))) - x + ll * y,
-            (1 - x**2),
-        )
+        T_ = ((psi + M * pi) / np.sqrt(np.abs(1 - x**2)) - x + ll * y) / (1 - x**2)
 
     return T_ - T0
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _tof_equation_p(x, y, T, ll):
     """First derivative of Izzo's time-of-flight equation."""
     return (3 * T * x - 2 + 2 * ll**3 * x / y) / (1 - x**2)
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _tof_equation_p2(x, y, T, dT, ll):
     """Second derivative of Izzo's time-of-flight equation."""
     return (3 * T + 5 * x * dT + 2 * (1 - ll**2) * ll**3 / y**3) / (1 - x**2)
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _tof_equation_p3(x, y, _, dT, ddT, ll):
     """Third derivative of Izzo's time-of-flight equation."""
     return (7 * x * ddT + 8 * dT - 6 * (1 - ll**2) * ll**5 * x / y**5) / (1 - x**2)
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _compute_T_min(ll, M, maxiter, atol, rtol):
     """Compute minimum T."""
     if ll == 1:
@@ -258,7 +255,7 @@ def _compute_T_min(ll, M, maxiter, atol, rtol):
     return [x_T_min, T_min]
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _initial_guess(T, ll, M, is_low_path):
     """Initial guess."""
     if M == 0:
@@ -297,7 +294,7 @@ def _initial_guess(T, ll, M, is_low_path):
         return x_0
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _halley(p0, T0, ll, atol, rtol, maxiter):
     """Find a minimum of time of flight equation using the Halley method.
 
@@ -325,7 +322,7 @@ def _halley(p0, T0, ll, atol, rtol, maxiter):
     raise RuntimeError("Failed to converge")
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _householder(p0, T0, ll, M, atol, rtol, maxiter):
     """Find a zero of time of flight equation using the Householder method.
 
@@ -356,7 +353,7 @@ def _householder(p0, T0, ll, M, atol, rtol, maxiter):
     raise RuntimeError("Failed to converge")
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def hyp2f1b(x):
     """Hypergeometric function 2F1(3, 1, 5/2, x), see [Battin].
 
