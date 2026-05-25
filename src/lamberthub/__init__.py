@@ -3,6 +3,7 @@
 from lamberthub.ecc_solvers.avanzini import avanzini2008
 from lamberthub.p_solvers.battin import battin1984
 from lamberthub.p_solvers.gauss import gauss1809
+from lamberthub.p_solvers.jiang import jiang2016
 from lamberthub.p_solvers.pan import pan2016
 from lamberthub.series_solvers.thorne import thorne2004
 from lamberthub.universal_solvers.arora import arora2013
@@ -19,6 +20,7 @@ __version__ = "1.1.dev0"
 ALL_SOLVERS = [
     gauss1809,
     battin1984,
+    jiang2016,
     pan2016,
     gooding1990,
     der2011,
@@ -34,6 +36,7 @@ ALL_SOLVERS = [
 
 ZERO_REV_SOLVERS = [
     battin1984,
+    jiang2016,
     pan2016,
     gooding1990,
     der2011,
