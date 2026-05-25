@@ -76,9 +76,12 @@ jobs:
     strategy:
       matrix:
         cfg:
-          - {name: zero-revolution, selector: zero_revolution_general}
-          - {name: multi-revolution, selector: multi_revolution_general}
-          - {name: robust, selector: robust_general}
+          - {name: zero-rev-nominal, selector: zero_revolution_nominal}
+          - {name: zero-rev-general, selector: zero_revolution_general}
+          - {name: zero-rev-hyperbolic, selector: zero_revolution_hyperbolic}
+          - {name: multi-rev-m1, selector: multi_revolution_m1}
+          - {name: multi-rev-hard, selector: multi_revolution_hard}
+          - {name: robust-zero-rev, selector: robust_zero_revolution}
       fail-fast: false
     steps:
       - uses: actions/checkout@v6
@@ -99,6 +102,42 @@ jobs:
         with:
           name: benchmark-report-${{ matrix.cfg.name }}
           path: .benchmarks/${{ matrix.cfg.name }}.json
+
+  update-performance-report:
+    name: "Update Performance Report"
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs: benchmarks
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: "Download benchmark reports"
+        uses: actions/download-artifact@v8
+        with:
+          pattern: benchmark-report-*
+          path: .benchmarks
+          merge-multiple: true
+
+      - name: "Generate performance report"
+        run: python scripts/generate_benchmark_report.py
+
+      - name: "Commit performance report"
+        run: |
+          if git diff --quiet README.md; then
+            echo "No performance report changes to commit"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "docs: update performance comparison [skip ci]"
+          git push origin HEAD:main
 
   build-library:
     name: "Build Library"
