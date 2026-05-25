@@ -127,6 +127,7 @@ def gooding1990(
         maxiter,
         atol,
         rtol,
+        full_output,
     )
 
     # Final velocity vectors are the vector summation of radial and tangential.
@@ -136,13 +137,13 @@ def gooding1990(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def _d8rt(x):
     """Compute the eighth root of a positive scalar."""
     return np.sqrt(np.sqrt(np.sqrt(x)))
 
 
-@jit(cache=True)
+@jit(cache=True, fastmath=True)
 def tlamb(m, q, qsqfm1, x, n):
     """
     Auxiliary routine for computing the non-dimensional time of flight as
@@ -354,7 +355,7 @@ def tlamb(m, q, qsqfm1, x, n):
     return t, dt, d2t, d3t
 
 
-def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
+def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol, full_output=False):
     r"""
     Auxiliary routine for finding the independent variable as function of the
     number of revolutions, the transfer angle parameter and the non-dimensional
@@ -497,8 +498,7 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
     while True:
         # 5: LINE OF STATEMENT
         if goto3 is False:
-            # Start the timer
-            tic = time.perf_counter()
+            tic = time.perf_counter() if full_output else 0.0
             # Enable desired number of iterations
             for numiter in range(1, maxiter + 1):
                 t, dt, d2t, d3t = tlamb(m, q, qsqfm1, x, 2)
@@ -514,10 +514,7 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
                     break
 
             if n != 3:
-                # Stop the timer and compute the time per iteration
-                tac = time.perf_counter()
-                tpi = (tac - tic) / numiter
-
+                tpi = (time.perf_counter() - tic) / numiter if full_output else 0.0
                 # Exit if only one solution normally when m = 0
                 return n, x, xpl, numiter, tpi
 
@@ -561,7 +558,18 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol):
     return n, x, xpl
 
 
-def vlamb(mu, r1_norm, r2_norm, dtheta, tof, is_low_path, maxiter, atol, rtol):
+def vlamb(
+    mu,
+    r1_norm,
+    r2_norm,
+    dtheta,
+    tof,
+    is_low_path,
+    maxiter,
+    atol,
+    rtol,
+    full_output=False,
+):
     r"""
     Auxiliary routine for computing the velocity vector components, both
     radian and tangential ones.
@@ -635,7 +643,9 @@ def vlamb(mu, r1_norm, r2_norm, dtheta, tof, is_low_path, maxiter, atol, rtol):
     t = 4.0 * mus * tof / s**2
 
     # Compute the number of solutions and
-    n_sol, x1_sol, x2_sol, numiter, tpi = xlamb(m, q, qsqfm1, t, maxiter, atol, rtol)
+    n_sol, x1_sol, x2_sol, numiter, tpi = xlamb(
+        m, q, qsqfm1, t, maxiter, atol, rtol, full_output
+    )
 
     # Filter the solution
     if n_sol > 1:
