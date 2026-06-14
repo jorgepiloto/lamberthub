@@ -182,6 +182,16 @@ def _speedup_within_case(benchmarks):
     return speedups
 
 
+def _benchmarks_by_scenario(benchmarks):
+    """Group benchmark entries by readable scenario title."""
+    by_scenario: dict[str, list] = {}
+    for benchmark in benchmarks:
+        by_scenario.setdefault(case_title(benchmark["params"]["case"]), []).append(
+            benchmark
+        )
+    return by_scenario
+
+
 def build_section(reports):
     """Build the generated Markdown performance section."""
     groups = sorted_benchmarks(reports)
@@ -213,31 +223,39 @@ def build_section(reports):
             [
                 f"### {group_title(group)}",
                 "",
-                "| Rank | Scenario | Revolutions | Prograde | Path | Solver | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |",
-                "|-----:|----------|------------:|----------|------|--------|-----------:|----------:|---------:|--------:|-------:|",
             ]
         )
-        for benchmark in benchmarks:
-            case = benchmark["params"]["case"]
-            name = solver_name(benchmark)
-            stats = benchmark["stats"]
-            key = case_key(benchmark)
-            rank = ranks.get((key, name), 0)
-            speedup = speedups.get((key, name), 1.0)
-            lines.append(
-                f"| {rank} | "
-                f"{case_title(case)} | "
-                f"{case['M']} | "
-                f"{case_prograde(case)} | "
-                f"{case_path(case)} | "
-                f"`{name}` | "
-                f"{format_microseconds(stats['median'])} | "
-                f"{format_microseconds(stats['mean'])} | "
-                f"{format_microseconds(stats['iqr'])} | "
-                f"{speedup:.1f}x | "
-                f"{stats['rounds']} |"
+        for scenario, scenario_benchmarks in _benchmarks_by_scenario(
+            benchmarks
+        ).items():
+            lines.extend(
+                [
+                    f"#### {scenario}",
+                    "",
+                    "| Rank | Solver | Revolutions | Prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |",
+                    "|-----:|--------|------------:|----------|------|-----------:|----------:|---------:|--------:|-------:|",
+                ]
             )
-        lines.append("")
+            for benchmark in scenario_benchmarks:
+                case = benchmark["params"]["case"]
+                name = solver_name(benchmark)
+                stats = benchmark["stats"]
+                key = case_key(benchmark)
+                rank = ranks.get((key, name), 0)
+                speedup = speedups.get((key, name), 1.0)
+                lines.append(
+                    f"| {rank} | "
+                    f"`{name}` | "
+                    f"{case['M']} | "
+                    f"{case_prograde(case)} | "
+                    f"{case_path(case)} | "
+                    f"{format_microseconds(stats['median'])} | "
+                    f"{format_microseconds(stats['mean'])} | "
+                    f"{format_microseconds(stats['iqr'])} | "
+                    f"{speedup:.1f}x | "
+                    f"{stats['rounds']} |"
+                )
+            lines.append("")
 
     lines.extend([END_MARKER, ""])
     return "\n".join(lines)
