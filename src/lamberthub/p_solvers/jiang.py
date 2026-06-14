@@ -2,6 +2,7 @@
 
 import time
 
+from numba import njit as jit
 import numpy as np
 from numpy.linalg import norm
 
@@ -104,25 +105,13 @@ def jiang2016(
         a_min = s / 2
         tof_min_energy = _tof_elliptic(mu, a_min, s, c, theta, long_period=False)
         long_period = tof > tof_min_energy
-        lower, upper = _get_elliptic_bracket(mu, tof, a_min, s, c, theta, long_period)
-        a, numiter = _solve_semimajor_axis(
-            lambda axis: _tof_elliptic(mu, axis, s, c, theta, long_period) - tof,
-            lower,
-            upper,
-            maxiter,
-            atol,
-            rtol,
+        a, numiter = _find_and_solve_elliptic(
+            mu, tof, a_min, s, c, theta, long_period, maxiter, atol, rtol
         )
         p = _elliptic_p(a, r1_norm, r2_norm, c, s, theta, long_period)
     else:
-        lower, upper = _get_hyperbolic_bracket(mu, tof, s, c, theta)
-        a, numiter = _solve_semimajor_axis(
-            lambda axis: _tof_hyperbolic(mu, axis, s, c, theta) - tof,
-            lower,
-            upper,
-            maxiter,
-            atol,
-            rtol,
+        a, numiter = _find_and_solve_hyperbolic(
+            mu, tof, s, c, theta, maxiter, atol, rtol
         )
         p = _hyperbolic_p(a, r1_norm, r2_norm, c, s, theta)
 
@@ -136,6 +125,7 @@ def jiang2016(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
+@jit(cache=True, fastmath=True)
 def _tof_parabolic(mu, s, c, theta):
     """Compute Jiang's parabolic branch time from equation (3).
 
@@ -166,6 +156,7 @@ def _tof_parabolic(mu, s, c, theta):
     return np.sqrt(2 / mu) * (s**1.5 - beta_sign * (s - c) ** 1.5) / 3
 
 
+@jit(cache=True, fastmath=True)
 def _tof_elliptic(mu, a, s, c, theta, long_period):
     """Evaluate the elliptic Lagrange time equation.
 
@@ -199,6 +190,7 @@ def _tof_elliptic(mu, a, s, c, theta, long_period):
     return np.sqrt(a**3 / mu) * ((alpha - np.sin(alpha)) - (beta - np.sin(beta)))
 
 
+@jit(cache=True, fastmath=True)
 def _tof_hyperbolic(mu, a, s, c, theta):
     """Evaluate the hyperbolic Lagrange time equation.
 
@@ -230,6 +222,7 @@ def _tof_hyperbolic(mu, a, s, c, theta):
     return np.sqrt((-a) ** 3 / mu) * ((np.sinh(alpha) - alpha) - (np.sinh(beta) - beta))
 
 
+@jit(cache=True, fastmath=True)
 def _elliptic_alpha_beta(a, s, c, theta, long_period):
     """Compute elliptic alpha and beta from Jiang's equation (6).
 
@@ -264,6 +257,7 @@ def _elliptic_alpha_beta(a, s, c, theta, long_period):
     return alpha, beta
 
 
+@jit(cache=True, fastmath=True)
 def _hyperbolic_alpha_beta(a, s, c, theta):
     """Compute hyperbolic alpha and beta from Jiang's equation (11).
 
@@ -292,6 +286,7 @@ def _hyperbolic_alpha_beta(a, s, c, theta):
     return alpha, beta
 
 
+@jit(cache=True, fastmath=True)
 def _beta_sign(theta):
     """Return the beta sign selected by the transfer angle.
 
@@ -313,6 +308,121 @@ def _beta_sign(theta):
 
     """
     return 1.0 if theta <= np.pi else -1.0
+
+
+@jit(cache=True, fastmath=True)
+def _find_and_solve_elliptic(
+    mu, tof, a_min, s, c, theta, long_period, maxiter, atol, rtol
+):
+    """Find elliptic bracket and solve with safeguarded Newton steps (JIT).
+
+    Combines bracket expansion and the Newton-bisection iteration into a single
+    JIT-compiled function, removing all Python closure overhead.
+    """
+    eps = 1.4901161193847656e-08
+    lower = a_min * (1 + eps)
+    upper = max(2 * lower, 1.0)
+
+    f_lower = _tof_elliptic(mu, lower, s, c, theta, long_period) - tof
+    f_upper = _tof_elliptic(mu, upper, s, c, theta, long_period) - tof
+    while f_lower * f_upper > 0:
+        upper *= 2
+        f_upper = _tof_elliptic(mu, upper, s, c, theta, long_period) - tof
+
+    x = (lower + upper) / 2
+    f_lower_iter = _tof_elliptic(mu, lower, s, c, theta, long_period) - tof
+
+    for numiter in range(1, maxiter + 1):
+        f_x = _tof_elliptic(mu, x, s, c, theta, long_period) - tof
+        if np.abs(f_x) <= atol:
+            return x, numiter
+
+        if f_lower_iter * f_x <= 0:
+            upper = x
+        else:
+            lower = x
+            f_lower_iter = f_x
+
+        step = 1.4901161193847656e-08 * max(1.0, np.abs(x))
+        x_minus = max(lower, x - step)
+        x_plus = min(upper, x + step)
+        if x_plus != x_minus:
+            f_plus = _tof_elliptic(mu, x_plus, s, c, theta, long_period) - tof
+            f_minus = _tof_elliptic(mu, x_minus, s, c, theta, long_period) - tof
+            derivative = (f_plus - f_minus) / (x_plus - x_minus)
+        else:
+            derivative = 0.0
+
+        x_new = x - f_x / derivative if derivative != 0.0 else (lower + upper) / 2
+
+        if not np.isfinite(x_new) or not (lower < x_new < upper):
+            x_new = (lower + upper) / 2
+
+        f_new = _tof_elliptic(mu, x_new, s, c, theta, long_period) - tof
+        if np.abs(f_new) <= atol or (
+            np.abs(x_new - x) <= atol + rtol * np.abs(x_new)
+            and np.abs(f_new) <= np.abs(f_x)
+        ):
+            return x_new, numiter
+
+        x = x_new
+
+    raise ValueError("Exceeded maximum number of iterations!")
+
+
+@jit(cache=True, fastmath=True)
+def _find_and_solve_hyperbolic(mu, tof, s, c, theta, maxiter, atol, rtol):
+    """Find hyperbolic bracket and solve with safeguarded Newton steps (JIT).
+
+    Combines bracket expansion and the Newton-bisection iteration into a single
+    JIT-compiled function, removing all Python closure overhead.
+    """
+    eps = 1.4901161193847656e-08
+    lower = -max(s, c, 1.0)
+    upper = -eps * max(s, c, 1.0)
+
+    while (_tof_hyperbolic(mu, lower, s, c, theta) - tof) < 0:
+        lower *= 2
+
+    x = (lower + upper) / 2
+    f_lower_iter = _tof_hyperbolic(mu, lower, s, c, theta) - tof
+
+    for numiter in range(1, maxiter + 1):
+        f_x = _tof_hyperbolic(mu, x, s, c, theta) - tof
+        if np.abs(f_x) <= atol:
+            return x, numiter
+
+        if f_lower_iter * f_x <= 0:
+            upper = x
+        else:
+            lower = x
+            f_lower_iter = f_x
+
+        step = 1.4901161193847656e-08 * max(1.0, np.abs(x))
+        x_minus = max(lower, x - step)
+        x_plus = min(upper, x + step)
+        if x_plus != x_minus:
+            f_plus = _tof_hyperbolic(mu, x_plus, s, c, theta) - tof
+            f_minus = _tof_hyperbolic(mu, x_minus, s, c, theta) - tof
+            derivative = (f_plus - f_minus) / (x_plus - x_minus)
+        else:
+            derivative = 0.0
+
+        x_new = x - f_x / derivative if derivative != 0.0 else (lower + upper) / 2
+
+        if not np.isfinite(x_new) or not (lower < x_new < upper):
+            x_new = (lower + upper) / 2
+
+        f_new = _tof_hyperbolic(mu, x_new, s, c, theta) - tof
+        if np.abs(f_new) <= atol or (
+            np.abs(x_new - x) <= atol + rtol * np.abs(x_new)
+            and np.abs(f_new) <= np.abs(f_x)
+        ):
+            return x_new, numiter
+
+        x = x_new
+
+    raise ValueError("Exceeded maximum number of iterations!")
 
 
 def _get_elliptic_bracket(mu, tof, a_min, s, c, theta, long_period):
@@ -349,7 +459,7 @@ def _get_elliptic_bracket(mu, tof, a_min, s, c, theta, long_period):
     dynamic upper bound so the solver is scale independent.
 
     """
-    eps = np.sqrt(np.finfo(float).eps)
+    eps = 1.4901161193847656e-08
     lower = a_min * (1 + eps)
     upper = max(2 * lower, 1.0)
 
@@ -393,7 +503,7 @@ def _get_hyperbolic_bracket(mu, tof, s, c, theta):
     geometry.
 
     """
-    eps = np.sqrt(np.finfo(float).eps)
+    eps = 1.4901161193847656e-08
     lower = -max(s, c, 1.0)
     upper = -eps * max(s, c, 1.0)
 
@@ -491,7 +601,7 @@ def _numerical_derivative(function, x, lower, upper):
         Centered finite-difference derivative clipped to the active bracket.
 
     """
-    step = np.sqrt(np.finfo(float).eps) * max(1.0, np.abs(x))
+    step = 1.4901161193847656e-08 * max(1.0, np.abs(x))
     x_minus = max(lower, x - step)
     x_plus = min(upper, x + step)
 
@@ -501,6 +611,7 @@ def _numerical_derivative(function, x, lower, upper):
     return (function(x_plus) - function(x_minus)) / (x_plus - x_minus)
 
 
+@jit(cache=True, fastmath=True)
 def _elliptic_p(a, r1_norm, r2_norm, c, s, theta, long_period):
     """Compute the elliptic semi-latus rectum from Jiang's equation (14).
 
@@ -532,6 +643,7 @@ def _elliptic_p(a, r1_norm, r2_norm, c, s, theta, long_period):
     return factor * np.sin((alpha + beta) / 2) ** 2
 
 
+@jit(cache=True, fastmath=True)
 def _hyperbolic_p(a, r1_norm, r2_norm, c, s, theta):
     """Compute the hyperbolic semi-latus rectum from Jiang's equation (15).
 
@@ -561,6 +673,7 @@ def _hyperbolic_p(a, r1_norm, r2_norm, c, s, theta):
     return factor * np.sinh((alpha + beta) / 2) ** 2
 
 
+@jit(cache=True, fastmath=True)
 def _parabolic_p(r1_norm, r2_norm, c, s, theta):
     """Compute the parabolic semi-latus rectum as the elliptic limiting value.
 
@@ -593,6 +706,7 @@ def _parabolic_p(r1_norm, r2_norm, c, s, theta):
     return factor * (np.sqrt(s) + _beta_sign(theta) * np.sqrt(s - c)) ** 2
 
 
+@jit(cache=True, fastmath=True)
 def _reconstruct_velocities(mu, r1, r2, r1_norm, r2_norm, theta, p):
     """Reconstruct endpoint velocities from Jiang's equations (17) and (18).
 

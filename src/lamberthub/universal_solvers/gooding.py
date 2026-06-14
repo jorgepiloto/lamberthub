@@ -499,19 +499,8 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol, full_output=False):
         # 5: LINE OF STATEMENT
         if goto3 is False:
             tic = time.perf_counter() if full_output else 0.0
-            # Enable desired number of iterations
-            for numiter in range(1, maxiter + 1):
-                t, dt, d2t, d3t = tlamb(m, q, qsqfm1, x, 2)
-                t = tin - t
-
-                if dt != 0.0:
-                    xold = x
-                    x = x + t * dt / (dt * dt + t * d2t / 2.0)
-
-                # This line was included so the code can work with tolerances
-                x_atol, x_rtol = np.abs(x - xold), np.abs(x / xold - 1)
-                if x_atol <= atol and x_rtol <= rtol:
-                    break
+            # Delegate to the JIT-compiled Halley loop
+            x, numiter = _xlamb_iter(m, q, qsqfm1, x, tin, maxiter, atol, rtol)
 
             if n != 3:
                 tpi = (time.perf_counter() - tic) / numiter if full_output else 0.0
@@ -556,6 +545,28 @@ def xlamb(m, q, qsqfm1, tin, maxiter, atol, rtol, full_output=False):
                     x = xpl
 
     return n, x, xpl
+
+
+@jit(cache=True, fastmath=True)
+def _xlamb_iter(m, q, qsqfm1, x, tin, maxiter, atol, rtol):
+    """Run the Halley iteration for the independent variable in Gooding's method.
+
+    Returns (x, numiter) once convergence is reached or maxiter is exhausted.
+    """
+    xold = x
+    for numiter in range(1, maxiter + 1):
+        t, dt, d2t, d3t = tlamb(m, q, qsqfm1, x, 2)
+        t = tin - t
+
+        if dt != 0.0:
+            xold = x
+            x = x + t * dt / (dt * dt + t * d2t / 2.0)
+
+        x_atol, x_rtol = np.abs(x - xold), np.abs(x / xold - 1)
+        if x_atol <= atol and x_rtol <= rtol:
+            return x, numiter
+
+    return x, maxiter
 
 
 def vlamb(

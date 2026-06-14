@@ -2,6 +2,7 @@
 
 import time
 
+from numba import njit as jit
 import numpy as np
 from numpy.linalg import norm
 from scipy.optimize import brentq
@@ -117,16 +118,19 @@ def der2011(
     return (v1, v2, numiter, tpi) if full_output is True else (v1, v2)
 
 
+@jit(cache=True, fastmath=True)
 def _compute_sigma(r1_norm, r2_norm, m, psi):
     """Compute Der's signed angle parameter."""
     return 2 * np.sqrt(r1_norm * r2_norm) * np.cos(psi / 2) / m
 
 
+@jit(cache=True, fastmath=True)
 def _compute_normalized_time(mu, m, tof):
     """Compute Sun's normalized time of flight."""
     return 4 * tof * np.sqrt(mu / m**3)
 
 
+@jit(cache=True, fastmath=True)
 def _compute_parabolic_time(sigma):
     """Compute the normalized parabolic time of flight."""
     return 2 * (1 - sigma**3) / 3
@@ -162,31 +166,17 @@ def _find_path_parameter(
 
 def _solve_elliptic(sigma, tau, M, x0, maxiter, atol, rtol):
     """Solve Sun's elliptic Lambert equation."""
-    x = x0
-    for numiter in range(1, maxiter + 1):
-        y = _compute_y(sigma, x)
-        tof = _tof_elliptic(sigma, x, y, M)
-        f = tof - tau
-
-        if np.abs(f) <= atol + rtol * np.abs(tau):
-            return x, y, numiter
-
-        dt = _tof_elliptic_prime(sigma, x, y, tof)
-        d2t = _tof_elliptic_second(sigma, x, y, dt)
-        try:
-            x = _laguerre_step(x, f, dt, d2t)
-        except ValueError:
-            return _solve_elliptic_bracketed(sigma, tau, M, x0, maxiter, atol, rtol)
-
-        if np.abs(x) >= 1:
-            return _solve_elliptic_bracketed(sigma, tau, M, x0, maxiter, atol, rtol)
-
-    raise ValueError("Exceeded maximum number of iterations.")
+    x, y, numiter, needs_fallback = _solve_elliptic_jit(
+        sigma, tau, M, x0, maxiter, atol, rtol
+    )
+    if needs_fallback:
+        return _solve_elliptic_bracketed(sigma, tau, M, x0, maxiter, atol, rtol)
+    return x, y, numiter
 
 
 def _solve_elliptic_bracketed(sigma, tau, M, x0, maxiter, atol, rtol):
     """Solve Sun's elliptic Lambert equation with Der's path-region bounds."""
-    eps = np.finfo(float).eps
+    eps = 2.220446049250313e-16
     lower, upper = (-1 + eps, 0.0) if x0 < 0 else (0.0, 1 - eps)
 
     def elliptic_equation(x):
@@ -212,27 +202,17 @@ def _solve_elliptic_bracketed(sigma, tau, M, x0, maxiter, atol, rtol):
 
 def _solve_hyperbolic(sigma, tau, x0, maxiter, atol, rtol):
     """Solve Sun's hyperbolic Lambert equation."""
-    x = max(1.1, x0 + 1.0)
-    for numiter in range(1, maxiter + 1):
-        y = _compute_y(sigma, x)
-        tof = _tof_hyperbolic(sigma, x, y)
-        f = tof - tau
-
-        if np.abs(f) <= atol + rtol * np.abs(tau):
-            return x, y, numiter
-
-        dt, d2t = _numerical_derivatives(_tof_hyperbolic, sigma, x, y)
-        try:
-            x = max(1.0 + np.finfo(float).eps, _laguerre_step(x, f, dt, d2t))
-        except ValueError:
-            return _solve_hyperbolic_bracketed(sigma, tau, maxiter, atol, rtol)
-
-    raise ValueError("Exceeded maximum number of iterations.")
+    x, y, numiter, needs_fallback = _solve_hyperbolic_jit(
+        sigma, tau, x0, maxiter, atol, rtol
+    )
+    if needs_fallback:
+        return _solve_hyperbolic_bracketed(sigma, tau, maxiter, atol, rtol)
+    return x, y, numiter
 
 
 def _solve_hyperbolic_bracketed(sigma, tau, maxiter, atol, rtol):
     """Solve Sun's hyperbolic Lambert equation on the valid path interval."""
-    lower = 1.0 + np.sqrt(np.finfo(float).eps)
+    lower = 1.0 + 1.4901161193847656e-08
     upper = 2.0
 
     def hyperbolic_equation(x):
@@ -259,25 +239,7 @@ def _solve_hyperbolic_bracketed(sigma, tau, maxiter, atol, rtol):
     return x, y, maxiter
 
 
-def _laguerre_step(x, f, df, d2f):
-    """Compute one Laguerre update for the current scalar equation value."""
-    for degree in range(2, 13):
-        discriminant = (degree - 1) ** 2 * df**2 - degree * (degree - 1) * f * d2f
-        if discriminant < 0:
-            continue
-
-        root = np.sqrt(discriminant)
-        denominator = df + np.copysign(root, df)
-        if denominator == 0:
-            continue
-
-        candidate = x - degree * f / denominator
-        if np.isfinite(candidate):
-            return candidate
-
-    raise ValueError("Laguerre iteration failed to compute a finite update.")
-
-
+@jit(cache=True, fastmath=True)
 def _compute_y(sigma, x):
     """Compute Sun's dependent variable from the path and angle parameters."""
     radicand = 1 - sigma**2 * (1 - x**2)
@@ -287,6 +249,29 @@ def _compute_y(sigma, x):
     return np.copysign(y_abs, sigma)
 
 
+@jit(cache=True, fastmath=True)
+def _acot_elliptic_x(x):
+    """Evaluate the elliptic arc-cotangent branch for the path parameter."""
+    return np.arccos(min(1.0, max(-1.0, x)))
+
+
+@jit(cache=True, fastmath=True)
+def _acot_elliptic_y(y):
+    """Evaluate the elliptic arc-cotangent branch for the angle parameter."""
+    if y >= 0:
+        return np.arccos(min(1.0, max(-1.0, y)))
+    return -np.arccos(min(1.0, max(-1.0, -y)))
+
+
+@jit(cache=True, fastmath=True)
+def _acoth_sun(u):
+    """Evaluate the inverse hyperbolic cotangent branch used by Sun."""
+    if u >= 0:
+        return np.arccosh(u)
+    return -np.arccosh(-u)
+
+
+@jit(cache=True, fastmath=True)
 def _tof_elliptic(sigma, x, y, M):
     """Evaluate Sun's normalized elliptic time of flight."""
     one_minus_x2 = 1 - x**2
@@ -301,6 +286,7 @@ def _tof_elliptic(sigma, x, y, M):
     return numerator / one_minus_x2 ** (3 / 2)
 
 
+@jit(cache=True, fastmath=True)
 def _tof_hyperbolic(sigma, x, y):
     """Evaluate Sun's normalized hyperbolic time of flight."""
     x2_minus_one = x**2 - 1
@@ -314,29 +300,87 @@ def _tof_hyperbolic(sigma, x, y):
     return numerator / x2_minus_one ** (3 / 2)
 
 
+@jit(cache=True, fastmath=True)
 def _tof_elliptic_prime(sigma, x, y, tof):
     """Evaluate the first derivative of Sun's elliptic time equation."""
     return (3 * x * tof - 2 * (1 - sigma**3 * x / y)) / (1 - x**2)
 
 
+@jit(cache=True, fastmath=True)
 def _tof_elliptic_second(sigma, x, y, dtof):
     """Evaluate the second derivative of Sun's elliptic time equation."""
-    if x == 0:
-        x = np.finfo(float).eps
-    return ((1 + 4 * x**2) * dtof + 2 * (1 - sigma**5 * x**3 / y**3)) / (x * (1 - x**2))
+    x_safe = x if x != 0.0 else 2.220446049250313e-16
+    return ((1 + 4 * x_safe**2) * dtof + 2 * (1 - sigma**5 * x_safe**3 / y**3)) / (
+        x_safe * (1 - x_safe**2)
+    )
 
 
-def _numerical_derivatives(tof_function, sigma, x, y):
-    """Approximate first and second derivatives of a time equation."""
-    step = np.sqrt(np.finfo(float).eps) * max(1.0, np.abs(x))
-    x_minus = max(1.0 + np.finfo(float).eps, x - step)
+@jit(cache=True, fastmath=True)
+def _laguerre_step(x, f, df, d2f):
+    """Compute one Laguerre update; returns 2.0 (sentinel) when no step found.
+
+    Returns 2.0 instead of nan so fastmath-compiled callers can detect failure
+    via ``abs(result) >= 1`` without relying on NaN semantics, which fastmath
+    disables (``-fno-honor-nans``).
+    """
+    for degree in range(2, 13):
+        discriminant = (degree - 1) ** 2 * df**2 - degree * (degree - 1) * f * d2f
+        if discriminant < 0:
+            continue
+
+        root = np.sqrt(discriminant)
+        denominator = df + np.copysign(root, df)
+        if denominator == 0:
+            continue
+
+        candidate = x - degree * f / denominator
+        # Explicit finite check safe under fastmath (no isfinite/isnan).
+        if -1e300 < candidate < 1e300:
+            return candidate
+
+    return 2.0
+
+
+@jit(cache=True, fastmath=True)
+def _solve_elliptic_jit(sigma, tau, M, x0, maxiter, atol, rtol):
+    """Solve Sun's elliptic Lambert equation with the Laguerre method.
+
+    Returns (x, y, numiter, needs_fallback). If needs_fallback is True the
+    caller should use the Python bracketed solver instead.
+    """
+    x = x0
+    for numiter in range(1, maxiter + 1):
+        y = _compute_y(sigma, x)
+        tof_val = _tof_elliptic(sigma, x, y, M)
+        f = tof_val - tau
+
+        if np.abs(f) <= atol + rtol * np.abs(tau):
+            return x, y, numiter, False
+
+        dt = _tof_elliptic_prime(sigma, x, y, tof_val)
+        d2t = _tof_elliptic_second(sigma, x, y, dt)
+        x_new = _laguerre_step(x, f, dt, d2t)
+
+        if np.abs(x_new) >= 1:
+            return x0, 0.0, numiter, True
+
+        x = x_new
+
+    return x0, 0.0, maxiter, True
+
+
+@jit(cache=True, fastmath=True)
+def _hyperbolic_numerical_derivatives(sigma, x, y):
+    """Finite-difference first and second derivatives of the hyperbolic TOF."""
+    step = 1.4901161193847656e-08 * max(1.0, np.abs(x))
+    x_minus = max(1.0 + 2.220446049250313e-16, x - step)
     x_plus = x + step
 
     y_minus = _compute_y(sigma, x_minus)
     y_plus = _compute_y(sigma, x_plus)
-    f_minus = tof_function(sigma, x_minus, y_minus)
-    f = tof_function(sigma, x, y)
-    f_plus = tof_function(sigma, x_plus, y_plus)
+    f_minus = _tof_hyperbolic(sigma, x_minus, y_minus)
+    f = _tof_hyperbolic(sigma, x, y)
+    f_plus = _tof_hyperbolic(sigma, x_plus, y_plus)
 
     first = (f_plus - f_minus) / (x_plus - x_minus)
     second = (
@@ -347,31 +391,52 @@ def _numerical_derivatives(tof_function, sigma, x, y):
     return first, second
 
 
-def _acot_elliptic_x(x):
-    """Evaluate the elliptic arc-cotangent branch for the path parameter."""
-    return np.arccos(np.clip(x, -1.0, 1.0))
+@jit(cache=True, fastmath=True)
+def _solve_hyperbolic_jit(sigma, tau, x0, maxiter, atol, rtol):
+    """Solve Sun's hyperbolic Lambert equation with the Laguerre method.
+
+    Returns (x, y, numiter, needs_fallback). If needs_fallback is True the
+    caller should use the Python bracketed solver instead.
+    """
+    x = max(1.1, x0 + 1.0)
+    for numiter in range(1, maxiter + 1):
+        y = _compute_y(sigma, x)
+        tof_val = _tof_hyperbolic(sigma, x, y)
+        f = tof_val - tau
+
+        if np.abs(f) <= atol + rtol * np.abs(tau):
+            return x, y, numiter, False
+
+        dt, d2t = _hyperbolic_numerical_derivatives(sigma, x, y)
+        x_new = _laguerre_step(x, f, dt, d2t)
+
+        # 2.0 is the sentinel returned by _laguerre_step on failure;
+        # x must stay > 1 for hyperbolic solutions.
+        if x_new <= 1.0:
+            return x, y, numiter, True
+
+        x = max(1.0 + 2.220446049250313e-16, x_new)
+
+    return x, _compute_y(sigma, x), maxiter, True
 
 
-def _acot_elliptic_y(y):
-    """Evaluate the elliptic arc-cotangent branch for the angle parameter."""
-    if y >= 0:
-        return np.arccos(np.clip(y, -1.0, 1.0))
-    return -np.arccos(np.clip(-y, -1.0, 1.0))
-
-
-def _acoth_sun(u):
-    """Evaluate the inverse hyperbolic cotangent branch used by Sun."""
-    if u >= 0:
-        return np.arccosh(u)
-    return -np.arccosh(-u)
-
-
+@jit(cache=True, fastmath=True)
 def _phi(u):
     """Evaluate Der's minimum-time auxiliary function."""
     sqrt_term = np.sqrt(max(0.0, 1 - u**2))
     if u == 0:
-        u = np.finfo(float).eps
+        u = 2.220446049250313e-16
     return _acot_elliptic_y(u) - (2 + u**2) * sqrt_term / (3 * u)
+
+
+@jit(cache=True, fastmath=True)
+def _compute_minimum_energy_time(sigma, M):
+    """Compute the normalized minimum-energy time."""
+    return (
+        M * np.pi
+        + np.arccos(min(1.0, max(-1.0, sigma)))
+        + sigma * np.sqrt(max(0.0, 1 - sigma**2))
+    )
 
 
 def _compute_minimum_time(sigma, M, maxiter, atol, rtol):
@@ -385,8 +450,8 @@ def _compute_minimum_time(sigma, M, maxiter, atol, rtol):
     try:
         x = brentq(
             minimum_time_equation,
-            np.finfo(float).eps,
-            1 - np.finfo(float).eps,
+            2.220446049250313e-16,
+            1 - 2.220446049250313e-16,
             xtol=atol,
             rtol=rtol,
             maxiter=maxiter,
@@ -406,20 +471,12 @@ def _compute_minimum_time(sigma, M, maxiter, atol, rtol):
             return 2 * (1 / x - sigma**3 / y) / 3
 
         x -= phi / dphi
-        x = np.clip(x, np.finfo(float).eps, 0.999999)
+        x = np.clip(x, 2.220446049250313e-16, 0.999999)
 
     raise ValueError("Exceeded maximum number of iterations.")
 
 
-def _compute_minimum_energy_time(sigma, M):
-    """Compute the normalized minimum-energy time."""
-    return (
-        M * np.pi
-        + np.arccos(np.clip(sigma, -1.0, 1.0))
-        + sigma * np.sqrt(max(0.0, 1 - sigma**2))
-    )
-
-
+@jit(cache=True, fastmath=True)
 def _reconstruct_velocities(mu, r1, r2, r1_norm, r2_norm, c_norm, m, n, x, y):
     """Compute the terminal velocity vectors from radial and chord components."""
     vc = np.sqrt(mu) * (y / np.sqrt(n) + x / np.sqrt(m))

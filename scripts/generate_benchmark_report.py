@@ -52,12 +52,12 @@ def solver_name(benchmark):
 
 
 def format_microseconds(seconds):
-    """Format seconds as microseconds."""
+    """Format seconds as microseconds with one decimal place."""
     return f"{seconds * 1e6:.1f}"
 
 
 def sorted_benchmarks(reports):
-    """Group benchmark entries by benchmark group."""
+    """Group benchmark entries by benchmark group, sorted by case then median."""
     groups = {}
     for report in reports:
         for benchmark in report["benchmarks"]:
@@ -84,6 +84,39 @@ def machine_summary(report):
     return f"{system}, Python {python}, {cpu}"
 
 
+def _rank_within_case(benchmarks):
+    """Return a dict mapping (case_name, solver_name) -> rank within that case."""
+    by_case: dict[str, list] = {}
+    for b in benchmarks:
+        case = b["params"]["case"]["name"]
+        by_case.setdefault(case, []).append(b)
+
+    ranks = {}
+    for case, entries in by_case.items():
+        sorted_entries = sorted(entries, key=lambda b: b["stats"]["median"])
+        for rank, entry in enumerate(sorted_entries, start=1):
+            ranks[(case, solver_name(entry))] = rank
+    return ranks
+
+
+def _speedup_within_case(benchmarks):
+    """Return a dict mapping (case_name, solver_name) -> speedup vs slowest."""
+    by_case: dict[str, list] = {}
+    for b in benchmarks:
+        case = b["params"]["case"]["name"]
+        by_case.setdefault(case, []).append(b)
+
+    speedups = {}
+    for case, entries in by_case.items():
+        slowest = max(e["stats"]["median"] for e in entries)
+        for entry in entries:
+            median = entry["stats"]["median"]
+            speedups[(case, solver_name(entry))] = (
+                slowest / median if median > 0 else 1.0
+            )
+    return speedups
+
+
 def build_section(reports):
     """Build the generated Markdown performance section."""
     groups = sorted_benchmarks(reports)
@@ -95,35 +128,44 @@ def build_section(reports):
         "",
         START_MARKER,
         "",
-        "_This section is generated from CI benchmark artifacts._",
+        "_This section is auto-generated from CI benchmark artifacts._",
         "",
         f"- Generated: {generated_at}",
         f"- Commit: `{commit[:12]}`",
         f"- Environment: {machine_summary(reports[0])}",
         "",
-        "Times are reported in microseconds. Lower values are better.",
+        "Times are in microseconds (lower is better).",
+        "**Speedup** is relative to the slowest solver for each case.",
+        "All solvers are JIT-warmed before timing begins.",
         "",
     ]
 
     for group, benchmarks in groups.items():
+        ranks = _rank_within_case(benchmarks)
+        speedups = _speedup_within_case(benchmarks)
+
         lines.extend(
             [
                 f"### {group}",
                 "",
-                "| Case | Solver | Median | Mean | IQR | Rounds |",
-                "|------|--------|-------:|-----:|----:|-------:|",
+                "| Rank | Case | Solver | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |",
+                "|-----:|------|--------|-----------:|----------:|---------:|--------:|-------:|",
             ]
         )
         for benchmark in benchmarks:
             case = benchmark["params"]["case"]["name"]
+            name = solver_name(benchmark)
             stats = benchmark["stats"]
+            rank = ranks.get((case, name), 0)
+            speedup = speedups.get((case, name), 1.0)
             lines.append(
-                "| "
+                f"| {rank} | "
                 f"`{case}` | "
-                f"`{solver_name(benchmark)}` | "
+                f"`{name}` | "
                 f"{format_microseconds(stats['median'])} | "
                 f"{format_microseconds(stats['mean'])} | "
                 f"{format_microseconds(stats['iqr'])} | "
+                f"{speedup:.1f}x | "
                 f"{stats['rounds']} |"
             )
         lines.append("")
