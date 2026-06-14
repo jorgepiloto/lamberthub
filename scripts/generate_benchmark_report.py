@@ -12,6 +12,36 @@ START_MARKER = "<!-- performance-comparison:start -->"
 END_MARKER = "<!-- performance-comparison:end -->"
 SECTION_TITLE = "## Performance comparison"
 
+GROUP_TITLES = {
+    "zero-rev-nominal": "Zero-revolution nominal cases",
+    "zero-rev-general": "Zero-revolution general cases",
+    "zero-rev-hyperbolic": "Zero-revolution hyperbolic cases",
+    "multi-rev-m1": "One-revolution branch cases",
+    "multi-rev-hard": "Near-minimum-energy multi-revolution cases",
+    "robust-zero-rev": "Near-tangent robustness cases",
+}
+
+CASE_TITLE_OVERRIDES = {
+    "battin-book": "Battin book",
+    "curtiss-book": "Curtiss book",
+    "vallado-book": "Vallado book",
+    "gmat-prograde": "GMAT hyperbolic",
+    "gmat-retrograde": "GMAT hyperbolic",
+    "der-article-i-prograde-low": "Der article I",
+    "der-article-i-retrograde-high": "Der article I",
+    "der-article-ii-prograde-high": "Der article II",
+    "der-article-ii-retrograde-high": "Der article II",
+    "prograde-high": "Der article II",
+    "prograde-low": "Der article II",
+    "retrograde-high": "Der article II",
+    "retrograde-low": "Der article II",
+    "m1-prograde-high": "Near-minimum-energy",
+    "m1-prograde-low": "Near-minimum-energy",
+    "m2-prograde-high": "Near-minimum-energy",
+    "m2-prograde-low": "Near-minimum-energy",
+    "near-tangent-prograde-high": "Near tangent",
+}
+
 
 def parse_args():
     """Parse command-line arguments."""
@@ -51,6 +81,40 @@ def solver_name(benchmark):
     return solver
 
 
+def case_key(benchmark):
+    """Return a stable key for one benchmark case."""
+    case = benchmark["params"]["case"]
+    return (
+        case["name"],
+        case["M"],
+        case["is_prograde"],
+        case["is_low_path"],
+    )
+
+
+def case_title(case):
+    """Return a readable case title."""
+    name = case["name"]
+    if name in CASE_TITLE_OVERRIDES:
+        return CASE_TITLE_OVERRIDES[name]
+    return name.replace("-", " ").title()
+
+
+def case_prograde(case):
+    """Return a Yes/No label for the prograde flag."""
+    return "Yes" if case["is_prograde"] else "No"
+
+
+def case_path(case):
+    """Return the selected Lambert path."""
+    return "low" if case["is_low_path"] else "high"
+
+
+def group_title(group):
+    """Return a readable benchmark group title."""
+    return GROUP_TITLES.get(group, group.replace("-", " ").title())
+
+
 def format_microseconds(seconds):
     """Format seconds as microseconds with one decimal place."""
     return f"{seconds * 1e6:.1f}"
@@ -66,7 +130,10 @@ def sorted_benchmarks(reports):
     for benchmarks in groups.values():
         benchmarks.sort(
             key=lambda item: (
-                item["params"]["case"]["name"],
+                case_title(item["params"]["case"]),
+                item["params"]["case"]["M"],
+                item["params"]["case"]["is_prograde"],
+                item["params"]["case"]["is_low_path"],
                 item["stats"]["median"],
                 solver_name(item),
             )
@@ -85,33 +152,31 @@ def machine_summary(report):
 
 
 def _rank_within_case(benchmarks):
-    """Return a dict mapping (case_name, solver_name) -> rank within that case."""
-    by_case: dict[str, list] = {}
+    """Return a dict mapping (case_key, solver_name) -> rank within that case."""
+    by_case: dict[tuple, list] = {}
     for b in benchmarks:
-        case = b["params"]["case"]["name"]
-        by_case.setdefault(case, []).append(b)
+        by_case.setdefault(case_key(b), []).append(b)
 
     ranks = {}
-    for case, entries in by_case.items():
+    for key, entries in by_case.items():
         sorted_entries = sorted(entries, key=lambda b: b["stats"]["median"])
         for rank, entry in enumerate(sorted_entries, start=1):
-            ranks[(case, solver_name(entry))] = rank
+            ranks[(key, solver_name(entry))] = rank
     return ranks
 
 
 def _speedup_within_case(benchmarks):
-    """Return a dict mapping (case_name, solver_name) -> speedup vs slowest."""
-    by_case: dict[str, list] = {}
+    """Return a dict mapping (case_key, solver_name) -> speedup vs slowest."""
+    by_case: dict[tuple, list] = {}
     for b in benchmarks:
-        case = b["params"]["case"]["name"]
-        by_case.setdefault(case, []).append(b)
+        by_case.setdefault(case_key(b), []).append(b)
 
     speedups = {}
-    for case, entries in by_case.items():
+    for key, entries in by_case.items():
         slowest = max(e["stats"]["median"] for e in entries)
         for entry in entries:
             median = entry["stats"]["median"]
-            speedups[(case, solver_name(entry))] = (
+            speedups[(key, solver_name(entry))] = (
                 slowest / median if median > 0 else 1.0
             )
     return speedups
@@ -146,21 +211,25 @@ def build_section(reports):
 
         lines.extend(
             [
-                f"### {group}",
+                f"### {group_title(group)}",
                 "",
-                "| Rank | Case | Solver | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |",
-                "|-----:|------|--------|-----------:|----------:|---------:|--------:|-------:|",
+                "| Rank | Scenario | Revolutions | Prograde | Path | Solver | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |",
+                "|-----:|----------|------------:|----------|------|--------|-----------:|----------:|---------:|--------:|-------:|",
             ]
         )
         for benchmark in benchmarks:
-            case = benchmark["params"]["case"]["name"]
+            case = benchmark["params"]["case"]
             name = solver_name(benchmark)
             stats = benchmark["stats"]
-            rank = ranks.get((case, name), 0)
-            speedup = speedups.get((case, name), 1.0)
+            key = case_key(benchmark)
+            rank = ranks.get((key, name), 0)
+            speedup = speedups.get((key, name), 1.0)
             lines.append(
                 f"| {rank} | "
-                f"`{case}` | "
+                f"{case_title(case)} | "
+                f"{case['M']} | "
+                f"{case_prograde(case)} | "
+                f"{case_path(case)} | "
                 f"`{name}` | "
                 f"{format_microseconds(stats['median'])} | "
                 f"{format_microseconds(stats['mean'])} | "
@@ -178,12 +247,13 @@ def update_readme(readme_path, section):
     """Replace or append the generated performance section in the README."""
     content = readme_path.read_text(encoding="utf-8")
     if START_MARKER in content and END_MARKER in content:
+        generated_content = section.split(f"{START_MARKER}\n\n", maxsplit=1)[1]
+        generated_content = f"{START_MARKER}\n\n{generated_content}"
         pattern = re.compile(
-            rf"{re.escape(SECTION_TITLE)}\n\n{re.escape(START_MARKER)}.*?"
-            rf"{re.escape(END_MARKER)}\n?",
+            rf"{re.escape(START_MARKER)}.*?{re.escape(END_MARKER)}\n?",
             flags=re.DOTALL,
         )
-        updated = pattern.sub(section, content)
+        updated = pattern.sub(generated_content, content)
     else:
         updated = content.rstrip() + "\n\n" + section
 
