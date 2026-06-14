@@ -184,7 +184,7 @@ All solvers are JIT-warmed before timing begins.
 
 #### Near-minimum-energy
 
-| Rank | Solver | Revolutions | Prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
+| Rank | Solver | Revolutions | prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
 |-----:|--------|------------:|----------|------|-----------:|----------:|---------:|--------:|-------:|
 | 1 | `mcelreath2025` | 1 | Yes | high | 46.8 | 47.8 | 0.5 | 13.9x | 4332 |
 | 2 | `izzo2015` | 1 | Yes | high | 61.0 | 62.2 | 1.0 | 10.7x | 3351 |
@@ -219,7 +219,7 @@ All solvers are JIT-warmed before timing begins.
 
 #### Der article II
 
-| Rank | Solver | Revolutions | Prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
+| Rank | Solver | Revolutions | prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
 |-----:|--------|------------:|----------|------|-----------:|----------:|---------:|--------:|-------:|
 | 1 | `mcelreath2025` | 1 | Yes | high | 47.5 | 48.7 | 0.7 | 13.5x | 4324 |
 | 2 | `izzo2015` | 1 | Yes | high | 61.4 | 62.7 | 1.0 | 10.5x | 3319 |
@@ -254,7 +254,7 @@ All solvers are JIT-warmed before timing begins.
 
 #### Near tangent
 
-| Rank | Solver | Revolutions | Prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
+| Rank | Solver | Revolutions | prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
 |-----:|--------|------------:|----------|------|-----------:|----------:|---------:|--------:|-------:|
 | 1 | `mcelreath2025` | 0 | Yes | high | 48.5 | 49.6 | 0.6 | 6.6x | 4241 |
 | 2 | `arora2013` | 0 | Yes | high | 54.1 | 55.0 | 0.8 | 5.9x | 3784 |
@@ -268,7 +268,7 @@ All solvers are JIT-warmed before timing begins.
 
 #### Curtiss book
 
-| Rank | Solver | Revolutions | Prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
+| Rank | Solver | Revolutions | prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
 |-----:|--------|------------:|----------|------|-----------:|----------:|---------:|--------:|-------:|
 | 1 | `battin1984` | 0 | Yes | low | 33.4 | 34.1 | 0.4 | 975.5x | 6123 |
 | 2 | `mcelreath2025` | 0 | Yes | low | 46.9 | 47.8 | 0.6 | 694.7x | 4337 |
@@ -285,7 +285,7 @@ All solvers are JIT-warmed before timing begins.
 
 #### Der article I
 
-| Rank | Solver | Revolutions | Prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
+| Rank | Solver | Revolutions | prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
 |-----:|--------|------------:|----------|------|-----------:|----------:|---------:|--------:|-------:|
 | 1 | `battin1984` | 0 | Yes | low | 36.4 | 37.1 | 0.4 | 854.6x | 5602 |
 | 2 | `mcelreath2025` | 0 | Yes | low | 46.7 | 47.9 | 0.6 | 666.1x | 4373 |
@@ -314,7 +314,7 @@ All solvers are JIT-warmed before timing begins.
 
 #### Der article II
 
-| Rank | Solver | Revolutions | Prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
+| Rank | Solver | Revolutions | prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
 |-----:|--------|------------:|----------|------|-----------:|----------:|---------:|--------:|-------:|
 | 1 | `battin1984` | 0 | Yes | high | 36.9 | 37.5 | 0.4 | 969.9x | 5490 |
 | 2 | `mcelreath2025` | 0 | Yes | high | 47.1 | 48.1 | 0.6 | 759.8x | 4355 |
@@ -345,7 +345,7 @@ All solvers are JIT-warmed before timing begins.
 
 #### GMAT hyperbolic
 
-| Rank | Solver | Revolutions | Prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
+| Rank | Solver | Revolutions | prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
 |-----:|--------|------------:|----------|------|-----------:|----------:|---------:|--------:|-------:|
 | 1 | `battin1984` | 0 | Yes | low | 34.8 | 35.3 | 0.4 | 1066.1x | 5850 |
 | 2 | `mcelreath2025` | 0 | Yes | low | 47.9 | 49.0 | 0.7 | 774.6x | 4233 |
@@ -376,7 +376,7 @@ All solvers are JIT-warmed before timing begins.
 
 #### Battin book
 
-| Rank | Solver | Revolutions | Prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
+| Rank | Solver | Revolutions | prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
 |-----:|--------|------------:|----------|------|-----------:|----------:|---------:|--------:|-------:|
 | 1 | `gauss1809` | 0 | Yes | low | 33.3 | 34.5 | 0.6 | 1095.4x | 6074 |
 | 2 | `battin1984` | 0 | Yes | low | 36.6 | 37.8 | 0.5 | 996.6x | 5600 |
@@ -395,7 +395,7 @@ All solvers are JIT-warmed before timing begins.
 
 #### Vallado book
 
-| Rank | Solver | Revolutions | Prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
+| Rank | Solver | Revolutions | prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |
 |-----:|--------|------------:|----------|------|-----------:|----------:|---------:|--------:|-------:|
 | 1 | `battin1984` | 0 | Yes | low | 38.2 | 39.5 | 0.5 | 10.5x | 5341 |
 | 2 | `gauss1809` | 0 | Yes | low | 51.9 | 53.5 | 0.8 | 7.7x | 3915 |

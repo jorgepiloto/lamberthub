@@ -7,4 +7,6 @@ astropy
 poliastro
 lamberthub
 Lambert's
+GMAT
+Vallado
 prograde

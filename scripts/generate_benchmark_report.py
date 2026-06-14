@@ -232,7 +232,7 @@ def build_section(reports):
                 [
                     f"#### {scenario}",
                     "",
-                    "| Rank | Solver | Revolutions | Prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |",
+                    "| Rank | Solver | Revolutions | prograde | Path | Median (µs) | Mean (µs) | IQR (µs) | Speedup | Rounds |",
                     "|-----:|--------|------------:|----------|------|-----------:|----------:|---------:|--------:|-------:|",
                 ]
             )
