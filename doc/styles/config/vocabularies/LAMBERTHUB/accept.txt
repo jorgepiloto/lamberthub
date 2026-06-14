@@ -2,6 +2,7 @@ AAS
 PyPI
 Battin
 Astropy
+Numba
 astropy
 poliastro
 lamberthub

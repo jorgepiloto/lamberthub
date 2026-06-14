@@ -154,9 +154,23 @@ Astrodynamics, revised edition, by R.H. Battin, problem 7-12*.
 
 ## Performance comparison
 
+Benchmarks run with
+[pytest-benchmark](https://pytest-benchmark.readthedocs.io). All Numba JIT
+functions are pre-compiled once before timing begins, compilation cost is never
+included in the measurements. Six test groups cover the main solver regimes:
+
+| Group | What it tests |
+|-------|---------------|
+| `zero-rev-nominal` | Classic textbook cases, all solvers |
+| `zero-rev-general` | General elliptic, zero-revolution solvers |
+| `zero-rev-hyperbolic` | Hyperbolic transfers |
+| `multi-rev-m1` | First multi-revolution branch (prograde and retrograde) |
+| `multi-rev-hard` | Near-minimum-energy multi-revolution cases |
+| `robust-zero-rev` | Near-tangent transfers that stress robustness |
+
 <!-- performance-comparison:start -->
 
-_This section is generated from CI benchmark artifacts._
+_This section is auto-generated from CI benchmark artifacts._
 
 - Generated: 2026-06-14 06:39 UTC
 - Commit: `5fff8c99d908`
