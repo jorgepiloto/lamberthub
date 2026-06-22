@@ -84,7 +84,7 @@ jobs:
           - {name: robust-zero-rev, selector: robust_zero_revolution}
       fail-fast: false
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: "Set up Python"
         uses: actions/setup-python@v6
@@ -111,7 +111,7 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: main
           fetch-depth: 0
