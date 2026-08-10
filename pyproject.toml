@@ -1,5 +1,5 @@
 [build-system]
-requires = ["flit_core>=3.2,<4"]
+requires = ["flit_core>=3.2,<5"]
 build-backend = "flit_core.buildapi"
 
 [project]
@@ -42,7 +42,7 @@ dynamic = ["version", "description"]
 
 [dependency-groups]
 tests = [
-    "pytest==9.1.0",
+    "pytest==9.1.1",
     "pytest-cov==7.1.0",
 ]
 benchmarks = [
