@@ -16,7 +16,7 @@ from lamberthub.universal_solvers.negrete import negrete2024
 from lamberthub.universal_solvers.vallado import vallado2013
 
 __author__ = "Jorge Martinez Garrido"
-__version__ = "2.0.0rc0"
+__version__ = "2.0.0rc1"
 
 ALL_SOLVERS = [
     gauss1809,
