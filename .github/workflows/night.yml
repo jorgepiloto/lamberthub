@@ -26,13 +26,32 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Build documentation
-        uses: ansys/actions/doc-build@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+      - name: Checkout project
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          group-dependencies-name: doc
-          needs-quarto: false
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
+        with:
+          enable-cache: false
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
-          use-python-cache: false
+
+      - name: Install tox
+        run: uv tool install tox
+
+      - name: Check documentation links
+        run: tox -e doc-links
+
+      - name: Build HTML documentation
+        run: tox -e doc-html
+
+      - name: Upload HTML documentation
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: documentation-html
+          path: doc/_build/html
+          if-no-files-found: error
 
   doc-deploy-dev:
     name: Deploy development docs
