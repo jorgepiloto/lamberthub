@@ -10,7 +10,7 @@
 [![Python](https://img.shields.io/pypi/pyversions/lamberthub?logo=pypi)](https://pypi.org/project/lamberthub/)
 [![PyPI](https://img.shields.io/pypi/v/lamberthub.svg?logo=python&logoColor=white)](https://pypi.org/project/lamberthub/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![CI](https://github.com/jorgepiloto/lamberthub/actions/workflows/pull-request.yml/badge.svg?branch=main)](https://github.com/jorgepiloto/lamberthub/actions/workflows/pull-request.yml)
+[![CI](https://github.com/jorgepiloto/lamberthub/actions/workflows/night.yml/badge.svg?branch=main)](https://github.com/jorgepiloto/lamberthub/actions/workflows/night.yml)
 [![Coverage](https://codecov.io/gh/jorgepiloto/lamberthub/branch/main/graph/badge.svg?token=3BY2J5AB8D)](https://codecov.io/gh/jorgepiloto/lamberthub)
 [![DOI](https://zenodo.org/badge/364482782.svg)](https://zenodo.org/badge/latestdoi/364482782)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
