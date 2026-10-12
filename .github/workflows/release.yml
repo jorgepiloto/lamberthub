@@ -28,7 +28,7 @@ jobs:
       pull-requests: write # Create a changelog pull request when required
     steps:
       - name: Update changelog
-        uses: ansys/actions/doc-deploy-changelog@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        uses: ansys/actions/doc-deploy-changelog@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           token: ${{ secrets.WEBSITE_DEPLOY_KEY }} # zizmor: ignore[secrets-outside-env]
           bot-user: github-actions[bot]
@@ -44,7 +44,7 @@ jobs:
       contents: read
     steps:
       - name: Run code style checks
-        uses: ansys/actions/code-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        uses: ansys/actions/code-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         env:
           SKIP: 'zizmor'
         with:
@@ -59,7 +59,7 @@ jobs:
       contents: read
     steps:
       - name: Run documentation style checks
-        uses: ansys/actions/doc-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        uses: ansys/actions/doc-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           files: README.md doc/source
           token: ${{ github.token }}
@@ -106,7 +106,7 @@ jobs:
       contents: read
     steps:
       - name: Run tests
-        uses: ansys/actions/tests-pytest@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        uses: ansys/actions/tests-pytest@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           group-dependencies-name: tests
@@ -119,7 +119,7 @@ jobs:
       contents: read
     steps:
       - name: Build source and wheel distributions
-        uses: ansys/actions/build-library@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        uses: ansys/actions/build-library@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
@@ -156,7 +156,7 @@ jobs:
       contents: write # Create the GitHub release
     steps:
       - name: Publish GitHub release
-        uses: ansys/actions/release-github@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        uses: ansys/actions/release-github@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           token: ${{ github.token }}

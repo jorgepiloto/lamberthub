@@ -27,13 +27,13 @@ jobs:
       pull-requests: write # Read and update pull-request contents
     steps:
       - name: Check pull request title
-        uses: ansys/actions/check-pr-title@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        uses: ansys/actions/check-pr-title@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           token: ${{ github.token }}
 
       - name: Create changelog fragment
         if: github.event.pull_request.head.repo.full_name == github.repository
-        uses: ansys/actions/doc-changelog@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        uses: ansys/actions/doc-changelog@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           token: ${{ github.token }}
           bot-user: github-actions[bot]
@@ -51,7 +51,7 @@ jobs:
       contents: read
     steps:
       - name: Run code style checks
-        uses: ansys/actions/code-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        uses: ansys/actions/code-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         env:
           SKIP: 'zizmor'
         with:
@@ -70,7 +70,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up Python
-        uses: ansys/actions/_setup-python@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        uses: ansys/actions/_setup-python@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           use-cache: false
@@ -89,7 +89,7 @@ jobs:
       pull-requests: write # Write Vale suggestions to the pull request
     steps:
       - name: Run documentation style checks
-        uses: ansys/actions/doc-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        uses: ansys/actions/doc-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           files: README.md doc/source
           token: ${{ github.token }}
@@ -137,7 +137,7 @@ jobs:
         python-version: ['3.12', '3.13', '3.14']
     steps:
       - name: Run tests
-        uses: ansys/actions/tests-pytest@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        uses: ansys/actions/tests-pytest@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           python-version: ${{ matrix.python-version }}
           group-dependencies-name: tests
@@ -169,7 +169,7 @@ jobs:
             selector: robust_zero_revolution
     steps:
       - name: Run benchmarks
-        uses: ansys/actions/tests-pytest@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        uses: ansys/actions/tests-pytest@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           group-dependencies-name: tests,benchmarks
@@ -191,7 +191,7 @@ jobs:
       contents: read
     steps:
       - name: Build source and wheel distributions
-        uses: ansys/actions/build-library@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        uses: ansys/actions/build-library@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
@@ -203,7 +203,7 @@ jobs:
       contents: read
     steps:
       - name: Audit GitHub Actions
-        uses: ansys/actions/check-actions-security@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        uses: ansys/actions/check-actions-security@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           auditing-level: high
           generate-summary: true
