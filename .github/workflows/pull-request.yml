@@ -39,8 +39,8 @@ jobs:
           bot-user: github-actions[bot]
           bot-email: 41898282+github-actions[bot]@users.noreply.github.com
           use-pull-request-title: true
-          use-default-towncrier-config: true
-          use-ansys-default-template: true
+          use-default-towncrier-config: false
+          use-ansys-default-template: false
           use-python-cache: false
 
   code-style:

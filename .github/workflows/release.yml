@@ -20,8 +20,25 @@ concurrency:
 
 jobs:
 
+  update-changelog:
+    name: Update changelog
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Commit the changelog and recreate the release tag
+      pull-requests: write # Create a changelog pull request when required
+    steps:
+      - name: Update changelog
+        uses: ansys/actions/doc-deploy-changelog@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          token: ${{ secrets.WEBSITE_DEPLOY_KEY }} # zizmor: ignore[secrets-outside-env]
+          bot-user: github-actions[bot]
+          bot-email: 41898282+github-actions[bot]@users.noreply.github.com
+          release-from-main: true
+          use-python-cache: false
+
   code-style:
     name: Code style
+    needs: update-changelog
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -36,6 +53,7 @@ jobs:
 
   doc-style:
     name: Doc style
+    needs: update-changelog
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -143,8 +161,8 @@ jobs:
           library-name: ${{ env.LIBRARY_NAME }}
           token: ${{ github.token }}
           additional-artifacts: ${{ env.LIBRARY_NAME }}-artifacts
-          changelog-release-notes: false
-          generate-release-notes: true
+          changelog-release-notes: true
+          generate-release-notes: false
           only-code: true
           use-python-cache: false
 

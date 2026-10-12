@@ -52,6 +52,7 @@ doc = [
     "numpydoc==1.11.0",
     "sphinx-autoapi==3.8.1",
     "sphinx-copybutton==0.5.2",
+    "sphinx-design==0.7.0",
     "sphinx-unbloated-theme @ git+https://github.com/jorgepiloto/sphinx-unbloated-theme.git@045e10831d14676378f207a3b225953211ae4a22",
 ]
 docstyle = [
@@ -90,6 +91,56 @@ exclude = ["tests", "doc", "build"]
 verbose = 1
 quiet = false
 color = true
+
+[tool.towncrier]
+package = "lamberthub"
+package_dir = "src"
+directory = "doc/source/changelog"
+filename = "doc/source/changelog.rst"
+start_string = ".. towncrier release notes start\n"
+template = "doc/source/changelog/template"
+title_format = "`{version} <https://github.com/jorgepiloto/lamberthub/releases/tag/v{version}>`_ - {project_date}"
+issue_format = "`#{issue} <https://github.com/jorgepiloto/lamberthub/pull/{issue}>`_"
+
+[[tool.towncrier.type]]
+directory = "breaking"
+name = "Breaking"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "added"
+name = "Added"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "fixed"
+name = "Fixed"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "documentation"
+name = "Documentation"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "dependencies"
+name = "Dependencies"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "maintenance"
+name = "Maintenance"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "miscellaneous"
+name = "Miscellaneous"
+showcontent = true
+
+[[tool.towncrier.type]]
+directory = "test"
+name = "Test"
+showcontent = true
 
 [tool.ruff]
 line-length = 88
