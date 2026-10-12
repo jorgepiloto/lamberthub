@@ -5,6 +5,9 @@ on:
     types: [opened, reopened, synchronize, edited]
 
 env:
+  DOCUMENTATION_BASE_URL: 'https://jorgemartinez.space/projects/lamberthub/version/dev/'
+  DOCUMENTATION_CNAME: 'jorgemartinez.space/projects/lamberthub'
+  DOCUMENTATION_ROOT_URL: 'https://jorgemartinez.space/projects/lamberthub'
   MAIN_PYTHON_VERSION: '3.12'
   LIBRARY_NAME: lamberthub
 
@@ -86,12 +89,27 @@ jobs:
       - name: Run documentation style checks
         uses: ansys/actions/doc-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
         with:
-          files: README.md
+          files: README.md doc/source
           token: ${{ github.token }}
+
+  doc-build:
+    name: Doc build
+    needs: doc-style
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Build documentation
+        uses: ansys/actions/doc-build@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          group-dependencies-name: doc
+          needs-quarto: false
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          use-python-cache: false
 
   tests:
     name: Tests / Python ${{ matrix.python-version }}
-    needs: [code-style, doc-style]
+    needs: [code-style, doc-build]
     runs-on: ubuntu-latest
     permissions:
       contents: read

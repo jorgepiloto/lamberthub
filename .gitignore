@@ -79,6 +79,8 @@ coverage.xml
 
 # Sphinx documentation
 doc/_build/
+doc/source/api-reference/lamberthub/
+doc/styles/Google/
 
 # PyBuilder
 target/

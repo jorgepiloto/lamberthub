@@ -6,6 +6,9 @@ on:
       - "v*.*.*"
 
 env:
+  DOCUMENTATION_BASE_URL: 'https://jorgemartinez.space/projects/lamberthub/version/stable/'
+  DOCUMENTATION_CNAME: 'jorgemartinez.space/projects/lamberthub'
+  DOCUMENTATION_ROOT_URL: 'https://jorgemartinez.space/projects/lamberthub'
   MAIN_PYTHON_VERSION: '3.12'
   LIBRARY_NAME: lamberthub
 
@@ -38,12 +41,27 @@ jobs:
       - name: Run documentation style checks
         uses: ansys/actions/doc-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
         with:
-          files: README.md
+          files: README.md doc/source
           token: ${{ github.token }}
+
+  doc-build:
+    name: Doc build
+    needs: doc-style
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Build documentation
+        uses: ansys/actions/doc-build@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          group-dependencies-name: doc
+          needs-quarto: false
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          use-python-cache: false
 
   tests:
     name: Tests
-    needs: [code-style, doc-style]
+    needs: [code-style, doc-build]
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -69,7 +87,7 @@ jobs:
 
   release-pypi:
     name: Release project to the public PyPI
-    needs: build-library
+    needs: [build-library, doc-build]
     runs-on: ubuntu-latest
     environment: release
     permissions:
@@ -108,3 +126,65 @@ jobs:
           generate-release-notes: true
           only-code: true
           use-python-cache: false
+
+  doc-deploy-stable:
+    name: Deploy stable docs
+    needs: release-github
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: read
+    concurrency:
+      group: website-documentation
+      cancel-in-progress: false
+    steps:
+      - name: Download documentation
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: documentation-html
+          path: documentation-html
+
+      - name: Read release version
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: echo "RELEASE_VERSION=${RELEASE_TAG#v}" >> "$GITHUB_ENV"
+
+      - name: Prepare versioned documentation
+        run: |
+          python3 - <<'PYTHON'
+          from pathlib import Path
+          from urllib.parse import urlsplit
+          import os
+          import shutil
+
+          shutil.copytree("documentation-html", "documentation-versioned")
+          page = Path("documentation-versioned/404.html")
+          root = urlsplit(os.environ["DOCUMENTATION_BASE_URL"]).path
+          version = os.environ["RELEASE_VERSION"]
+          version_root = f"{root.rstrip('/').rsplit('/', 1)[0]}/{version}/"
+          content = page.read_text(encoding="utf-8")
+          old_base = f'<base href="{root}">'
+          assert old_base in content, "404 page must declare the documentation root"
+          page.write_text(
+              content.replace(old_base, f'<base href="{version_root}">'),
+              encoding="utf-8",
+          )
+          PYTHON
+
+      - name: Deploy versioned documentation
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          personal_token: ${{ secrets.WEBSITE_DEPLOY_KEY }}
+          external_repository: jorgepiloto/website
+          publish_dir: documentation-versioned
+          publish_branch: gh-pages
+          destination_dir: projects/lamberthub/version/${{ env.RELEASE_VERSION }}
+
+      - name: Deploy stable documentation
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          personal_token: ${{ secrets.WEBSITE_DEPLOY_KEY }}
+          external_repository: jorgepiloto/website
+          publish_dir: documentation-html
+          publish_branch: gh-pages
+          destination_dir: projects/lamberthub/version/stable

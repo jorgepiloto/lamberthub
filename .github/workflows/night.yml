@@ -6,6 +6,9 @@ on:
   workflow_dispatch:
 
 env:
+  DOCUMENTATION_BASE_URL: 'https://jorgemartinez.space/projects/lamberthub/version/dev/'
+  DOCUMENTATION_CNAME: 'jorgemartinez.space/projects/lamberthub'
+  DOCUMENTATION_ROOT_URL: 'https://jorgemartinez.space/projects/lamberthub'
   MAIN_PYTHON_VERSION: '3.12'
   LIBRARY_NAME: lamberthub
 
@@ -17,8 +20,49 @@ concurrency:
 
 jobs:
 
+  doc-build:
+    name: Doc build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Build documentation
+        uses: ansys/actions/doc-build@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          group-dependencies-name: doc
+          needs-quarto: false
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          use-python-cache: false
+
+  doc-deploy-dev:
+    name: Deploy development docs
+    needs: doc-build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    concurrency:
+      group: website-documentation
+      cancel-in-progress: false
+    steps:
+      - name: Download documentation
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: documentation-html
+          path: documentation-html
+
+      - name: Deploy documentation
+        uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
+        with:
+          personal_token: ${{ secrets.WEBSITE_DEPLOY_KEY }}
+          external_repository: jorgepiloto/website
+          publish_dir: documentation-html
+          publish_branch: gh-pages
+          destination_dir: projects/lamberthub/version/dev
+
   tests:
     name: Tests / Python ${{ matrix.python-version }}
+    needs: doc-build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -98,4 +142,3 @@ jobs:
           auditing-level: high
           generate-summary: true
           token: ${{ github.token }}
-
