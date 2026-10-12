@@ -155,36 +155,17 @@ jobs:
       actions: read # Download workflow artifacts for the release
       contents: write # Create the GitHub release
     steps:
-      - name: Prepare GitHub release
+      - name: Publish GitHub release
         uses: ansys/actions/release-github@878428addc6c36a8d6946221485709ca5dc872e5 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           token: ${{ github.token }}
           additional-artifacts: ${{ env.LIBRARY_NAME }}-artifacts
           changelog-release-notes: true
-          dry-run: true
           generate-release-notes: false
           only-code: true
           upload-documentation: false
           use-python-cache: false
-
-      - name: Publish GitHub release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          RELEASE_NOTES_BODY: ${{ env.RELEASE_NOTES_BODY }}
-          TAG_NAME: ${{ github.ref_name }}
-        run: |
-          if gh release view "${TAG_NAME}" >/dev/null 2>&1; then
-            gh release edit "${TAG_NAME}" --notes "${RELEASE_NOTES_BODY}"
-          else
-            gh release create "${TAG_NAME}" --notes "${RELEASE_NOTES_BODY}"
-          fi
-
-          shopt -s nullglob globstar
-          artifacts=(dist/extra/**/*)
-          if [ "${#artifacts[@]}" -gt 0 ]; then
-            gh release upload "${TAG_NAME}" --clobber "${artifacts[@]}"
-          fi
 
   doc-deploy-stable:
     name: Deploy stable docs
