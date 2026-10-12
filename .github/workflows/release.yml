@@ -28,6 +28,8 @@ jobs:
     steps:
       - name: Run code style checks
         uses: ansys/actions/code-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        env:
+          SKIP: 'zizmor'
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           use-python-cache: false
@@ -110,7 +112,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: release
     permissions:
-      id-token: write
+      id-token: write # Authenticate to PyPI through trusted publishing
       contents: read
     steps:
       - name: Download library artifacts
@@ -132,8 +134,8 @@ jobs:
     needs: release-pypi
     runs-on: ubuntu-latest
     permissions:
-      actions: read
-      contents: write
+      actions: read # Download workflow artifacts for the release
+      contents: write # Create the GitHub release
     steps:
       - name: Publish GitHub release
         uses: ansys/actions/release-github@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook

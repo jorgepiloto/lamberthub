@@ -23,8 +23,8 @@ jobs:
     name: Create changelog fragment
     runs-on: ubuntu-latest
     permissions:
-      contents: write
-      pull-requests: write
+      contents: write # Write the generated changelog fragment
+      pull-requests: write # Read and update pull-request contents
     steps:
       - name: Check pull request title
         uses: ansys/actions/check-pr-title@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
@@ -52,6 +52,8 @@ jobs:
     steps:
       - name: Run code style checks
         uses: ansys/actions/code-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        env:
+          SKIP: 'zizmor'
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           use-python-cache: false
@@ -84,7 +86,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: write
+      pull-requests: write # Write Vale suggestions to the pull request
     steps:
       - name: Run documentation style checks
         uses: ansys/actions/doc-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
