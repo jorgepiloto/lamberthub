@@ -91,7 +91,7 @@ jobs:
         python-version: ['3.12', '3.13', '3.14']
     steps:
       - name: Run tests
-        uses: ansys/actions/tests-pytest@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
+        uses: ansys/actions/tests-pytest@878428addc6c36a8d6946221485709ca5dc872e5 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           python-version: ${{ matrix.python-version }}
           group-dependencies-name: tests
@@ -104,7 +104,7 @@ jobs:
       contents: read
     steps:
       - name: Run benchmarks
-        uses: ansys/actions/tests-pytest@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
+        uses: ansys/actions/tests-pytest@878428addc6c36a8d6946221485709ca5dc872e5 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           group-dependencies-name: tests,benchmarks
@@ -130,7 +130,7 @@ jobs:
         python-version: ['3.12', '3.13', '3.14']
     steps:
       - name: Build wheelhouse
-        uses: ansys/actions/build-wheelhouse@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
+        uses: ansys/actions/build-wheelhouse@878428addc6c36a8d6946221485709ca5dc872e5 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           operating-system: ${{ matrix.os }}
@@ -144,7 +144,7 @@ jobs:
       contents: read
     steps:
       - name: Build source and wheel distributions
-        uses: ansys/actions/build-library@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
+        uses: ansys/actions/build-library@878428addc6c36a8d6946221485709ca5dc872e5 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
@@ -156,7 +156,7 @@ jobs:
       contents: read
     steps:
       - name: Audit GitHub Actions
-        uses: ansys/actions/check-actions-security@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
+        uses: ansys/actions/check-actions-security@878428addc6c36a8d6946221485709ca5dc872e5 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           auditing-level: high
           generate-summary: true
