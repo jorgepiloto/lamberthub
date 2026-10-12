@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/jorgepiloto/lamberthub">
-    <img width="640" src="https://raw.githubusercontent.com/jorgepiloto/lamberthub/main/doc/source/_static/logo.png" alt="lamberthub">
+    <img width="720" src="https://raw.githubusercontent.com/jorgepiloto/lamberthub/main/doc/source/_static/logo.png" alt="lamberthub">
   </a>
 </p>
 
