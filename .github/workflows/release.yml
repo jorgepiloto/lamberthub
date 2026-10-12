@@ -1,0 +1,110 @@
+name: release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+env:
+  MAIN_PYTHON_VERSION: '3.12'
+  LIBRARY_NAME: lamberthub
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  code-style:
+    name: Code style
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Run code style checks
+        uses: ansys/actions/code-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          use-python-cache: false
+
+  doc-style:
+    name: Doc style
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Run documentation style checks
+        uses: ansys/actions/doc-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          files: README.md
+          token: ${{ github.token }}
+
+  tests:
+    name: Tests
+    needs: [code-style, doc-style]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Run tests
+        uses: ansys/actions/tests-pytest@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          group-dependencies-name: tests
+
+  build-library:
+    name: Build library
+    needs: tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Build source and wheel distributions
+        uses: ansys/actions/build-library@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          library-name: ${{ env.LIBRARY_NAME }}
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+  release-pypi:
+    name: Release project to the public PyPI
+    needs: build-library
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Download library artifacts
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: ${{ env.LIBRARY_NAME }}-artifacts
+          path: ${{ env.LIBRARY_NAME }}-artifacts
+
+      - name: Upload artifacts to PyPI using trusted publisher
+        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+        with:
+          repository-url: https://upload.pypi.org/legacy/
+          print-hash: true
+          packages-dir: ${{ env.LIBRARY_NAME }}-artifacts
+          skip-existing: false
+
+  release-github:
+    name: Release to GitHub
+    needs: release-pypi
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: write
+    steps:
+      - name: Publish GitHub release
+        uses: ansys/actions/release-github@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          library-name: ${{ env.LIBRARY_NAME }}
+          token: ${{ github.token }}
+          additional-artifacts: ${{ env.LIBRARY_NAME }}-artifacts
+          changelog-release-notes: false
+          generate-release-notes: true
+          only-code: true
+          use-python-cache: false

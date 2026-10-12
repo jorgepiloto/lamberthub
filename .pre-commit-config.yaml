@@ -1,22 +1,44 @@
 repos:
 
- 
-- repo: https://github.com/charliermarsh/ruff-pre-commit
-  rev: v0.6.5
+- repo: https://github.com/astral-sh/ruff-pre-commit
+  rev: 44b5042edab9382aba712eed4f9c7bab7a3d6a3e  # frozen: v0.17.0
   hooks:
-    - id: ruff
-      args: [ --fix ]
+    - id: ruff-check
     - id: ruff-format
 
-- repo: https://github.com/codespell-project/codespell
-  rev: v2.3.0
+- repo: https://github.com/adamchainz/blacken-docs
+  rev: dda8db18cfc68df532abf33b185ecd12d5b7b326  # frozen: 1.20.0
   hooks:
-  - id: codespell
-    args: ["--ignore-words=./doc/styles/config/vocabularies/LAMBERTHUB/accept.txt"]
+    - id: blacken-docs
+      additional_dependencies: [black==26.5.1]
+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: 3e8a8703264a2f4a69428a0aa4dcb512790b2c8c  # frozen: v6.0.0
+  hooks:
+  - id: check-merge-conflict
+  - id: check-yaml
+  - id: requirements-txt-fixer
+  - id: trailing-whitespace
+  - id: debug-statements
+
+# Validate our github workflow files
+- repo: https://github.com/python-jsonschema/check-jsonschema
+  rev: 4f85d46a92dc17713078e5de73f8a13190edf6fc  # frozen: 0.38.2
+  hooks:
+    - id: check-github-workflows
 
 - repo: https://github.com/econchick/interrogate
-  rev: 1.7.0
+  rev: a6268877efd41a21197445cc04cbf28f9c6facba  # frozen: 1.7.0
   hooks:
-  - id: interrogate
-    args: [src]
-    pass_filenames: false
+    - id: interrogate
+      args: [src]
+      pass_filenames: false
+
+- repo: https://github.com/ansys/pre-commit-hooks
+  rev: 55c5b6a5439abd847613579c6924da750e8b78b2  # frozen: v0.8.0
+  hooks:
+    - id: add-license-headers
+      files: '/.*\.(yml|py)$'
+      args:
+      - --start_year=2022
+      exclude: '^(.github|doc)/.*'

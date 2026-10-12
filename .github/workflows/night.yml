@@ -1,0 +1,101 @@
+name: night
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+env:
+  MAIN_PYTHON_VERSION: '3.12'
+  LIBRARY_NAME: lamberthub
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  tests:
+    name: Tests / Python ${{ matrix.python-version }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12', '3.13', '3.14']
+    steps:
+      - name: Run tests
+        uses: ansys/actions/tests-pytest@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          python-version: ${{ matrix.python-version }}
+          group-dependencies-name: tests
+
+  benchmarks:
+    name: Benchmarks
+    needs: tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Run benchmarks
+        uses: ansys/actions/tests-pytest@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          group-dependencies-name: tests,benchmarks
+          pytest-postargs: tests
+          pytest-extra-args: >-
+            -m benchmark
+            --benchmark-only
+            --benchmark-disable-gc
+            --benchmark-warmup=on
+            --benchmark-min-rounds=5
+            --benchmark-max-time=0.2
+
+  build-wheelhouse:
+    name: Build wheelhouse / ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    needs: benchmarks
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ['3.12', '3.13', '3.14']
+    steps:
+      - name: Build wheelhouse
+        uses: ansys/actions/build-wheelhouse@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          library-name: ${{ env.LIBRARY_NAME }}
+          operating-system: ${{ matrix.os }}
+          python-version: ${{ matrix.python-version }}
+
+  build-library:
+    name: Build library
+    needs: build-wheelhouse
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Build source and wheel distributions
+        uses: ansys/actions/build-library@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          library-name: ${{ env.LIBRARY_NAME }}
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+  actions-security:
+    name: Check actions security
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Audit GitHub Actions
+        uses: ansys/actions/check-actions-security@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          auditing-level: high
+          generate-summary: true
+          token: ${{ github.token }}
+

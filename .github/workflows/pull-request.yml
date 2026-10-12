@@ -1,0 +1,174 @@
+name: pull-request
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize, edited]
+
+env:
+  MAIN_PYTHON_VERSION: '3.12'
+  LIBRARY_NAME: lamberthub
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  changelog-fragment:
+    name: Create changelog fragment
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Check pull request title
+        uses: ansys/actions/check-pr-title@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          token: ${{ github.token }}
+
+      - name: Create changelog fragment
+        if: github.event.pull_request.head.repo.full_name == github.repository
+        uses: ansys/actions/doc-changelog@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          token: ${{ github.token }}
+          bot-user: github-actions[bot]
+          bot-email: 41898282+github-actions[bot]@users.noreply.github.com
+          use-pull-request-title: true
+          use-default-towncrier-config: true
+          use-ansys-default-template: true
+          use-python-cache: false
+
+  code-style:
+    name: Code style
+    needs: changelog-fragment
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Run code style checks
+        uses: ansys/actions/code-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          use-python-cache: false
+
+  type-check:
+    name: Type check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: ansys/actions/_setup-python@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          use-cache: false
+          provision-uv: true
+          prune-uv-cache: true
+
+      - name: Run type checks
+        run: uvx ty check --ignore unresolved-import src
+
+  doc-style:
+    name: Doc style
+    needs: changelog-fragment
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Run documentation style checks
+        uses: ansys/actions/doc-style@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          files: README.md
+          token: ${{ github.token }}
+
+  tests:
+    name: Tests / Python ${{ matrix.python-version }}
+    needs: [code-style, doc-style]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.12', '3.13', '3.14']
+    steps:
+      - name: Run tests
+        uses: ansys/actions/tests-pytest@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          python-version: ${{ matrix.python-version }}
+          group-dependencies-name: tests
+          pytest-extra-args: ${{ matrix.python-version == env.MAIN_PYTHON_VERSION && '--cov=lamberthub --cov-report=term' || '' }}
+        env:
+          NUMBA_DISABLE_JIT: ${{ matrix.python-version == env.MAIN_PYTHON_VERSION && '1' || '0' }}
+
+  benchmarks:
+    name: Benchmarks / ${{ matrix.name }}
+    needs: tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: zero-rev-nominal
+            selector: zero_revolution_nominal
+          - name: zero-rev-general
+            selector: zero_revolution_general
+          - name: zero-rev-hyperbolic
+            selector: zero_revolution_hyperbolic
+          - name: multi-rev-m1
+            selector: multi_revolution_m1
+          - name: multi-rev-hard
+            selector: multi_revolution_hard
+          - name: robust-zero-rev
+            selector: robust_zero_revolution
+    steps:
+      - name: Run benchmarks
+        uses: ansys/actions/tests-pytest@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+          group-dependencies-name: tests,benchmarks
+          pytest-postargs: tests
+          pytest-extra-args: >-
+            -m benchmark
+            -k ${{ matrix.selector }}
+            --benchmark-only
+            --benchmark-disable-gc
+            --benchmark-warmup=on
+            --benchmark-min-rounds=5
+            --benchmark-max-time=0.2
+
+  build-library:
+    name: Build library
+    needs: [tests, benchmarks]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Build source and wheel distributions
+        uses: ansys/actions/build-library@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          library-name: ${{ env.LIBRARY_NAME }}
+          python-version: ${{ env.MAIN_PYTHON_VERSION }}
+
+  actions-security:
+    name: Check actions security
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Audit GitHub Actions
+        uses: ansys/actions/check-actions-security@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # ci/zizmor-hook
+        with:
+          auditing-level: high
+          generate-summary: true
+          token: ${{ github.token }}
