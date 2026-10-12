@@ -164,6 +164,7 @@ jobs:
           changelog-release-notes: true
           generate-release-notes: false
           only-code: true
+          upload-documentation: false
           use-python-cache: false
 
   doc-deploy-stable:
