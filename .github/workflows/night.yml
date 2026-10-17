@@ -32,7 +32,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up Python
-        uses: astral-sh/setup-uv@fac544c07dec837d0ccb6301d7b5580bf5edae39 # v8.2.0
+        uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
         with:
           enable-cache: false
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
@@ -47,7 +47,7 @@ jobs:
         run: tox -e doc-html
 
       - name: Upload HTML documentation
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: documentation-html
           path: doc/_build/html
@@ -65,7 +65,7 @@ jobs:
       cancel-in-progress: false
     steps:
       - name: Download documentation
-        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: documentation-html
           path: documentation-html
@@ -91,7 +91,7 @@ jobs:
         python-version: ['3.12', '3.13', '3.14']
     steps:
       - name: Run tests
-        uses: ansys/actions/tests-pytest@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
+        uses: ansys/actions/tests-pytest@68b3a5e058c084d3fcfcfccc282933ec4d6ba977 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           python-version: ${{ matrix.python-version }}
           group-dependencies-name: tests
@@ -104,7 +104,7 @@ jobs:
       contents: read
     steps:
       - name: Run benchmarks
-        uses: ansys/actions/tests-pytest@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
+        uses: ansys/actions/tests-pytest@68b3a5e058c084d3fcfcfccc282933ec4d6ba977 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
           group-dependencies-name: tests,benchmarks
@@ -130,7 +130,7 @@ jobs:
         python-version: ['3.12', '3.13', '3.14']
     steps:
       - name: Build wheelhouse
-        uses: ansys/actions/build-wheelhouse@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
+        uses: ansys/actions/build-wheelhouse@68b3a5e058c084d3fcfcfccc282933ec4d6ba977 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           operating-system: ${{ matrix.os }}
@@ -144,7 +144,7 @@ jobs:
       contents: read
     steps:
       - name: Build source and wheel distributions
-        uses: ansys/actions/build-library@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
+        uses: ansys/actions/build-library@68b3a5e058c084d3fcfcfccc282933ec4d6ba977 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           library-name: ${{ env.LIBRARY_NAME }}
           python-version: ${{ env.MAIN_PYTHON_VERSION }}
@@ -156,7 +156,7 @@ jobs:
       contents: read
     steps:
       - name: Audit GitHub Actions
-        uses: ansys/actions/check-actions-security@88fa7e3b0b7dbead9c6f8b38c5e742d4768965d2 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
+        uses: ansys/actions/check-actions-security@68b3a5e058c084d3fcfcfccc282933ec4d6ba977 # zizmor: ignore[stale-action-refs] intentional ci/zizmor-hook SHA
         with:
           auditing-level: high
           generate-summary: true
