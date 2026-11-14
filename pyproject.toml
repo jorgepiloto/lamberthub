@@ -42,21 +42,21 @@ dynamic = ["version", "description"]
 
 [dependency-groups]
 tests = [
-    "pytest==9.1.1",
+    "pytest==9.2.0",
     "pytest-cov==7.1.0",
 ]
 benchmarks = [
-    "pytest-benchmark==5.3.0",
+    "pytest-benchmark==5.3.1",
 ]
 doc = [
     "numpydoc==1.11.0",
-    "sphinx-autoapi==3.8.1",
+    "sphinx-autoapi==3.9.0",
     "sphinx-copybutton==0.5.2",
     "sphinx-design==0.7.0",
     "sphinx-unbloated-theme @ git+https://github.com/jorgepiloto/sphinx-unbloated-theme.git@045e10831d14676378f207a3b225953211ae4a22",
 ]
 docstyle = [
-    "docutils==0.22.4",
+    "docutils==0.23",
 ]
 
 [project.urls]
